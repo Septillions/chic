@@ -31,17 +31,20 @@
         <mysql-connector.version>8.0.18</mysql-connector.version>
         <druid.version>1.1.20</druid.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.2.0</mybatis-plus-generator.version>
         <pagehelper.version>1.2.12</pagehelper.version>
         <shiro.version>1.4.1</shiro.version>
         <jwt.version>3.8.3</jwt.version>
+        <freemarker.version>2.3.29</freemarker.version>
         <fastjson.version>1.2.62</fastjson.version>
         <hutool.version>5.0.2</hutool.version>
     </properties>
 
     <dependencies>
+        <!-- WEB -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- AOP -->
         <dependency>
@@ -87,6 +90,12 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
+            <!-- MyBatis Plus Generator -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
             <!-- PageHelper -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -105,6 +114,12 @@
                 <artifactId>java-jwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
+            <!-- FreeMarker -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
             <!-- FastJson -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -119,14 +134,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
