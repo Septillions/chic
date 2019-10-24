@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 /**
- * 代码生成器
+ * MyBatis-Plus-Generator 代码生成器
+ * 配置参考 https://mp.baomidou.com/guide/generator.html
  */
 public class CodeGenerator {
     public static void main(String[] args) {
@@ -24,7 +25,6 @@ public class CodeGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/chic-mbg/src/main/java");
         gc.setFileOverride(true);
-        gc.setAuthor("Septillions");
         gc.setOpen(false);
         generator.setGlobalConfig(gc);
         // 包配置
@@ -37,6 +37,7 @@ public class CodeGenerator {
         tc.setController(null);
         tc.setService(null);
         tc.setServiceImpl(null);
+        tc.setXml(null);
         generator.setTemplate(tc);
         // 策略配置
         StrategyConfig sc = new StrategyConfig();
