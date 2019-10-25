@@ -56,6 +56,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -105,7 +110,7 @@
             <!-- Shiro -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring</artifactId>
+                <artifactId>shiro-spring-boot-starter</artifactId>
                 <version>${shiro.version}</version>
             </dependency>
             <!-- JWT -->
