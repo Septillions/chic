@@ -15,4 +15,23 @@
         <version>1.0.0</version>
     </parent>
 
+    <dependencies>
+        <!-- 子模块 MBG -->
+        <dependency>
+            <groupId>com.github.chic</groupId>
+            <artifactId>chic-mbg</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 子模块 COMMON -->
+        <dependency>
+            <groupId>com.github.chic</groupId>
+            <artifactId>chic-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- JWT -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+    </dependencies>
 </project>

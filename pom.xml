@@ -33,8 +33,7 @@
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <mybatis-plus-generator.version>3.2.0</mybatis-plus-generator.version>
         <pagehelper.version>1.2.12</pagehelper.version>
-        <shiro.version>1.4.1</shiro.version>
-        <jwt.version>3.8.3</jwt.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.29</freemarker.version>
         <fastjson.version>1.2.62</fastjson.version>
         <hutool.version>5.0.2</hutool.version>
@@ -55,6 +54,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- Redis -->
         <dependency>
@@ -107,17 +111,11 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-            <!-- Shiro -->
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring-boot-starter</artifactId>
-                <version>${shiro.version}</version>
-            </dependency>
             <!-- JWT -->
             <dependency>
-                <groupId>com.auth0</groupId>
-                <artifactId>java-jwt</artifactId>
-                <version>${jwt.version}</version>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
             <!-- FreeMarker -->
             <dependency>
