@@ -29,7 +29,6 @@ public class CodeGenerator {
         generator.setGlobalConfig(gc);
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("mbg");
         pc.setParent("com.github.chic");
         generator.setPackageInfo(pc);
         // 配置模板

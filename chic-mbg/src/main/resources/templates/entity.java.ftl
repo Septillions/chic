@@ -20,10 +20,7 @@ import lombok.experimental.Accessors;
 @Data
     <#if superEntityClass??>
 @EqualsAndHashCode(callSuper = true)
-    <#else>
-@EqualsAndHashCode(callSuper = false)
     </#if>
-@Accessors(chain = true)
 </#if>
 <#if table.convert>
 @TableName("${table.name}")
