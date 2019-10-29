@@ -15,9 +15,7 @@ jwt:
   secret: JWTSecret
   # JWT 存储的请求头
   tokenHeader: Authorization
-  # JWT 前缀字符
-  tokenPrefix: Bearer-
-  # JWT 超期限时间(60*60*24*7)
-  expiration: 604800
+  # JWT 超期限时间(60*60*24*7 604800)
+  expiration: 1
   # 不需要认证的接口
-  antMatchers: /login
+  antMatchers: /admin/login,/admin/register

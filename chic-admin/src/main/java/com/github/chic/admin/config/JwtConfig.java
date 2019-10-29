@@ -1,10 +1,8 @@
 package com.github.chic.admin.config;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Data
 @Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
@@ -17,10 +15,6 @@ public class JwtConfig {
      */
     public static String tokenHeader;
     /**
-     * JWT 前缀字符
-     */
-    public static String tokenPrefix;
-    /**
      * JWT 超期限时间
      */
     public static Integer expiration;
@@ -28,4 +22,20 @@ public class JwtConfig {
      * 不需要认证的接口
      */
     public static String antMatchers;
+
+    public void setSecret(String secret) {
+        JwtConfig.secret = secret;
+    }
+
+    public void setTokenHeader(String tokenHeader) {
+        JwtConfig.tokenHeader = tokenHeader;
+    }
+
+    public void setExpiration(Integer expiration) {
+        JwtConfig.expiration = expiration;
+    }
+
+    public void setAntMatchers(String antMatchers) {
+        JwtConfig.antMatchers = antMatchers;
+    }
 }
