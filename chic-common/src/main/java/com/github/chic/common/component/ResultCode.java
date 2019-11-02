@@ -1,5 +1,8 @@
 package com.github.chic.common.component;
 
+/**
+ * 接口统一返回状态码
+ */
 public enum ResultCode {
     SUCCESS(0, "ok"),
     UNAUTHORIZED(1001, "未登录"),

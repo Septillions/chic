@@ -3,6 +3,9 @@ package com.github.chic.common.component;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * 接口统一返回格式对象
+ */
 @Data
 @AllArgsConstructor
 public class JsonResult<T> {

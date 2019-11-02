@@ -3,6 +3,9 @@ package com.github.chic.admin.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * JWT 配置类
+ */
 @Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
