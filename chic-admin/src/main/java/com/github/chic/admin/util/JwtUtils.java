@@ -1,7 +1,7 @@
 package com.github.chic.admin.util;
 
 import com.github.chic.admin.config.JwtConfig;
-import com.github.chic.admin.security.entity.JwtUserDetails;
+import com.github.chic.admin.security.entity.JwtAdminDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,9 +14,9 @@ public class JwtUtils {
     /**
      * 根据用户生成Token
      */
-    public static String generateToken(JwtUserDetails jwtUserDetails) {
+    public static String generateToken(JwtAdminDetails jwtAdminDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", jwtUserDetails.getUsername());
+        claims.put("sub", jwtAdminDetails.getUsername());
         return generateToken(claims);
     }
 

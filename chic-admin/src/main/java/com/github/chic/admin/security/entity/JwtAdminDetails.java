@@ -10,7 +10,7 @@ import java.util.Collection;
  * Spring Security 用户实现
  */
 @Data
-public class JwtUserDetails implements UserDetails {
+public class JwtAdminDetails implements UserDetails {
     /**
      * ID
      */

@@ -1,6 +1,6 @@
 package com.github.chic.admin.security.component;
 
-import com.github.chic.admin.security.entity.JwtUserDetails;
+import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.entity.Admin;
 import com.github.chic.entity.Role;
@@ -18,12 +18,12 @@ import java.util.List;
  * Spring Security 用户的业务实现
  */
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class JwtAdminDetailsServiceImpl implements UserDetailsService {
     @Resource
     private AdminService adminService;
 
     @Override
-    public JwtUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public JwtAdminDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 获取用户信息
         Admin admin = adminService.getByUsername(username);
         if (admin == null) {
@@ -36,11 +36,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleCode()));
         }
         // 构建Security用户
-        JwtUserDetails jwtUserDetails = new JwtUserDetails();
-        jwtUserDetails.setAdminId(admin.getAdminId());
-        jwtUserDetails.setUsername(admin.getUsername());
-        jwtUserDetails.setPassword(admin.getPassword());
-        jwtUserDetails.setAuthorities(authorities);
-        return jwtUserDetails;
+        JwtAdminDetails jwtAdminDetails = new JwtAdminDetails();
+        jwtAdminDetails.setAdminId(admin.getAdminId());
+        jwtAdminDetails.setUsername(admin.getUsername());
+        jwtAdminDetails.setPassword(admin.getPassword());
+        jwtAdminDetails.setAuthorities(authorities);
+        return jwtAdminDetails;
     }
 }

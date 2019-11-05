@@ -6,7 +6,7 @@ import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
 import com.github.chic.admin.model.dto.AdminParam;
-import com.github.chic.admin.security.entity.JwtUserDetails;
+import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.JwtUtils;
 import com.github.chic.common.exception.AuthException;
@@ -65,10 +65,10 @@ public class AdminServiceImpl implements AdminService {
             throw new AuthException(1003, "帐号或密码错误(Account or Password Error)");
         }
         // Security
-        JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(adminParam.getUsername());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
+        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(adminParam.getUsername());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return JwtUtils.generateToken(jwtUserDetails);
+        return JwtUtils.generateToken(jwtAdminDetails);
     }
 
     @Override
