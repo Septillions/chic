@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
-import com.github.chic.admin.model.dto.AdminParam;
+import com.github.chic.admin.model.dto.LoginParam;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.JwtUtils;
@@ -37,17 +37,17 @@ public class AdminServiceImpl implements AdminService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(AdminParam adminParam) {
+    public void register(LoginParam loginParam) {
         // 检查是否有相同用户名
         QueryWrapper<Admin> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Admin::getUsername, adminParam.getUsername());
+        wrapper.lambda().eq(Admin::getUsername, loginParam.getUsername());
         Integer count = adminMapper.selectCount(wrapper);
         if (count > 0) {
             throw new AuthException(1004, "用户名已经注册");
         }
         // 创建用户
         Admin admin = new Admin();
-        BeanUtil.copyProperties(adminParam, admin);
+        BeanUtil.copyProperties(loginParam, admin);
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.setCreateTime(LocalDateTime.now());
         admin.setUpdateTime(LocalDateTime.now());
@@ -55,17 +55,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String login(AdminParam adminParam) {
+    public String login(LoginParam loginParam) {
         // 获取用户
-        Admin admin = getByUsername(adminParam.getUsername());
+        Admin admin = getByUsername(loginParam.getUsername());
         if (admin == null) {
             throw new AuthException(1003, "该帐号不存在(The account does not exist)");
         }
-        if (!passwordEncoder.matches(adminParam.getPassword(), admin.getPassword())) {
+        if (!passwordEncoder.matches(loginParam.getPassword(), admin.getPassword())) {
             throw new AuthException(1003, "帐号或密码错误(Account or Password Error)");
         }
         // Security
-        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(adminParam.getUsername());
+        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return JwtUtils.generateToken(jwtAdminDetails);
