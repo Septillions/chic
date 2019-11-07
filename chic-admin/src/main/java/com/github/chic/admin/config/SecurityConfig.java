@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         // 取消跨站请求伪造防护
-        httpSecurity.csrf().disable();
+        httpSecurity.csrf().disable().cors();
         // 基于token不需要session
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 禁用缓存
