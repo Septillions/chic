@@ -18,7 +18,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.RELEASE</version>
+        <version>2.2.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -29,14 +29,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- Version -->
         <mysql-connector.version>8.0.18</mysql-connector.version>
-        <druid.version>1.1.20</druid.version>
+        <druid.version>1.1.21</druid.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <mybatis-plus-generator.version>3.2.0</mybatis-plus-generator.version>
         <pagehelper.version>1.2.12</pagehelper.version>
         <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.29</freemarker.version>
         <fastjson.version>1.2.62</fastjson.version>
-        <hutool.version>5.0.2</hutool.version>
+        <hutool.version>5.0.5</hutool.version>
     </properties>
 
     <dependencies>
