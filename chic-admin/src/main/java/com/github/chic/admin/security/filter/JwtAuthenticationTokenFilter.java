@@ -61,7 +61,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String uri = request.getRequestURI();
-        String[] antMatchers = JwtConfig.antMatchers.split(",");
+        String[] antMatchers = JwtConfig.antMatchers;
         return Arrays.asList(antMatchers).contains(uri);
     }
 }

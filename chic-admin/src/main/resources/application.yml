@@ -20,4 +20,7 @@ jwt:
   # JWT 超期限时间(60*60*24*7 604800)
   expiration: 604800
   # 不需要认证的接口
-  antMatchers: /api/**,/admin/login,/admin/register
+  antMatchers:
+    - /api/**
+    - /admin/login
+    - /admin/register

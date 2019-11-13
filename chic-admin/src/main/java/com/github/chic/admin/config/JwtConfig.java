@@ -24,7 +24,7 @@ public class JwtConfig {
     /**
      * 不需要认证的接口
      */
-    public static String antMatchers;
+    public static String[] antMatchers;
 
     public void setSecret(String secret) {
         JwtConfig.secret = secret;
@@ -38,7 +38,7 @@ public class JwtConfig {
         JwtConfig.expiration = expiration;
     }
 
-    public void setAntMatchers(String antMatchers) {
+    public void setAntMatchers(String[] antMatchers) {
         JwtConfig.antMatchers = antMatchers;
     }
 }
