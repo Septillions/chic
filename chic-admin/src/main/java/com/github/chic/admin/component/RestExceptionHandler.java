@@ -5,6 +5,8 @@ import com.github.chic.common.component.ResultCode;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.exception.ServiceException;
 import com.github.chic.common.exception.VerifyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,14 +19,17 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestControllerAdvice
 public class RestExceptionHandler {
+    /**
+     * LOGGER
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestExceptionHandler.class);
 
     /**
      * 全局异常 统一JSON格式返回
      */
     @ExceptionHandler(Exception.class)
     public JsonResult exception(HttpServletRequest request, Exception e) {
-        System.out.println("GlobalExceptionHandler:");
-        e.printStackTrace();
+        LOGGER.error("RestExceptionHandler:", e);
         return JsonResult.failed(e.getMessage());
     }
 
