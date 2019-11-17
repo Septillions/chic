@@ -7,3 +7,20 @@ spring:
 mybatis-plus:
   global-config:
     banner: false
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT
+jwt:
+  # JWT 加解密使用的密钥
+  secret: JWTSecret
+  # JWT 存储的请求头
+  tokenHeader: Authorization
+  # JWT 超期限时间(60*60*24*7 604800)
+  expiration: 604800
+  # 不需要认证的接口
+  antMatchers:
+    - /admin/**
+    - /api/user/sendSmsCode
+    - /api/user/login
