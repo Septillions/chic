@@ -8,19 +8,19 @@
         <!-- 设置输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 设置编码 -->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <!-- 时间滚动输出日志 -->
+    <!-- INFO 输出日志 -->
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志指定最新的文件名，其他文件名使用FileNamePattern -->
         <File>${LOG_HOME}/info.log</File>
         <!-- 文件滚动模式 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名,可设置文件类型为.gz,开启文件压缩 -->
+            <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/info.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -28,7 +28,7 @@
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 设置编码 -->
             <charset>UTF-8</charset>
         </encoder>
@@ -38,13 +38,13 @@
         </filter>
     </appender>
 
-    <!-- 时间滚动输出日志 -->
+    <!-- WARN 输出日志 -->
     <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志指定最新的文件名，其他文件名使用FileNamePattern -->
         <File>${LOG_HOME}/warn.log</File>
         <!-- 文件滚动模式 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名,可设置文件类型为.gz,开启文件压缩 -->
+            <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -52,7 +52,7 @@
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 设置编码 -->
             <charset>UTF-8</charset>
         </encoder>
@@ -64,13 +64,13 @@
         </filter>
     </appender>
 
-    <!-- 时间滚动输出日志 -->
+    <!-- ERROR 输出日志 -->
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 日志指定最新的文件名，其他文件名使用FileNamePattern -->
         <File>${LOG_HOME}/error.log</File>
         <!-- 文件滚动模式 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名,可设置文件类型为.gz,开启文件压缩 -->
+            <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -78,7 +78,7 @@
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <!-- 设置编码 -->
             <charset>UTF-8</charset>
         </encoder>
