@@ -7,8 +7,24 @@ spring:
 
   # Redis
   redis:
+    # 数据库索引（默认为0）
     database: 0
+    # 服务器地址
     host: localhost
+    # 端口号
     port: 6379
+    # 密码（默认为空）
     password:
-    timeout: 3000ms
+    # 连接超时时间（毫秒）
+    timeout: 5000ms
+    lettuce:
+      # 连接池
+      pool:
+        # 最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 最大空闲连接
+        max-idle: 8
+        # 最小空闲连接
+        min-idle: 0
