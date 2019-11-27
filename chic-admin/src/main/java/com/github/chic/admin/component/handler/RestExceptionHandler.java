@@ -1,4 +1,4 @@
-package com.github.chic.admin.component;
+package com.github.chic.admin.component.handler;
 
 import com.github.chic.common.component.JsonResult;
 import com.github.chic.common.component.ResultCode;
