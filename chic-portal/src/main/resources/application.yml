@@ -22,5 +22,4 @@ jwt:
   # 不需要认证的接口
   antMatchers:
     - /admin/**
-    - /api/user/sendSmsCode
     - /api/user/login
