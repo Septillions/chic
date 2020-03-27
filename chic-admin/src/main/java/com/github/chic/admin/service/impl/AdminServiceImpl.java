@@ -1,11 +1,11 @@
 package com.github.chic.admin.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
-import com.github.chic.admin.model.dto.LoginParam;
+import com.github.chic.admin.model.param.LoginParam;
+import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.JwtUtils;
@@ -37,18 +37,18 @@ public class AdminServiceImpl implements AdminService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void register(LoginParam loginParam) {
+    public void register(RegisterParam registerParam) {
         // 检查是否有相同用户名
         QueryWrapper<Admin> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Admin::getUsername, loginParam.getUsername());
+        wrapper.lambda().eq(Admin::getUsername, registerParam.getUsername());
         Integer count = adminMapper.selectCount(wrapper);
         if (count > 0) {
             throw new AuthException(1004, "用户名已经注册");
         }
         // 创建用户
         Admin admin = new Admin();
-        BeanUtil.copyProperties(loginParam, admin);
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        admin.setUsername(registerParam.getUsername());
+        admin.setPassword(passwordEncoder.encode(registerParam.getPassword()));
         admin.setCreateTime(LocalDateTime.now());
         admin.setUpdateTime(LocalDateTime.now());
         adminMapper.insert(admin);

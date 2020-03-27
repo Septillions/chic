@@ -1,6 +1,7 @@
 package com.github.chic.admin.controller;
 
-import com.github.chic.admin.model.dto.LoginParam;
+import com.github.chic.admin.model.param.LoginParam;
+import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.common.component.JsonResult;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +25,8 @@ public class AdminController {
      * 注册
      */
     @PostMapping("/register")
-    public JsonResult register(@RequestBody LoginParam loginParam) {
-        adminService.register(loginParam);
+    public JsonResult register(@RequestBody @Valid RegisterParam registerParam) {
+        adminService.register(registerParam);
         return JsonResult.success();
     }
 
@@ -32,7 +34,7 @@ public class AdminController {
      * 登陆
      */
     @PostMapping("/login")
-    public JsonResult login(@RequestBody LoginParam loginParam) {
+    public JsonResult login(@RequestBody @Valid LoginParam loginParam) {
         String token = adminService.login(loginParam);
         Map<String, Object> resultMap = new HashMap<>(5);
         resultMap.put("token", token);
