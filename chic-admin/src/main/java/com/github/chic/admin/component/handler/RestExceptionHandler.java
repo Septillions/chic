@@ -9,10 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 全局异常处理类
@@ -47,6 +52,26 @@ public class RestExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public JsonResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         return JsonResult.failed(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMsg());
+    }
+
+    /**
+     * Spring Validation 校验异常
+     */
+    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
+    public JsonResult validationException(HttpServletRequest request, Exception e) {
+        BindingResult bindingResult;
+        if (e instanceof BindException) {
+            bindingResult = ((BindException) e).getBindingResult();
+        } else {
+            bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
+        }
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        StringBuilder errorMsg = new StringBuilder("校验异常(ValidException):");
+        for (FieldError error : fieldErrors) {
+            errorMsg.append(error.getField()).append("-").append(error.getDefaultMessage()).append(",");
+        }
+        errorMsg.deleteCharAt(errorMsg.length() - 1);
+        return JsonResult.failed(3001, errorMsg.toString());
     }
 
     /**
