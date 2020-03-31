@@ -19,8 +19,15 @@ jwt:
   tokenHeader: Authorization
   # JWT 超期限时间(60*60*24*7 604800)
   expiration: 604800
+
+# 认证
+auth:
   # 不需要认证的接口
-  antMatchers:
-    - /api/**
-    - /admin/login
-    - /admin/register
+  ignores:
+    # 不限请求方法
+    pattern:
+      - /api/**
+    # POST 请求
+    post:
+      - /admin/login
+      - /admin/register

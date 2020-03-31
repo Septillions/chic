@@ -21,10 +21,6 @@ public class JwtConfig {
      * JWT 超期限时间
      */
     public static Integer expiration;
-    /**
-     * 不需要认证的接口
-     */
-    public static String[] antMatchers;
 
     public void setSecret(String secret) {
         JwtConfig.secret = secret;
@@ -36,9 +32,5 @@ public class JwtConfig {
 
     public void setExpiration(Integer expiration) {
         JwtConfig.expiration = expiration;
-    }
-
-    public void setAntMatchers(String[] antMatchers) {
-        JwtConfig.antMatchers = antMatchers;
     }
 }

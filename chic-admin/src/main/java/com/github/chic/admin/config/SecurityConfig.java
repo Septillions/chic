@@ -6,10 +6,12 @@ import com.github.chic.admin.security.component.RestAuthenticationEntryPoint;
 import com.github.chic.admin.security.filter.JwtAuthenticationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,6 +31,11 @@ import javax.annotation.Resource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
+     * 自定义认证配置类
+     */
+    @Resource
+    private AuthConfig authConfig;
+    /**
      * 自定义未登录处理类
      */
     @Resource
@@ -46,10 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        // 登录登出由自己实现
+        httpSecurity.formLogin().disable()
+                .logout().disable();
+        // 认证请求
         httpSecurity.authorizeRequests()
-                // 不进行权限验证的请求或资源(从配置文件中读取)
-                .antMatchers(JwtConfig.antMatchers).permitAll()
-                // 除上面外的所有请求全部需要鉴权认证
+                // 所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         // 取消跨站请求伪造防护
         httpSecurity.csrf().disable().cors();
@@ -67,6 +76,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(restAccessDeniedHandler);
     }
 
+    @Override
+    public void configure(WebSecurity webSecurity) {
+        // 忽略 GET
+        authConfig.getIgnores().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
+        // 忽略 POST
+        authConfig.getIgnores().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
+        // 忽略 DELETE
+        authConfig.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
+        // 忽略 PUT
+        authConfig.getIgnores().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
+        // 忽略 HEAD
+        authConfig.getIgnores().getHead().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.HEAD, url));
+        // 忽略 PATCH
+        authConfig.getIgnores().getPatch().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PATCH, url));
+        // 忽略 OPTIONS
+        authConfig.getIgnores().getOptions().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, url));
+        // 忽略 TRACE
+        authConfig.getIgnores().getTrace().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.TRACE, url));
+        // 按照请求格式忽略
+        authConfig.getIgnores().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
     @Bean
     public DefaultWebSecurityExpressionHandler jwtSecurityExpressionHandler() {
         DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
@@ -82,11 +118,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
