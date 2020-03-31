@@ -5,10 +5,7 @@ import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.common.component.JsonResult;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -61,7 +58,7 @@ public class AdminController {
     /**
      * 权限测试
      */
-    @PreAuthorize("hasPermission('/test/permission','test:permissions')")
+    @PreAuthorize("hasPermission('/test/permission','test:permission')")
     @PostMapping("/test/permission")
     public JsonResult testPermission() {
         return JsonResult.success();

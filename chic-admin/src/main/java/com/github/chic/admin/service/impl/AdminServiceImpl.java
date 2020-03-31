@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
         wrapper.lambda().eq(Admin::getUsername, registerParam.getUsername());
         Integer count = adminMapper.selectCount(wrapper);
         if (count > 0) {
-            throw new AuthException(1004, "用户名已经注册");
+            throw new AuthException(1005, "用户名已经注册");
         }
         // 创建用户
         Admin admin = new Admin();
@@ -59,10 +59,10 @@ public class AdminServiceImpl implements AdminService {
         // 获取用户
         Admin admin = getByUsername(loginParam.getUsername());
         if (admin == null) {
-            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+            throw new AuthException(1004, "该帐号不存在(The account does not exist)");
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), admin.getPassword())) {
-            throw new AuthException(1003, "帐号或密码错误(Account or Password Error)");
+            throw new AuthException(1004, "帐号或密码错误(Account or Password Error)");
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());

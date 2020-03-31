@@ -4,7 +4,7 @@
     <select id="selectRoleListByAdminId" resultType="com.github.chic.entity.Role">
         SELECT r.*
         FROM t_admin_role_relation arr
-                 LEFT JOIN t_role r ON arr.role_id = r.role_id
+                 INNER JOIN t_role r ON arr.role_id = r.role_id
         WHERE arr.admin_id = #{adminId}
     </select>
 </mapper>

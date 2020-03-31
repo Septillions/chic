@@ -13,10 +13,13 @@ import java.io.IOException;
 public class JsonResultUtils {
 
     public static void responseJson(HttpServletResponse response, Integer code, String msg) throws IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "*");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         JsonResult jsonResult = JsonResult.failed(code, msg);
         response.getWriter().println(JSON.toJSONString(jsonResult, SerializerFeature.WriteMapNullValue));
         response.getWriter().flush();
+        response.getWriter().close();
     }
 }
