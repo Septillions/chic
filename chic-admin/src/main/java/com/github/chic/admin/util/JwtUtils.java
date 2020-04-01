@@ -2,14 +2,17 @@ package com.github.chic.admin.util;
 
 import com.github.chic.admin.config.JwtConfig;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.github.chic.common.component.ResultCode;
+import com.github.chic.common.exception.AuthException;
+import io.jsonwebtoken.*;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JWT 工具类
+ */
 public class JwtUtils {
     /**
      * 根据用户生成Token
@@ -40,10 +43,16 @@ public class JwtUtils {
      * 解析Token
      */
     public static Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(JwtConfig.secret)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(JwtConfig.secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new AuthException(ResultCode.INVALID.getCode(), "Token过期");
+        } catch (JwtException e) {
+            throw new AuthException(ResultCode.INVALID.getCode(), "Token无效");
+        }
     }
 
     /**
