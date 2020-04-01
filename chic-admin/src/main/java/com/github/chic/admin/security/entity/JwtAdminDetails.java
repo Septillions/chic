@@ -1,10 +1,16 @@
 package com.github.chic.admin.security.entity;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.github.chic.entity.Admin;
+import com.github.chic.entity.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security 用户实现
@@ -24,9 +30,9 @@ public class JwtAdminDetails implements UserDetails {
      */
     private String password;
     /**
-     * 角色
+     * 角色列表
      */
-    private Collection<GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
     /**
      * 账户是否未过期
      */
@@ -43,6 +49,16 @@ public class JwtAdminDetails implements UserDetails {
      * 账户是否有效
      */
     private boolean isEnabled = true;
+
+    public static JwtAdminDetails create(Admin admin, List<Role> roleList) {
+        List<SimpleGrantedAuthority> authorities = roleList.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleCode()))
+                .collect(Collectors.toList());
+        JwtAdminDetails jwtAdminDetails = new JwtAdminDetails();
+        BeanUtil.copyProperties(admin, jwtAdminDetails);
+        jwtAdminDetails.setAuthorities(authorities);
+        return jwtAdminDetails;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
