@@ -58,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().disable();
         // 认证请求
         httpSecurity.authorizeRequests()
+                .antMatchers("/druid/**").permitAll()
                 // 所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         // 取消跨站请求伪造防护

@@ -4,6 +4,46 @@ spring:
     url: jdbc:mysql://localhost:3306/chic?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
+    # Druid
+    druid:
+      # 初始化连接数
+      initialSize: 1
+      # 最小连接数
+      minIdle: 1
+      # 最大连接数
+      maxActive: 20
+      # 获取连接超时时间
+      maxWait: 2000
+      # 连接有效性检测间隔时间
+      timeBetweenEvictionRunsMillis: 60000
+      # 连接最小生存时间
+      minEvictableIdleTimeMillis: 600000
+      # PSCache
+      poolPreparedStatements: true
+      # 连接 PSCache 大小
+      maxOpenPreparedStatements: 100
+      # 获取连接时检测
+      testOnBorrow: false
+      # 放回连接时检测
+      testOnReturn: false
+      # 空闲时检测
+      testWhileIdle: true
+      # 检测连接的查询语句
+      validationQuery: SELECT 1
+      # 监控统计拦截的 filters
+      filters: stat,wall
+      # 监控页面
+      statViewServlet:
+        enabled: true
+        loginUsername: admin
+        loginPassword: admin
+        resetEnable: false
+        urlPattern: /druid/*
+      # 网络统计
+      webStatFilter:
+        enabled: true
+        urlPattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
 
   # Redis
   redis:
