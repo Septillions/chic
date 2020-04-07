@@ -79,26 +79,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             case GET:
                 ignores.addAll(authConfig.getIgnores().getGet());
                 break;
-            case PUT:
-                ignores.addAll(authConfig.getIgnores().getPut());
-                break;
-            case HEAD:
-                ignores.addAll(authConfig.getIgnores().getHead());
-                break;
             case POST:
                 ignores.addAll(authConfig.getIgnores().getPost());
                 break;
-            case PATCH:
-                ignores.addAll(authConfig.getIgnores().getPatch());
-                break;
-            case TRACE:
-                ignores.addAll(authConfig.getIgnores().getTrace());
+            case PUT:
+                ignores.addAll(authConfig.getIgnores().getPut());
                 break;
             case DELETE:
                 ignores.addAll(authConfig.getIgnores().getDelete());
-                break;
-            case OPTIONS:
-                ignores.addAll(authConfig.getIgnores().getOptions());
                 break;
             default:
                 break;

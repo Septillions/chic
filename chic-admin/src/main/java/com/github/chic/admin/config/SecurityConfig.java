@@ -58,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().disable();
         // 认证请求
         httpSecurity.authorizeRequests()
+                // 放行druid监控资源
                 .antMatchers("/druid/**").permitAll()
                 // 所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
@@ -83,18 +84,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authConfig.getIgnores().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
         // 忽略 POST
         authConfig.getIgnores().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
-        // 忽略 DELETE
-        authConfig.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
         // 忽略 PUT
         authConfig.getIgnores().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
-        // 忽略 HEAD
-        authConfig.getIgnores().getHead().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.HEAD, url));
-        // 忽略 PATCH
-        authConfig.getIgnores().getPatch().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PATCH, url));
-        // 忽略 OPTIONS
-        authConfig.getIgnores().getOptions().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, url));
-        // 忽略 TRACE
-        authConfig.getIgnores().getTrace().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.TRACE, url));
+        // 忽略 DELETE
+        authConfig.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
         // 按照请求格式忽略
         authConfig.getIgnores().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
     }
