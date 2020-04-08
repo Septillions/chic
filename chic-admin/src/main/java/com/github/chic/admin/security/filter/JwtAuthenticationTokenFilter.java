@@ -5,8 +5,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.chic.admin.config.AuthConfig;
 import com.github.chic.admin.config.JwtConfig;
+import com.github.chic.admin.model.constant.RedisKeyEnum;
+import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.util.JwtUtils;
+import com.github.chic.common.component.RedisService;
+import com.github.chic.common.component.ResultCode;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.util.JsonResultUtils;
 import org.springframework.http.HttpMethod;
@@ -35,7 +39,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private AuthConfig authConfig;
     /**
-     * Security用户服务类
+     * Redis 业务类
+     */
+    @Resource
+    private RedisService redisService;
+    /**
+     * Security 用户服务类
      */
     @Resource
     private UserDetailsService userDetailsService;
@@ -52,6 +61,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 username = JwtUtils.getUsername(token);
             } catch (AuthException e) {
                 JsonResultUtils.responseJson(response, e.getErrCode(), e.getErrMsg());
+                return;
+            }
+            // Redis有效控制
+            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), username, token);
+            RedisJwtDTO redisJwtDTO = (RedisJwtDTO) redisService.get(redisJwtKey);
+            if (redisJwtDTO == null) {
+                JsonResultUtils.responseJson(response, ResultCode.INVALID.getCode(), "Token失效");
                 return;
             }
             // 认证

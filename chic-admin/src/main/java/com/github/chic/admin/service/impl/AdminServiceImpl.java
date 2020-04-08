@@ -1,14 +1,22 @@
 package com.github.chic.admin.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.chic.admin.config.JwtConfig;
 import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
+import com.github.chic.admin.model.constant.RedisKeyEnum;
+import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.JwtUtils;
+import com.github.chic.common.util.ServletUtils;
+import com.github.chic.common.component.RedisService;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.entity.Admin;
 import com.github.chic.entity.Permission;
@@ -24,7 +32,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
     @Resource
     private AdminMapper adminMapper;
     @Resource
@@ -35,6 +43,8 @@ public class AdminServiceImpl implements AdminService {
     private UserDetailsService userDetailsService;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private RedisService redisService;
 
     @Override
     public void register(RegisterParam registerParam) {
@@ -68,7 +78,20 @@ public class AdminServiceImpl implements AdminService {
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return JwtUtils.generateToken(jwtAdminDetails);
+        // JWT
+        String jwt = JwtUtils.generateToken(jwtAdminDetails);
+        // Redis
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), admin.getUsername(), jwt);
+        UserAgent ua = ServletUtils.getUserAgent();
+        RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
+        redisJwtDTO.setUsername(admin.getUsername());
+        redisJwtDTO.setJwt(jwt);
+        redisJwtDTO.setOs(ua.getOs().toString());
+        redisJwtDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisJwtKey, redisJwtDTO, JwtConfig.expiration);
+        return jwt;
     }
 
     @Override
