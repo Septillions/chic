@@ -20,7 +20,7 @@ public class JwtConfig {
     /**
      * JWT 超期限时间
      */
-    public static Integer expiration;
+    public static Long expiration;
 
     public void setSecret(String secret) {
         JwtConfig.secret = secret;
@@ -30,7 +30,7 @@ public class JwtConfig {
         JwtConfig.tokenHeader = tokenHeader;
     }
 
-    public void setExpiration(Integer expiration) {
+    public void setExpiration(Long expiration) {
         JwtConfig.expiration = expiration;
     }
 }

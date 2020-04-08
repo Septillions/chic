@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/admin/auth")
+public class AuthController {
     @Resource
     private AdminService adminService;
 

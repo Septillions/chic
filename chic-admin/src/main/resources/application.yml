@@ -29,5 +29,5 @@ auth:
       - /api/**
     # POST 请求
     post:
-      - /admin/login
-      - /admin/register
+      - /admin/auth/login
+      - /admin/auth/register

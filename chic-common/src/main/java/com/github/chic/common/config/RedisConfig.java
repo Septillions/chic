@@ -1,4 +1,4 @@
-package com.github.chic.admin.config;
+package com.github.chic.common.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
