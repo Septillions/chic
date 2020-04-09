@@ -60,6 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 // 放行druid监控资源
                 .antMatchers("/druid/**").permitAll()
+                // 放行swagger文档资源
+                .antMatchers("/swagger-ui.html",
+                        "/v2/api-docs",
+                        "/webjars/**",
+                        "/resources/**",
+                        "/swagger-resources/**").permitAll()
                 // 所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         // 取消跨站请求伪造防护
