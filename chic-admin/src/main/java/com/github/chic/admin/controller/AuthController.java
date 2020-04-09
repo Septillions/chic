@@ -2,16 +2,18 @@ package com.github.chic.admin.controller;
 
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
+import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.common.component.JsonResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
+@Api(tags = "Auth 授权")
 @RestController
 @RequestMapping("/admin/auth")
 public class AuthController {
@@ -21,6 +23,7 @@ public class AuthController {
     /**
      * 注册
      */
+    @ApiOperation("注册")
     @PostMapping("/register")
     public JsonResult register(@RequestBody @Valid RegisterParam registerParam) {
         adminService.register(registerParam);
@@ -30,12 +33,13 @@ public class AuthController {
     /**
      * 登陆
      */
+    @ApiOperation("登陆")
     @PostMapping("/login")
-    public JsonResult login(@RequestBody @Valid LoginParam loginParam) {
+    public JsonResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
         String token = adminService.login(loginParam);
-        Map<String, Object> resultMap = new HashMap<>(5);
-        resultMap.put("token", token);
-        return JsonResult.success(resultMap);
+        LoginVO loginVO = new LoginVO();
+        loginVO.setToken(token);
+        return JsonResult.success(loginVO);
     }
 
     /**
