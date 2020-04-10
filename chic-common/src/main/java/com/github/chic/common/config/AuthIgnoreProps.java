@@ -1,4 +1,4 @@
-package com.github.chic.admin.security.entity;
+package com.github.chic.common.config;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * 认证忽略配置类
  */
 @Data
-public class IgnoreConfig {
+public class AuthIgnoreProps {
     /**
      * 需要忽略的 URL 格式，不考虑请求方法
      */

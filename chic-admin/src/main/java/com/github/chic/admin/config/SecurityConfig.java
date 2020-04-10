@@ -4,6 +4,7 @@ import com.github.chic.admin.security.component.JwtPermissionEvaluator;
 import com.github.chic.admin.security.component.RestAccessDeniedHandler;
 import com.github.chic.admin.security.component.RestAuthenticationEntryPoint;
 import com.github.chic.admin.security.filter.JwtAuthenticationTokenFilter;
+import com.github.chic.common.config.AuthProps;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 自定义认证配置类
      */
     @Resource
-    private AuthConfig authConfig;
+    private AuthProps authProps;
     /**
      * 自定义未登录处理类
      */
@@ -87,15 +88,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         // 忽略 GET
-        authConfig.getIgnores().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
+        authProps.getIgnores().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
         // 忽略 POST
-        authConfig.getIgnores().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
+        authProps.getIgnores().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
         // 忽略 PUT
-        authConfig.getIgnores().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
+        authProps.getIgnores().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
         // 忽略 DELETE
-        authConfig.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
+        authProps.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
         // 按照请求格式忽略
-        authConfig.getIgnores().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
+        authProps.getIgnores().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
     }
 
     @Override

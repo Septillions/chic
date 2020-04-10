@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.chic.admin.config.JwtConfig;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
@@ -90,7 +90,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         redisJwtDTO.setPlatform(ua.getPlatform().toString());
         redisJwtDTO.setIp(ServletUtils.getIpAddress());
         redisJwtDTO.setLoginTime(LocalDateTime.now());
-        redisService.set(redisJwtKey, redisJwtDTO, JwtConfig.expiration);
+        redisService.set(redisJwtKey, redisJwtDTO, JwtProps.expiration);
         return jwt;
     }
 

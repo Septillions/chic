@@ -1,4 +1,4 @@
-package com.github.chic.admin.config;
+package com.github.chic.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "jwt")
-public class JwtConfig {
+public class JwtProps {
     /**
      * JWT 加解密使用的密钥
      */
@@ -23,14 +23,14 @@ public class JwtConfig {
     public static Long expiration;
 
     public void setSecret(String secret) {
-        JwtConfig.secret = secret;
+        JwtProps.secret = secret;
     }
 
     public void setTokenHeader(String tokenHeader) {
-        JwtConfig.tokenHeader = tokenHeader;
+        JwtProps.tokenHeader = tokenHeader;
     }
 
     public void setExpiration(Long expiration) {
-        JwtConfig.expiration = expiration;
+        JwtProps.expiration = expiration;
     }
 }

@@ -1,6 +1,6 @@
 package com.github.chic.admin.util;
 
-import com.github.chic.admin.config.JwtConfig;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.exception.AuthException;
@@ -33,9 +33,9 @@ public class JwtUtils {
                 // 签发时间
                 .setIssuedAt(new Date())
                 // 失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + JwtConfig.expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JwtProps.expiration * 1000))
                 // 签名算法和密钥
-                .signWith(SignatureAlgorithm.HS512, JwtConfig.secret)
+                .signWith(SignatureAlgorithm.HS512, JwtProps.secret)
                 .compact();
     }
 
@@ -45,7 +45,7 @@ public class JwtUtils {
     public static Claims getClaims(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(JwtConfig.secret)
+                    .setSigningKey(JwtProps.secret)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {

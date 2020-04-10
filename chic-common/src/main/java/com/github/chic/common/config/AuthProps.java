@@ -1,6 +1,5 @@
-package com.github.chic.admin.config;
+package com.github.chic.common.config;
 
-import com.github.chic.admin.security.entity.IgnoreConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -11,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "auth")
-public class AuthConfig {
+public class AuthProps {
     /**
      * 不需要认证的接口
      */
-    private IgnoreConfig ignores;
+    private AuthIgnoreProps ignores;
 }

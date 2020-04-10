@@ -3,8 +3,8 @@ package com.github.chic.admin.security.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.chic.admin.config.AuthConfig;
-import com.github.chic.admin.config.JwtConfig;
+import com.github.chic.common.config.AuthProps;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.admin.model.constant.RedisKeyEnum;
 import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
@@ -37,7 +37,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
      * 自定义认证配置类
      */
     @Resource
-    private AuthConfig authConfig;
+    private AuthProps authProps;
     /**
      * Redis 业务类
      */
@@ -52,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 获得TokenHeader
-        String token = request.getHeader(JwtConfig.tokenHeader);
+        String token = request.getHeader(JwtProps.tokenHeader);
         // 获取请求头中JWT的Token
         if (!StrUtil.isEmpty(token)) {
             // 获取用户名
@@ -93,21 +93,21 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         Set<String> ignores = new HashSet<>();
         switch (httpMethod) {
             case GET:
-                ignores.addAll(authConfig.getIgnores().getGet());
+                ignores.addAll(authProps.getIgnores().getGet());
                 break;
             case POST:
-                ignores.addAll(authConfig.getIgnores().getPost());
+                ignores.addAll(authProps.getIgnores().getPost());
                 break;
             case PUT:
-                ignores.addAll(authConfig.getIgnores().getPut());
+                ignores.addAll(authProps.getIgnores().getPut());
                 break;
             case DELETE:
-                ignores.addAll(authConfig.getIgnores().getDelete());
+                ignores.addAll(authProps.getIgnores().getDelete());
                 break;
             default:
                 break;
         }
-        ignores.addAll(authConfig.getIgnores().getPattern());
+        ignores.addAll(authProps.getIgnores().getPattern());
         if (CollUtil.isNotEmpty(ignores)) {
             for (String ignore : ignores) {
                 AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);
