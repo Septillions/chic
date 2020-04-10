@@ -5,10 +5,14 @@ package com.github.chic.admin.model.constant;
  */
 public enum RedisKeyEnum {
     /**
-     * AUTH JWT 状态
+     * AUTH JWT 格式
      * auth:jwt:admin:{username}:{jwt}
      */
-    AUTH_JWT_FORMAT("auth:jwt:admin:{}:{}");
+    AUTH_JWT_FORMAT("auth:jwt:admin:{}:{}"),
+    /**
+     * AUTH JWT 前缀
+     */
+    AUTH_JWT_PREFIX("auth:jwt:admin:");
     private String key;
 
     RedisKeyEnum(String key) {

@@ -27,6 +27,9 @@ auth:
     # 不限请求方法
     pattern:
       - /api/**
+    # GET 请求
+    get:
+      - /admin/monitor/findOnlineAdminList
     # POST 请求
     post:
       - /admin/auth/login
