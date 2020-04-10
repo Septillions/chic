@@ -1,4 +1,4 @@
-package com.github.chic.common.component;
+package com.github.chic.common.entity.api;
 
 import com.github.pagehelper.Page;
 import lombok.AllArgsConstructor;

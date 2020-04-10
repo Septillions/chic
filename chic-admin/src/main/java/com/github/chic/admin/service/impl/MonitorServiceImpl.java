@@ -3,7 +3,7 @@ package com.github.chic.admin.service.impl;
 import com.github.chic.admin.model.constant.RedisKeyEnum;
 import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.service.MonitorService;
-import com.github.chic.common.component.RedisService;
+import com.github.chic.common.service.RedisService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

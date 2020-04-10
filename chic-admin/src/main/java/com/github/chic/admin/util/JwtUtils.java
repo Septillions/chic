@@ -2,7 +2,7 @@ package com.github.chic.admin.util;
 
 import com.github.chic.admin.config.JwtConfig;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
-import com.github.chic.common.component.ApiCodeEnum;
+import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.exception.AuthException;
 import io.jsonwebtoken.*;
 

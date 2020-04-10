@@ -1,6 +1,6 @@
 package com.github.chic.portal.security.filter;
 
-import com.github.chic.common.component.ApiCodeEnum;
+import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;
 import com.github.chic.portal.config.JwtConfig;
 import com.github.chic.portal.security.entity.JwtUserDetails;

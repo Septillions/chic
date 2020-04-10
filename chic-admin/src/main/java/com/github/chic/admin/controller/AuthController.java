@@ -4,7 +4,7 @@ import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.service.AdminService;
-import com.github.chic.common.component.ApiResult;
+import com.github.chic.common.entity.api.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;

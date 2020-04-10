@@ -1,6 +1,6 @@
 package com.github.chic.admin.security.component;
 
-import com.github.chic.common.component.ApiCodeEnum;
+import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

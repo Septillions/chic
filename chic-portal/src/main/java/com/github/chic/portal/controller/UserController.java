@@ -1,6 +1,6 @@
 package com.github.chic.portal.controller;
 
-import com.github.chic.common.component.ApiResult;
+import com.github.chic.common.entity.api.ApiResult;
 import com.github.chic.portal.model.dto.LoginParam;
 import com.github.chic.portal.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
