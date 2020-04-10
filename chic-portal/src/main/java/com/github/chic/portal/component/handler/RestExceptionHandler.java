@@ -1,7 +1,7 @@
 package com.github.chic.portal.component.handler;
 
-import com.github.chic.common.component.JsonResult;
-import com.github.chic.common.component.ResultCode;
+import com.github.chic.common.component.ApiResult;
+import com.github.chic.common.component.ApiCodeEnum;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.exception.ServiceException;
 import com.github.chic.common.exception.VerifyException;
@@ -28,25 +28,25 @@ public class RestExceptionHandler {
      * 全局异常 统一JSON格式返回
      */
     @ExceptionHandler(Exception.class)
-    public JsonResult exception(HttpServletRequest request, Exception e) {
+    public ApiResult exception(HttpServletRequest request, Exception e) {
         LOGGER.error("RestExceptionHandler:", e);
-        return JsonResult.failed(e.getMessage());
+        return ApiResult.failed(e.getMessage());
     }
 
     /**
      * Spring Security 未登录异常
      */
     @ExceptionHandler(AuthenticationException.class)
-    public JsonResult authenticationException(HttpServletRequest request, AuthenticationException e) {
-        return JsonResult.failed(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMsg());
+    public ApiResult authenticationException(HttpServletRequest request, AuthenticationException e) {
+        return ApiResult.failed(ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
     }
 
     /**
      * Spring Security 无权限异常
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public JsonResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
-        return JsonResult.failed(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMsg());
+    public ApiResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+        return ApiResult.failed(ApiCodeEnum.FORBIDDEN.getCode(), ApiCodeEnum.FORBIDDEN.getMsg());
     }
 
     /**
@@ -54,8 +54,8 @@ public class RestExceptionHandler {
      * errCode 1xxx 格式
      */
     @ExceptionHandler(AuthException.class)
-    public JsonResult authException(HttpServletRequest request, AuthException e) {
-        return JsonResult.failed(e.getErrCode(), e.getErrMsg());
+    public ApiResult authException(HttpServletRequest request, AuthException e) {
+        return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 
     /**
@@ -63,8 +63,8 @@ public class RestExceptionHandler {
      * errCode 2xxx 格式
      */
     @ExceptionHandler(VerifyException.class)
-    public JsonResult verifyException(HttpServletRequest request, VerifyException e) {
-        return JsonResult.failed(e.getErrCode(), e.getErrMsg());
+    public ApiResult verifyException(HttpServletRequest request, VerifyException e) {
+        return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 
     /**
@@ -72,7 +72,7 @@ public class RestExceptionHandler {
      * errCode 3xxx 格式
      */
     @ExceptionHandler(ServiceException.class)
-    public JsonResult serviceException(HttpServletRequest request, ServiceException e) {
-        return JsonResult.failed(e.getErrCode(), e.getErrMsg());
+    public ApiResult serviceException(HttpServletRequest request, ServiceException e) {
+        return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 }

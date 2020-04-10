@@ -4,7 +4,7 @@ import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.service.AdminService;
-import com.github.chic.common.component.JsonResult;
+import com.github.chic.common.component.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +25,9 @@ public class AuthController {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public JsonResult register(@RequestBody @Valid RegisterParam registerParam) {
+    public ApiResult register(@RequestBody @Valid RegisterParam registerParam) {
         adminService.register(registerParam);
-        return JsonResult.success();
+        return ApiResult.success();
     }
 
     /**
@@ -35,19 +35,19 @@ public class AuthController {
      */
     @ApiOperation("登陆")
     @PostMapping("/login")
-    public JsonResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
+    public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
         String token = adminService.login(loginParam);
         LoginVO loginVO = new LoginVO();
         loginVO.setToken(token);
-        return JsonResult.success(loginVO);
+        return ApiResult.success(loginVO);
     }
 
     /**
      * Token测试
      */
     @PostMapping("/test/token")
-    public JsonResult testToken() {
-        return JsonResult.success();
+    public ApiResult testToken() {
+        return ApiResult.success();
     }
 
     /**
@@ -55,8 +55,8 @@ public class AuthController {
      */
     @PreAuthorize("hasRole('admin')")
     @PostMapping("/test/role")
-    public JsonResult testRole() {
-        return JsonResult.success();
+    public ApiResult testRole() {
+        return ApiResult.success();
     }
 
     /**
@@ -64,7 +64,7 @@ public class AuthController {
      */
     @PreAuthorize("hasPermission('/test/permission','test:permission')")
     @PostMapping("/test/permission")
-    public JsonResult testPermission() {
-        return JsonResult.success();
+    public ApiResult testPermission() {
+        return ApiResult.success();
     }
 }

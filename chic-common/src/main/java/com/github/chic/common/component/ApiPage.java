@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResult<T> {
+public class ApiPage<T> {
     private Integer pageIndex;
     private Integer pageSize;
     private Long totle;

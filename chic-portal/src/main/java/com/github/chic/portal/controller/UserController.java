@@ -1,6 +1,6 @@
 package com.github.chic.portal.controller;
 
-import com.github.chic.common.component.JsonResult;
+import com.github.chic.common.component.ApiResult;
 import com.github.chic.portal.model.dto.LoginParam;
 import com.github.chic.portal.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +22,10 @@ public class UserController {
      * 登陆
      */
     @PostMapping("/login")
-    public JsonResult login(@RequestBody LoginParam loginParam) {
+    public ApiResult login(@RequestBody LoginParam loginParam) {
         String token = userService.login(loginParam);
         Map<String, Object> resultMap = new HashMap<>(5);
         resultMap.put("token", token);
-        return JsonResult.success(resultMap);
+        return ApiResult.success(resultMap);
     }
 }

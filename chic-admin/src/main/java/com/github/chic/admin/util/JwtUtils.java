@@ -2,7 +2,7 @@ package com.github.chic.admin.util;
 
 import com.github.chic.admin.config.JwtConfig;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
-import com.github.chic.common.component.ResultCode;
+import com.github.chic.common.component.ApiCodeEnum;
 import com.github.chic.common.exception.AuthException;
 import io.jsonwebtoken.*;
 
@@ -49,9 +49,9 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(ResultCode.INVALID.getCode(), "Token过期");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token过期");
         } catch (JwtException e) {
-            throw new AuthException(ResultCode.INVALID.getCode(), "Token无效");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token无效");
         }
     }
 

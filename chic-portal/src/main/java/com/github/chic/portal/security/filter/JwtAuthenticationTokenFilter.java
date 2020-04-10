@@ -1,7 +1,7 @@
 package com.github.chic.portal.security.filter;
 
-import com.github.chic.common.component.ResultCode;
-import com.github.chic.common.util.JsonResultUtils;
+import com.github.chic.common.component.ApiCodeEnum;
+import com.github.chic.common.util.ServletUtils;
 import com.github.chic.portal.config.JwtConfig;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import com.github.chic.portal.util.JwtUtils;
@@ -39,10 +39,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             try {
                 mobile = JwtUtils.getMobile(token);
             } catch (ExpiredJwtException e) {
-                JsonResultUtils.responseJson(response, ResultCode.UNAUTHORIZED.getCode(), "Token过期");
+                ServletUtils.writeJson(response, ApiCodeEnum.UNAUTHORIZED.getCode(), "Token过期");
                 return;
             } catch (JwtException e) {
-                JsonResultUtils.responseJson(response, ResultCode.UNAUTHORIZED.getCode(), "Token无效");
+                ServletUtils.writeJson(response, ApiCodeEnum.UNAUTHORIZED.getCode(), "Token无效");
                 return;
             }
             // 认证

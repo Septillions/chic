@@ -3,8 +3,8 @@ package com.github.chic.admin.controller;
 import cn.hutool.core.collection.CollUtil;
 import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.service.MonitorService;
-import com.github.chic.common.component.JsonResult;
-import com.github.chic.common.component.PageResult;
+import com.github.chic.common.component.ApiPage;
+import com.github.chic.common.component.ApiResult;
 import com.github.chic.common.component.PageParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +26,7 @@ public class MonitorController {
 
     @ApiOperation("获取在线管理员列表")
     @GetMapping("/findOnlineAdminList")
-    public JsonResult<PageResult<RedisJwtDTO>> findOnlineAdminList(PageParam pageParam) {
+    public ApiResult<ApiPage<RedisJwtDTO>> findOnlineAdminList(PageParam pageParam) {
         // 列表
         List<RedisJwtDTO> redisJwtDTOList = monitorService.listOnlineAdmin();
         // 比较器
@@ -37,11 +37,11 @@ public class MonitorController {
         };
         // 分页
         List<RedisJwtDTO> data = CollUtil.sortPageAll(pageParam.getPageIndex() - 1, pageParam.getPageSize(), comparator, redisJwtDTOList);
-        PageResult<RedisJwtDTO> pageResult = new PageResult<>();
-        pageResult.setPageIndex(pageParam.getPageIndex());
-        pageResult.setPageSize(pageParam.getPageSize());
-        pageResult.setTotle((long) redisJwtDTOList.size());
-        pageResult.setItems(data);
-        return JsonResult.success(pageResult);
+        ApiPage<RedisJwtDTO> apiPage = new ApiPage<>();
+        apiPage.setPageIndex(pageParam.getPageIndex());
+        apiPage.setPageSize(pageParam.getPageSize());
+        apiPage.setTotle((long) redisJwtDTOList.size());
+        apiPage.setItems(data);
+        return ApiResult.success(apiPage);
     }
 }

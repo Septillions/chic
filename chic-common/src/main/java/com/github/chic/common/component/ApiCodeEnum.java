@@ -3,7 +3,7 @@ package com.github.chic.common.component;
 /**
  * API 返回状态码
  */
-public enum ResultCode {
+public enum ApiCodeEnum {
     /**
      * 成功
      */
@@ -27,7 +27,7 @@ public enum ResultCode {
     private Integer code;
     private String msg;
 
-    ResultCode(Integer code, String msg) {
+    ApiCodeEnum(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
