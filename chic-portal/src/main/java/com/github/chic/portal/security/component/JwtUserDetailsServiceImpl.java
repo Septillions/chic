@@ -1,5 +1,6 @@
 package com.github.chic.portal.security.component;
 
+import com.github.chic.entity.Role;
 import com.github.chic.entity.User;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import com.github.chic.portal.service.UserService;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Spring Security 用户的业务实现
@@ -24,12 +26,9 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("无效用户");
         }
+        // 获取角色列表
+        List<Role> roleList = userService.listRoleByUserId(user.getUserId());
         // 构建Security用户
-        JwtUserDetails jwtUserDetails = new JwtUserDetails();
-        jwtUserDetails.setUserId(user.getUserId());
-        jwtUserDetails.setUsername(user.getUsername());
-        jwtUserDetails.setPassword(user.getPassword());
-        jwtUserDetails.setMobile(user.getMobile());
-        return jwtUserDetails;
+        return JwtUserDetails.create(user, roleList);
     }
 }

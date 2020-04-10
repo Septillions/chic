@@ -1,10 +1,23 @@
 package com.github.chic.portal.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.exception.AuthException;
+import com.github.chic.common.service.RedisService;
+import com.github.chic.common.util.ServletUtils;
+import com.github.chic.entity.Permission;
+import com.github.chic.entity.Role;
 import com.github.chic.entity.User;
+import com.github.chic.portal.mapper.PermissionMapper;
+import com.github.chic.portal.mapper.RoleMapper;
 import com.github.chic.portal.mapper.UserMapper;
-import com.github.chic.portal.model.dto.LoginParam;
+import com.github.chic.portal.model.constant.RedisKeyEnum;
+import com.github.chic.portal.model.dto.RedisJwtDTO;
+import com.github.chic.portal.model.param.LoginParam;
+import com.github.chic.portal.model.param.RegisterParam;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import com.github.chic.portal.service.UserService;
 import com.github.chic.portal.util.JwtUtils;
@@ -15,15 +28,42 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RoleMapper roleMapper;
+    @Resource
+    private PermissionMapper permissionMapper;
     @Resource
     private UserDetailsService userDetailsService;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private RedisService redisService;
+
+    @Override
+    public void register(RegisterParam registerParam) {
+        // 检查是否有相同用户名
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(User::getMobile, registerParam.getMobile());
+        Integer count = userMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new AuthException(1005, "手机号已经注册");
+        }
+        // 创建用户
+        User user = new User();
+        user.setUsername(registerParam.getMobile());
+        user.setMobile(registerParam.getMobile());
+        user.setPassword(passwordEncoder.encode(registerParam.getPassword()));
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+        userMapper.insert(user);
+    }
 
     @Override
     public String login(LoginParam loginParam) {
@@ -39,7 +79,20 @@ public class UserServiceImpl implements UserService {
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(loginParam.getMobile());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return JwtUtils.generateToken(jwtUserDetails);
+        // JWT
+        String jwt = JwtUtils.generateToken(jwtUserDetails);
+        // Redis
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), user.getUsername(), jwt);
+        UserAgent ua = ServletUtils.getUserAgent();
+        RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
+        redisJwtDTO.setMobile(user.getMobile());
+        redisJwtDTO.setJwt(jwt);
+        redisJwtDTO.setOs(ua.getOs().toString());
+        redisJwtDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisJwtKey, redisJwtDTO, JwtProps.expiration);
+        return jwt;
     }
 
     @Override
@@ -47,5 +100,15 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(User::getMobile, mobile);
         return userMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public List<Role> listRoleByUserId(Integer userId) {
+        return roleMapper.selectRoleListByUserId(userId);
+    }
+
+    @Override
+    public List<Permission> listPermissionByUserId(Integer userId) {
+        return permissionMapper.selectPermissionListByUserId(userId);
     }
 }

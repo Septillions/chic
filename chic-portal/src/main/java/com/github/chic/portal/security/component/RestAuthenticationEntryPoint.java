@@ -1,9 +1,7 @@
 package com.github.chic.portal.security.component;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.chic.common.entity.api.ApiResult;
 import com.github.chic.common.entity.api.ApiCodeEnum;
+import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -20,10 +18,6 @@ import java.io.IOException;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        ApiResult apiResult = ApiResult.failed(ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
-        response.getWriter().println(JSON.toJSONString(apiResult, SerializerFeature.WriteMapNullValue));
-        response.getWriter().flush();
+        ServletUtils.writeJson(response, ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
     }
 }

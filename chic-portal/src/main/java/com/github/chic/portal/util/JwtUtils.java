@@ -1,6 +1,6 @@
 package com.github.chic.portal.util;
 
-import com.github.chic.portal.config.JwtConfig;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,9 +30,9 @@ public class JwtUtils {
                 // 签发时间
                 .setIssuedAt(new Date())
                 // 失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + JwtConfig.expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JwtProps.expiration * 1000))
                 // 签名算法和密钥
-                .signWith(SignatureAlgorithm.HS512, JwtConfig.secret)
+                .signWith(SignatureAlgorithm.HS512, JwtProps.secret)
                 .compact();
     }
 
@@ -41,7 +41,7 @@ public class JwtUtils {
      */
     public static Claims getClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(JwtConfig.secret)
+                .setSigningKey(JwtProps.secret)
                 .parseClaimsJws(token)
                 .getBody();
     }

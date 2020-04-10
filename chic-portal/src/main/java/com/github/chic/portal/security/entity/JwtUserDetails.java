@@ -1,10 +1,16 @@
 package com.github.chic.portal.security.entity;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.github.chic.entity.Role;
+import com.github.chic.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security 用户实现
@@ -30,7 +36,7 @@ public class JwtUserDetails implements UserDetails {
     /**
      * 角色
      */
-    private Collection<GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
     /**
      * 账户是否未过期
      */
@@ -47,6 +53,16 @@ public class JwtUserDetails implements UserDetails {
      * 账户是否有效
      */
     private boolean isEnabled = true;
+
+    public static JwtUserDetails create(User user, List<Role> roleList) {
+        List<SimpleGrantedAuthority> authorities = roleList.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleCode()))
+                .collect(Collectors.toList());
+        JwtUserDetails jwtUserDetails = new JwtUserDetails();
+        BeanUtil.copyProperties(user, jwtUserDetails);
+        jwtUserDetails.setAuthorities(authorities);
+        return jwtUserDetails;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,9 +1,7 @@
 package com.github.chic.portal.security.component;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.github.chic.common.entity.api.ApiResult;
 import com.github.chic.common.entity.api.ApiCodeEnum;
+import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -20,10 +18,6 @@ import java.io.IOException;
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        ApiResult apiResult = ApiResult.failed(ApiCodeEnum.FORBIDDEN.getCode(), ApiCodeEnum.FORBIDDEN.getMsg());
-        response.getWriter().println(JSON.toJSONString(apiResult, SerializerFeature.WriteMapNullValue));
-        response.getWriter().flush();
+        ServletUtils.writeJson(response, ApiCodeEnum.FORBIDDEN.getCode(), ApiCodeEnum.FORBIDDEN.getMsg());
     }
 }

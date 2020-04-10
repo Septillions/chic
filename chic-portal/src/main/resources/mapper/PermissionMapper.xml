@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.chic.portal.mapper.PermissionMapper">
+    <select id="selectPermissionListByUserId" resultType="com.github.chic.entity.Permission">
+        SELECT p.*
+        FROM t_user_role_relation urr
+                 INNER JOIN t_role r ON urr.role_id = r.role_id
+                 INNER JOIN t_role_permission_relation rpr ON r.role_id = rpr.role_id
+                 INNER JOIN t_permission p ON rpr.permission_id = p.permission_id
+        WHERE urr.user_id = #{userId}
+    </select>
+</mapper>

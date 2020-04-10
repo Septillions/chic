@@ -1,6 +1,7 @@
 package com.github.chic.portal.component.aspect;
 
-import com.github.chic.portal.util.ServletUtils;
+import cn.hutool.extra.servlet.ServletUtil;
+import com.github.chic.common.util.ServletUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -31,10 +32,9 @@ public class WebLogAspect {
         // 日志
         StringBuilder log = new StringBuilder();
         // 记录请求内容
-        assert request != null;
         log.append(request.getMethod()).append(" : ").append(request.getRequestURL()).append(" - ");
         log.append("ARGS : ").append(Arrays.toString(joinPoint.getArgs())).append(" - ");
-        log.append("IP : ").append(ServletUtils.getIpAddress(request)).append(" - ");
+        log.append("IP : ").append(ServletUtil.getClientIP(request)).append(" - ");
         try {
             // 执行请求方法
             Object result = joinPoint.proceed(joinPoint.getArgs());
