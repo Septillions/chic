@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.chic</groupId>
     <artifactId>chic-admin</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0.0</version>
     <name>chic-admin</name>
 
@@ -32,4 +32,8 @@
             <artifactId>jjwt</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>admin</finalName>
+    </build>
 </project>
