@@ -3,6 +3,10 @@ spring:
   profiles:
     active: dev
 
+# Logback
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
+
 # MyBatis Plus
 mybatis-plus:
   global-config:
