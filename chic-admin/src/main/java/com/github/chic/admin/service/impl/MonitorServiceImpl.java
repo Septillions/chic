@@ -1,6 +1,6 @@
 package com.github.chic.admin.service.impl;
 
-import com.github.chic.admin.model.constant.RedisKeyEnum;
+import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.service.MonitorService;
 import com.github.chic.common.service.RedisService;
@@ -18,7 +18,7 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public List<RedisJwtDTO> listOnlineAdmin() {
-        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_PREFIX.getKey() + "*");
+        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_ADMIN_PREFIX.getKey() + "*");
         List<RedisJwtDTO> redisJwtDTOList = new ArrayList<>();
         for (String key : keys) {
             RedisJwtDTO redisJwtDTO = (RedisJwtDTO) redisService.get(key);

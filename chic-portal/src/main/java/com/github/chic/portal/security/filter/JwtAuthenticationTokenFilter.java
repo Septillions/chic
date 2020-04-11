@@ -6,10 +6,10 @@ import cn.hutool.core.util.StrUtil;
 import com.github.chic.common.config.AuthProps;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.entity.api.ApiCodeEnum;
+import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
-import com.github.chic.portal.model.constant.RedisKeyEnum;
 import com.github.chic.portal.model.dto.RedisJwtDTO;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import com.github.chic.portal.util.JwtUtils;
@@ -64,7 +64,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
             // Redis有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), mobile, token);
+            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), mobile, token);
             RedisJwtDTO redisJwtDTO = (RedisJwtDTO) redisService.get(redisJwtKey);
             if (redisJwtDTO == null) {
                 ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token失效");

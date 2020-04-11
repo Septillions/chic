@@ -5,6 +5,7 @@ import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
@@ -14,7 +15,6 @@ import com.github.chic.entity.User;
 import com.github.chic.portal.mapper.PermissionMapper;
 import com.github.chic.portal.mapper.RoleMapper;
 import com.github.chic.portal.mapper.UserMapper;
-import com.github.chic.portal.model.constant.RedisKeyEnum;
 import com.github.chic.portal.model.dto.RedisJwtDTO;
 import com.github.chic.portal.model.param.LoginParam;
 import com.github.chic.portal.model.param.RegisterParam;
@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // JWT
         String jwt = JwtUtils.generateToken(jwtUserDetails);
         // Redis
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), user.getUsername(), jwt);
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), user.getUsername(), jwt);
         UserAgent ua = ServletUtils.getUserAgent();
         RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
         redisJwtDTO.setMobile(user.getMobile());

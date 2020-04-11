@@ -8,7 +8,7 @@ import com.github.chic.common.config.JwtProps;
 import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
-import com.github.chic.admin.model.constant.RedisKeyEnum;
+import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.admin.model.dto.RedisJwtDTO;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
@@ -81,7 +81,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // JWT
         String jwt = JwtUtils.generateToken(jwtAdminDetails);
         // Redis
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_FORMAT.getKey(), admin.getUsername(), jwt);
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), admin.getUsername(), jwt);
         UserAgent ua = ServletUtils.getUserAgent();
         RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
         redisJwtDTO.setUsername(admin.getUsername());
