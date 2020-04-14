@@ -29,14 +29,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- Version -->
         <mysql-connector.version>8.0.19</mysql-connector.version>
-        <druid.version>1.1.21</druid.version>
+        <druid.version>1.1.22</druid.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <mybatis-plus-generator.version>3.2.0</mybatis-plus-generator.version>
         <pagehelper.version>1.2.13</pagehelper.version>
         <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.30</freemarker.version>
-        <fastjson.version>1.2.67</fastjson.version>
-        <hutool.version>5.2.4</hutool.version>
+        <fastjson.version>1.2.68</fastjson.version>
+        <hutool.version>5.3.0</hutool.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-ui.version>2.9.2</swagger-ui.version>
         <chic.version>1.0.0</chic.version>
