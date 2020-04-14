@@ -28,10 +28,7 @@ jwt:
 auth:
   # 不需要认证的接口
   ignores:
-    # 不限请求方法
-    pattern:
-      - /admin/**
     # POST 请求
     post:
-      - /api/auth/login
-      - /api/auth/register
+      - /auth/login
+      - /auth/register

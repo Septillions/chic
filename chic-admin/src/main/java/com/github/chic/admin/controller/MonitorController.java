@@ -19,7 +19,7 @@ import java.util.List;
 
 @Api(tags = "Monitor 监控")
 @RestController
-@RequestMapping("/admin/monitor")
+@RequestMapping("/monitor")
 public class MonitorController {
     @Resource
     private MonitorService monitorService;

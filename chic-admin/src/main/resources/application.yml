@@ -28,13 +28,10 @@ jwt:
 auth:
   # 不需要认证的接口
   ignores:
-    # 不限请求方法
-    pattern:
-      - /api/**
     # GET 请求
     get:
-      - /admin/monitor/findOnlineAdminList
+      - /monitor/findOnlineAdminList
     # POST 请求
     post:
-      - /admin/auth/login
-      - /admin/auth/register
+      - /auth/login
+      - /auth/register
