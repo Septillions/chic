@@ -1,0 +1,27 @@
+version: '3'
+services:
+  chic-portal:
+    image: tomcat:8
+    container_name: chic-portal
+    ports:
+      - 8081:8080
+    volumes:
+      - /docker/chic-portal/logs:/logs
+      - /docker/chic-portal/logs/debug:/usr/local/tomcat/logs
+      - /docker/chic-portal/webapps:/usr/local/tomcat/webapps
+    networks:
+      - project-network
+  chic-admin:
+    image: tomcat:8
+    container_name: chic-admin
+    ports:
+      - 8082:8080
+    volumes:
+      - /docker/chic-admin/logs:/logs
+      - /docker/chic-admin/logs/debug:/usr/local/tomcat/logs
+      - /docker/chic-admin/webapps:/usr/local/tomcat/webapps
+    networks:
+      - project-network
+networks:
+  project-network:
+    external: true
