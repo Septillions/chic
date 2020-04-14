@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <!-- 设置存储路径变量 -->
-    <property name="LOG_HOME" value="/www/wwwlogs/chic/"/>
+    <property name="LOG_HOME" value="/logs/"/>
 
     <!-- INFO 输出日志 -->
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
