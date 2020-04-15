@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 28/03/2020 14:27:48
+ Date: 15/04/2020 08:53:45
 */
 
 SET NAMES utf8mb4;
@@ -100,5 +100,16 @@ CREATE TABLE `t_user`  (
   `update_time` datetime(0) NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_user_role_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_role_relation`;
+CREATE TABLE `t_user_role_relation`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
+  `role_id` int(10) UNSIGNED NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与角色关联表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
