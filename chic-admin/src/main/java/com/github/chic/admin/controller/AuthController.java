@@ -25,7 +25,7 @@ public class AuthController {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public ApiResult register(@RequestBody @Valid RegisterParam registerParam) {
+    public ApiResult<Object> register(@RequestBody @Valid RegisterParam registerParam) {
         adminService.register(registerParam);
         return ApiResult.success();
     }
@@ -46,7 +46,7 @@ public class AuthController {
      * Token测试
      */
     @PostMapping("/test/token")
-    public ApiResult testToken() {
+    public ApiResult<Object> testToken() {
         return ApiResult.success();
     }
 
@@ -55,7 +55,7 @@ public class AuthController {
      */
     @PreAuthorize("hasRole('admin')")
     @PostMapping("/test/role")
-    public ApiResult testRole() {
+    public ApiResult<Object> testRole() {
         return ApiResult.success();
     }
 
@@ -64,7 +64,7 @@ public class AuthController {
      */
     @PreAuthorize("hasPermission('/test/permission','test:permission')")
     @PostMapping("/test/permission")
-    public ApiResult testPermission() {
+    public ApiResult<Object> testPermission() {
         return ApiResult.success();
     }
 }

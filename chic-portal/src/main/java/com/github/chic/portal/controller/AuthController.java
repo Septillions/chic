@@ -27,7 +27,7 @@ public class AuthController {
      */
     @ApiOperation("注册")
     @PostMapping("/register")
-    public ApiResult register(@RequestBody @Valid RegisterParam registerParam) {
+    public ApiResult<Object> register(@RequestBody @Valid RegisterParam registerParam) {
         userService.register(registerParam);
         return ApiResult.success();
     }
