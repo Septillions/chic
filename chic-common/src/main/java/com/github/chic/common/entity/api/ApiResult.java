@@ -1,9 +1,11 @@
 package com.github.chic.common.entity.api;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * API 返回格式对象
@@ -24,13 +26,15 @@ public class ApiResult<T> {
         return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), data);
     }
 
-    public static <T> ApiResult<ApiPage<T>> success(Page<T> page) {
-        ApiPage<T> data = new ApiPage<>();
-        data.setPageIndex(page.getPageNum());
-        data.setPageSize(page.getPageSize());
-        data.setTotle(page.getTotal());
-        data.setItems(page.getResult());
-        return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), data);
+    public static <T> ApiResult<ApiPage<T>> success(List<T> list) {
+        ApiPage<T> apiPage = new ApiPage<>();
+        PageInfo<T> pageInfo = new PageInfo<>(list);
+        apiPage.setPageIndex(pageInfo.getPageNum());
+        apiPage.setPageSize(pageInfo.getPageSize());
+        apiPage.setPages(pageInfo.getPages());
+        apiPage.setTotle(pageInfo.getTotal());
+        apiPage.setItems(pageInfo.getList());
+        return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), apiPage);
     }
 
     public static <T> ApiResult<T> failed() {

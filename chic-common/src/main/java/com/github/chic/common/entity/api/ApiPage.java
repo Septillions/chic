@@ -15,6 +15,7 @@ import java.util.List;
 public class ApiPage<T> {
     private Integer pageIndex;
     private Integer pageSize;
+    private Integer pages;
     private Long totle;
     private List<T> items;
 }
