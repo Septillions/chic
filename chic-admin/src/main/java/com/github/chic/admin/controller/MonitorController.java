@@ -1,10 +1,11 @@
 package com.github.chic.admin.controller;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.chic.admin.model.dto.RedisJwtDTO;
+import cn.hutool.core.util.PageUtil;
 import com.github.chic.admin.service.MonitorService;
 import com.github.chic.common.entity.api.ApiPage;
 import com.github.chic.common.entity.api.ApiResult;
+import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.common.entity.param.PageParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,21 +27,21 @@ public class MonitorController {
 
     @ApiOperation("获取在线管理员列表")
     @GetMapping("/findOnlineAdminList")
-    public ApiResult<ApiPage<RedisJwtDTO>> findOnlineAdminList(PageParam pageParam) {
+    public ApiResult<ApiPage<RedisJwtAdminDTO>> findOnlineAdminList(PageParam pageParam) {
         // 列表
-        List<RedisJwtDTO> redisJwtDTOList = monitorService.listOnlineAdmin();
+        List<RedisJwtAdminDTO> redisJwtAdminDTOList = monitorService.listOnlineAdmin();
         // 比较器
-        Comparator<RedisJwtDTO> comparator = (o1, o2) -> {
+        Comparator<RedisJwtAdminDTO> comparator = (o1, o2) -> {
             LocalDateTime t1 = o1.getLoginTime();
             LocalDateTime t2 = o2.getLoginTime();
             return t1.compareTo(t2);
         };
         // 分页
-        List<RedisJwtDTO> data = CollUtil.sortPageAll(pageParam.getPageIndex() - 1, pageParam.getPageSize(), comparator, redisJwtDTOList);
-        ApiPage<RedisJwtDTO> apiPage = new ApiPage<>();
+        List<RedisJwtAdminDTO> data = CollUtil.sortPageAll(pageParam.getPageIndex() - 1, pageParam.getPageSize(), comparator, redisJwtAdminDTOList);
+        ApiPage<RedisJwtAdminDTO> apiPage = new ApiPage<>();
         apiPage.setPageIndex(pageParam.getPageIndex());
         apiPage.setPageSize(pageParam.getPageSize());
-        apiPage.setTotle((long) redisJwtDTOList.size());
+        apiPage.setPages(PageUtil.totalPage(redisJwtAdminDTOList.size(), pageParam.getPageSize()));
         apiPage.setTotal((long) redisJwtAdminDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);

@@ -1,7 +1,7 @@
 package com.github.chic.admin.service.impl;
 
 import com.github.chic.common.entity.constant.RedisKeyEnum;
-import com.github.chic.admin.model.dto.RedisJwtDTO;
+import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.admin.service.MonitorService;
 import com.github.chic.common.service.RedisService;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class MonitorServiceImpl implements MonitorService {
     private RedisService redisService;
 
     @Override
-    public List<RedisJwtDTO> listOnlineAdmin() {
+    public List<RedisJwtAdminDTO> listOnlineAdmin() {
         Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_ADMIN_PREFIX.getKey() + "*");
-        List<RedisJwtDTO> redisJwtDTOList = new ArrayList<>();
+        List<RedisJwtAdminDTO> redisJwtAdminDTOList = new ArrayList<>();
         for (String key : keys) {
-            RedisJwtDTO redisJwtDTO = (RedisJwtDTO) redisService.get(key);
-            if (redisJwtDTO != null) {
-                redisJwtDTOList.add(redisJwtDTO);
+            RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(key);
+            if (redisJwtAdminDTO != null) {
+                redisJwtAdminDTOList.add(redisJwtAdminDTO);
             }
         }
-        return redisJwtDTOList;
+        return redisJwtAdminDTOList;
     }
 }

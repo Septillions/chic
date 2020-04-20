@@ -9,7 +9,7 @@ import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
-import com.github.chic.admin.model.dto.RedisJwtDTO;
+import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
@@ -83,14 +83,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // Redis
         String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), admin.getUsername(), jwt);
         UserAgent ua = ServletUtils.getUserAgent();
-        RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
-        redisJwtDTO.setUsername(admin.getUsername());
-        redisJwtDTO.setJwt(jwt);
-        redisJwtDTO.setOs(ua.getOs().toString());
-        redisJwtDTO.setPlatform(ua.getPlatform().toString());
-        redisJwtDTO.setIp(ServletUtils.getIpAddress());
-        redisJwtDTO.setLoginTime(LocalDateTime.now());
-        redisService.set(redisJwtKey, redisJwtDTO, JwtProps.expiration);
+        RedisJwtAdminDTO redisJwtAdminDTO = new RedisJwtAdminDTO();
+        redisJwtAdminDTO.setUsername(admin.getUsername());
+        redisJwtAdminDTO.setJwt(jwt);
+        redisJwtAdminDTO.setOs(ua.getOs().toString());
+        redisJwtAdminDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtAdminDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtAdminDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisJwtKey, redisJwtAdminDTO, JwtProps.expiration);
         return jwt;
     }
 

@@ -15,7 +15,7 @@ import com.github.chic.entity.User;
 import com.github.chic.portal.mapper.PermissionMapper;
 import com.github.chic.portal.mapper.RoleMapper;
 import com.github.chic.portal.mapper.UserMapper;
-import com.github.chic.portal.model.dto.RedisJwtDTO;
+import com.github.chic.common.entity.dto.RedisJwtUserDTO;
 import com.github.chic.portal.model.param.LoginParam;
 import com.github.chic.portal.model.param.RegisterParam;
 import com.github.chic.portal.security.entity.JwtUserDetails;
@@ -84,14 +84,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // Redis
         String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), user.getUsername(), jwt);
         UserAgent ua = ServletUtils.getUserAgent();
-        RedisJwtDTO redisJwtDTO = new RedisJwtDTO();
-        redisJwtDTO.setMobile(user.getMobile());
-        redisJwtDTO.setJwt(jwt);
-        redisJwtDTO.setOs(ua.getOs().toString());
-        redisJwtDTO.setPlatform(ua.getPlatform().toString());
-        redisJwtDTO.setIp(ServletUtils.getIpAddress());
-        redisJwtDTO.setLoginTime(LocalDateTime.now());
-        redisService.set(redisJwtKey, redisJwtDTO, JwtProps.expiration);
+        RedisJwtUserDTO redisJwtUserDTO = new RedisJwtUserDTO();
+        redisJwtUserDTO.setMobile(user.getMobile());
+        redisJwtUserDTO.setJwt(jwt);
+        redisJwtUserDTO.setOs(ua.getOs().toString());
+        redisJwtUserDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtUserDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtUserDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisJwtKey, redisJwtUserDTO, JwtProps.expiration);
         return jwt;
     }
 

@@ -1,12 +1,12 @@
-package com.github.chic.portal.model.dto;
+package com.github.chic.common.entity.dto;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class RedisJwtDTO {
-    private String mobile;
+public class RedisJwtAdminDTO {
+    private String username;
     private String jwt;
     private String ip;
     private String os;
