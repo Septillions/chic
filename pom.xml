@@ -173,7 +173,6 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct-processor.version}</version>
-                <scope>provided</scope>
             </dependency>
             <!-- Swagger -->
             <dependency>

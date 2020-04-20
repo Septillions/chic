@@ -23,7 +23,7 @@ public enum RedisKeyEnum {
      */
     AUTH_JWT_USER_PREFIX("auth:jwt:user:");
 
-    private String key;
+    private final String key;
 
     RedisKeyEnum(String key) {
         this.key = key;

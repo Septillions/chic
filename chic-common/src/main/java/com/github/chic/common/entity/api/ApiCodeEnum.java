@@ -24,8 +24,8 @@ public enum ApiCodeEnum {
      * 服务器异常
      */
     FAILED(5000, "服务器异常");
-    private Integer code;
-    private String msg;
+    private final Integer code;
+    private final String msg;
 
     ApiCodeEnum(Integer code, String msg) {
         this.code = code;
