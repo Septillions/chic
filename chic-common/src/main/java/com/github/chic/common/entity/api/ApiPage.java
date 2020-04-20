@@ -16,6 +16,6 @@ public class ApiPage<T> {
     private Integer pageIndex;
     private Integer pageSize;
     private Integer pages;
-    private Long totle;
+    private Long total;
     private List<T> items;
 }

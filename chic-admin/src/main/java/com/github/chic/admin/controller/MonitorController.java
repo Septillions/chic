@@ -41,6 +41,7 @@ public class MonitorController {
         apiPage.setPageIndex(pageParam.getPageIndex());
         apiPage.setPageSize(pageParam.getPageSize());
         apiPage.setTotle((long) redisJwtDTOList.size());
+        apiPage.setTotal((long) redisJwtAdminDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);
     }

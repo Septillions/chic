@@ -32,7 +32,7 @@ public class ApiResult<T> {
         apiPage.setPageIndex(pageInfo.getPageNum());
         apiPage.setPageSize(pageInfo.getPageSize());
         apiPage.setPages(pageInfo.getPages());
-        apiPage.setTotle(pageInfo.getTotal());
+        apiPage.setTotal(pageInfo.getTotal());
         apiPage.setItems(pageInfo.getList());
         return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), apiPage);
     }
