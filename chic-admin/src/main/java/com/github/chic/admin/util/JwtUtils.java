@@ -18,7 +18,7 @@ public class JwtUtils {
      * 根据用户生成Token
      */
     public static String generateToken(JwtAdminDetails jwtAdminDetails) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>(5);
         claims.put("sub", jwtAdminDetails.getUsername());
         return generateToken(claims);
     }

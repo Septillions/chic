@@ -3,16 +3,17 @@ package com.github.chic.admin.security.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.chic.common.config.AuthProps;
-import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.entity.constant.RedisKeyEnum;
-import com.github.chic.admin.model.dto.RedisJwtDTO;
+import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.util.JwtUtils;
+import com.github.chic.common.config.AuthProps;
+import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.entity.api.ApiCodeEnum;
+import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,17 +36,17 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
      * 自定义认证配置类
      */
-    @Resource
+    @Autowired
     private AuthProps authProps;
     /**
      * Redis 业务类
      */
-    @Resource
+    @Autowired
     private RedisService redisService;
     /**
      * Security 用户服务类
      */
-    @Resource
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
@@ -65,8 +65,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
             // Redis有效控制
             String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), username, token);
-            RedisJwtDTO redisJwtDTO = (RedisJwtDTO) redisService.get(redisJwtKey);
-            if (redisJwtDTO == null) {
+            RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisJwtKey);
+            if (redisJwtAdminDTO == null) {
                 ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token失效");
                 return;
             }

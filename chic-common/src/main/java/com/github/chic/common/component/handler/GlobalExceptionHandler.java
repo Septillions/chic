@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      * 全局异常 统一JSON格式返回
      */
     @ExceptionHandler(Exception.class)
-    public ApiResult exception(HttpServletRequest request, Exception e) {
+    public ApiResult<Object> exception(HttpServletRequest request, Exception e) {
         LOGGER.error("GlobalExceptionHandler:", e);
         return ApiResult.failed(e.getMessage());
     }
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
      * Spring Security 未登录异常
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ApiResult authenticationException(HttpServletRequest request, AuthenticationException e) {
+    public ApiResult<Object> authenticationException(HttpServletRequest request, AuthenticationException e) {
         return ApiResult.failed(ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
     }
 
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
      * Spring Security 无权限异常
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ApiResult accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+    public ApiResult<Object> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         return ApiResult.failed(ApiCodeEnum.FORBIDDEN.getCode(), ApiCodeEnum.FORBIDDEN.getMsg());
     }
 
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
      * Spring Validation 校验异常
      */
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public ApiResult validationException(HttpServletRequest request, Exception e) {
+    public ApiResult<Object> validationException(HttpServletRequest request, Exception e) {
         BindingResult bindingResult;
         if (e instanceof BindException) {
             bindingResult = ((BindException) e).getBindingResult();
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
      * errCode 1xxx 格式
      */
     @ExceptionHandler(AuthException.class)
-    public ApiResult authException(HttpServletRequest request, AuthException e) {
+    public ApiResult<Object> authException(HttpServletRequest request, AuthException e) {
         return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 
@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
      * errCode 2xxx 格式
      */
     @ExceptionHandler(VerifyException.class)
-    public ApiResult verifyException(HttpServletRequest request, VerifyException e) {
+    public ApiResult<Object> verifyException(HttpServletRequest request, VerifyException e) {
         return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 
@@ -97,7 +97,7 @@ public class GlobalExceptionHandler {
      * errCode 3xxx 格式
      */
     @ExceptionHandler(ServiceException.class)
-    public ApiResult serviceException(HttpServletRequest request, ServiceException e) {
+    public ApiResult<Object> serviceException(HttpServletRequest request, ServiceException e) {
         return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 }
