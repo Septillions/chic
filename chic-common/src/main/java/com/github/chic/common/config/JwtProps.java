@@ -16,7 +16,7 @@ public class JwtProps {
     /**
      * JWT 存储的请求头
      */
-    public static String tokenHeader;
+    public static String header;
     /**
      * JWT 超期限时间
      */
@@ -26,8 +26,8 @@ public class JwtProps {
         JwtProps.secret = secret;
     }
 
-    public void setTokenHeader(String tokenHeader) {
-        JwtProps.tokenHeader = tokenHeader;
+    public void setHeader(String header) {
+        JwtProps.header = header;
     }
 
     public void setExpiration(Long expiration) {

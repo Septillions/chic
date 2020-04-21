@@ -20,7 +20,7 @@ jwt:
   # JWT 加解密使用的密钥
   secret: JWTSecret
   # JWT 存储的请求头
-  tokenHeader: Authorization
+  header: Authorization
   # JWT 超期限时间(60*60*24*7 604800)
   expiration: 604800
 

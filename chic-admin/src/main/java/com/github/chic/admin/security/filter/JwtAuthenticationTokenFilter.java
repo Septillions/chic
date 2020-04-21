@@ -52,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 获得TokenHeader
-        String token = request.getHeader(JwtProps.tokenHeader);
+        String token = request.getHeader(JwtProps.header);
         // 获取请求头中JWT的Token
         if (!StrUtil.isEmpty(token)) {
             // 获取用户名
