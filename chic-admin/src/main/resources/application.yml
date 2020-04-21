@@ -31,6 +31,7 @@ auth:
     # GET 请求
     get:
       - /monitor/findOnlineAdminList
+      - /monitor/findOnlineUserList
       - /user/list
     # POST 请求
     post:

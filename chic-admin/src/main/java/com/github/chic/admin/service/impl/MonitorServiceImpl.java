@@ -3,6 +3,7 @@ package com.github.chic.admin.service.impl;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.admin.service.MonitorService;
+import com.github.chic.common.entity.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,18 @@ public class MonitorServiceImpl implements MonitorService {
             }
         }
         return redisJwtAdminDTOList;
+    }
+
+    @Override
+    public List<RedisJwtUserDTO> listOnlineUser() {
+        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_USER_PREFIX.getKey() + "*");
+        List<RedisJwtUserDTO> redisJwtUserDTOList = new ArrayList<>();
+        for (String key : keys) {
+            RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(key);
+            if (redisJwtUserDTO != null) {
+                redisJwtUserDTOList.add(redisJwtUserDTO);
+            }
+        }
+        return redisJwtUserDTOList;
     }
 }
