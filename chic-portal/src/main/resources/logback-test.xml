@@ -81,11 +81,20 @@
         </filter>
     </appender>
 
+    <!-- LOGSTASH 输出日志 -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- Logstash 服务端 -->
+        <destination>logstash:4560</destination>
+        <!-- 设置编码 -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
     <!-- 指定基础的日志输出级别 -->
     <root level="INFO">
         <!-- appender将会添加到这个logger -->
         <appender-ref ref="INFO"/>
         <appender-ref ref="WARN"/>
         <appender-ref ref="ERROR"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
 </configuration>

@@ -41,6 +41,7 @@
         <mapstruct-processor.version>1.3.1.Final</mapstruct-processor.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-ui.version>2.9.2</swagger-ui.version>
+        <logstash.version>6.3</logstash.version>
         <chic.version>1.0.0</chic.version>
     </properties>
 
@@ -185,6 +186,12 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger-ui.version}</version>
+            </dependency>
+            <!-- Logstash -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
