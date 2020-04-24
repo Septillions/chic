@@ -1,6 +1,5 @@
 version: '3'
 services:
-  # elasticsearch 搜索引擎
   elasticsearch:
     image: elasticsearch:6.8.8
     container_name: elasticsearch
@@ -16,7 +15,6 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
       - project-network
-  # logstash 日志收集
   logstash:
     image: logstash:6.8.8
     container_name: logstash
@@ -29,7 +27,6 @@ services:
       - elasticsearch
     networks:
       - project-network
-  # kibana 管理面板
   kibana:
     image: kibana:6.8.8
     container_name: kibana

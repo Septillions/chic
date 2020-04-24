@@ -1,8 +1,8 @@
 package com.github.chic.admin.service.impl;
 
+import com.github.chic.admin.service.MonitorService;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
-import com.github.chic.admin.service.MonitorService;
 import com.github.chic.common.entity.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import org.springframework.stereotype.Service;
