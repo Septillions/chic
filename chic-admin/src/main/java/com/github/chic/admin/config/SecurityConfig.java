@@ -1,6 +1,5 @@
 package com.github.chic.admin.config;
 
-import com.github.chic.admin.security.component.JwtPermissionEvaluator;
 import com.github.chic.admin.security.component.RestAccessDeniedHandler;
 import com.github.chic.admin.security.component.RestAuthenticationEntryPoint;
 import com.github.chic.admin.security.filter.JwtAuthenticationTokenFilter;
@@ -19,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -102,13 +100,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public DefaultWebSecurityExpressionHandler jwtSecurityExpressionHandler() {
-        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
-        handler.setPermissionEvaluator(new JwtPermissionEvaluator());
-        return handler;
     }
 
     @Bean
