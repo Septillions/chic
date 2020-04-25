@@ -14,6 +14,8 @@ public interface UserService extends IService<User> {
 
     String login(LoginParam loginParam);
 
+    void logout(String token);
+
     User getByMobile(String mobile);
 
     List<Role> listRoleByUserId(Integer userId);

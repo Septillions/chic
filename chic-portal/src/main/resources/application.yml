@@ -30,5 +30,6 @@ auth:
   ignores:
     # POST 请求
     post:
-      - /auth/login
       - /auth/register
+      - /auth/login
+      - /auth/logout

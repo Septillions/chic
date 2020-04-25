@@ -14,6 +14,8 @@ public interface AdminService extends IService<Admin> {
 
     String login(LoginParam loginParam);
 
+    void logout(String token);
+
     Admin getByUsername(String username);
 
     List<Role> listRoleByAdminId(Integer adminId);

@@ -96,6 +96,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public void logout(String token) {
+        String mobile = JwtUtils.getMobile(token);
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), mobile, token);
+        redisService.delete(redisJwtKey);
+    }
+
+    @Override
     public User getByMobile(String mobile) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(User::getMobile, mobile);

@@ -95,6 +95,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
+    public void logout(String token) {
+        String username = JwtUtils.getUsername(token);
+        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), username, token);
+        redisService.delete(redisJwtKey);
+    }
+
+    @Override
     public Admin getByUsername(String username) {
         QueryWrapper<Admin> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Admin::getUsername, username);

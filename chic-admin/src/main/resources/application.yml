@@ -32,8 +32,8 @@ auth:
     get:
       - /monitor/findOnlineAdminList
       - /monitor/findOnlineUserList
-      - /user/list
     # POST 请求
     post:
-      - /auth/login
       - /auth/register
+      - /auth/login
+      - /auth/logout
