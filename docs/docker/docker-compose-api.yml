@@ -9,7 +9,9 @@ services:
       - /docker/chic-portal/logs:/logs
       - /docker/chic-portal/logs/debug:/usr/local/tomcat/logs
       - /docker/chic-portal/webapps:/usr/local/tomcat/webapps
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      TZ: Asia/Shanghai
     networks:
       - project-network
   chic-admin:
@@ -21,7 +23,9 @@ services:
       - /docker/chic-admin/logs:/logs
       - /docker/chic-admin/logs/debug:/usr/local/tomcat/logs
       - /docker/chic-admin/webapps:/usr/local/tomcat/webapps
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      TZ: Asia/Shanghai
     networks:
       - project-network
 networks:

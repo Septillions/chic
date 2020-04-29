@@ -8,7 +8,7 @@ services:
     volumes:
       - /docker/elasticsearch/plugins:/usr/share/elasticsearch/plugins
       - /docker/elasticsearch/data:/usr/share/elasticsearch/data
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - "cluster.name=elasticsearch"
       - "discovery.type=single-node"
@@ -22,7 +22,7 @@ services:
       - 4560:4560
     volumes:
       - /docker/logstash/conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
       - elasticsearch
     networks:
@@ -33,7 +33,7 @@ services:
     ports:
       - 5601:5601
     volumes:
-      - /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - "elasticsearch.hosts=http://elasticsearch:9200"
     depends_on:
