@@ -35,6 +35,7 @@ services:
       - /docker/redis/data:/data
       - /docker/redis/conf/redis.conf:/etc/redis/redis.conf
       - /etc/localtime:/etc/localtime:ro
+    command: redis-server /etc/redis/redis.conf
     networks:
       - project-network
   rabbitmq:
