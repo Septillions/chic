@@ -37,6 +37,20 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - project-network
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - /docker/rabbitmq:/var/lib/rabbitmq
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      RABBITMQ_DEFAULT_USER: chic
+      RABBITMQ_DEFAULT_PASS: chic
+    networks:
+      - project-network
 networks:
   project-network:
     external: true

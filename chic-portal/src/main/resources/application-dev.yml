@@ -68,3 +68,13 @@ spring:
         max-idle: 8
         # 最小空闲连接
         min-idle: 0
+
+  # RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: chic
+    password: chic
+    virtual-host: /
+    publisher-returns: true
+    publisher-confirm-type: simple
