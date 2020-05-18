@@ -2,8 +2,10 @@ package com.github.chic.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.chic.admin.model.param.LoginParam;
+import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.LoginVO;
+import com.github.chic.admin.model.vo.RefreshVO;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.entity.api.ApiResult;
@@ -42,9 +44,7 @@ public class AuthController {
     @ApiOperation("登陆")
     @PostMapping("/login")
     public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
-        String token = adminService.login(loginParam);
-        LoginVO loginVO = new LoginVO();
-        loginVO.setToken(token);
+        LoginVO loginVO = adminService.login(loginParam);
         return ApiResult.success(loginVO);
     }
 
@@ -59,6 +59,16 @@ public class AuthController {
             adminService.logout(token);
         }
         return ApiResult.success();
+    }
+
+    /**
+     * 刷新
+     */
+    @ApiOperation("刷新")
+    @PostMapping("/refresh")
+    public ApiResult<RefreshVO> refresh(@RequestBody RefreshParam refreshParam) {
+        RefreshVO refreshVO = adminService.refresh(refreshParam);
+        return ApiResult.success(refreshVO);
     }
 
     /**

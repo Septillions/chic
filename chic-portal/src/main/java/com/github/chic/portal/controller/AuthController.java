@@ -4,8 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.entity.api.ApiResult;
 import com.github.chic.portal.model.param.LoginParam;
+import com.github.chic.portal.model.param.RefreshParam;
 import com.github.chic.portal.model.param.RegisterParam;
 import com.github.chic.portal.model.vo.LoginVO;
+import com.github.chic.portal.model.vo.RefreshVO;
 import com.github.chic.portal.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,10 +42,8 @@ public class AuthController {
      */
     @ApiOperation("登陆")
     @PostMapping("/login")
-    public ApiResult<LoginVO> login(@RequestBody LoginParam loginParam) {
-        String token = userService.login(loginParam);
-        LoginVO loginVO = new LoginVO();
-        loginVO.setToken(token);
+    public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
+        LoginVO loginVO = userService.login(loginParam);
         return ApiResult.success(loginVO);
     }
 
@@ -58,5 +58,15 @@ public class AuthController {
             userService.logout(token);
         }
         return ApiResult.success();
+    }
+
+    /**
+     * 刷新
+     */
+    @ApiOperation("刷新")
+    @PostMapping("/refresh")
+    public ApiResult<RefreshVO> refresh(@RequestBody RefreshParam refreshParam) {
+        RefreshVO refreshVO = userService.refresh(refreshParam);
+        return ApiResult.success(refreshVO);
     }
 }

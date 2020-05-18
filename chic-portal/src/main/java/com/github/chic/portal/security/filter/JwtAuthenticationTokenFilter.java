@@ -64,10 +64,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
             // Redis有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), mobile, token);
+            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, token);
             RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisJwtKey);
             if (redisJwtUserDTO == null) {
-                ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token失效");
+                ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token 失效");
                 return;
             }
             // 认证

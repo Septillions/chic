@@ -5,23 +5,41 @@ package com.github.chic.common.entity.constant;
  */
 public enum RedisKeyEnum {
     /**
-     * AUTH JWT 格式
-     * auth:jwt:admin:{username}:{jwt}
+     * AUTH JWT ACCESS 格式
+     * auth:admin:jwt:access:{username}:{jwt}
      */
-    AUTH_JWT_ADMIN_FORMAT("auth:jwt:admin:{}:{}"),
+    AUTH_ADMIN_JWT_ACCESS_FORMAT("auth:admin:jwt:access:{}:{}"),
     /**
-     * AUTH JWT 前缀
+     * AUTH JWT ACCESS 前缀
      */
-    AUTH_JWT_ADMIN_PREFIX("auth:jwt:admin:"),
+    AUTH_ADMIN_JWT_ACCESS_PREFIX("auth:admin:jwt:access:"),
     /**
-     * AUTH JWT 格式
-     * auth:jwt:user:{mobile}:{jwt}
+     * AUTH JWT REFRESH 格式
+     * auth:admin:jwt:refresh:{mobile}:{jwt}
      */
-    AUTH_JWT_USER_FORMAT("auth:jwt:user:{}:{}"),
+    AUTH_ADMIN_JWT_REFRESH_FORMAT("auth:admin:jwt:refresh:{}:{}"),
     /**
-     * AUTH JWT 前缀
+     * AUTH JWT REFRESH 前缀
      */
-    AUTH_JWT_USER_PREFIX("auth:jwt:user:");
+    AUTH_ADMIN_JWT_REFRESH_PREFIX("auth:admin:jwt:refresh:"),
+    /**
+     * AUTH JWT ACCESS 格式
+     * auth:user:jwt:access{mobile}:{jwt}
+     */
+    AUTH_USER_JWT_ACCESS_FORMAT("auth:user:jwt:access:{}:{}"),
+    /**
+     * AUTH JWT ACCESS 前缀
+     */
+    AUTH_USER_JWT_ACCESS_PREFIX("auth:user:jwt:access:"),
+    /**
+     * AUTH JWT REFRESH 格式
+     * auth:user:jwt:refresh:{mobile}:{jwt}
+     */
+    AUTH_USER_JWT_REFRESH_FORMAT("auth:user:jwt:refresh:{}:{}"),
+    /**
+     * AUTH JWT REFRESH 前缀
+     */
+    AUTH_USER_JWT_REFRESH_PREFIX("auth:user:jwt:refresh:");
 
     private final String key;
 

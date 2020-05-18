@@ -15,32 +15,41 @@ import java.util.Map;
  */
 public class JwtUtils {
     /**
-     * 根据用户生成Token
+     * 生成 AccessToken
      */
-    public static String generateToken(JwtUserDetails jwtUserDetails) {
+    public static String generateAccessToken(JwtUserDetails jwtUserDetails) {
         Map<String, Object> claims = new HashMap<>(5);
         claims.put("sub", jwtUserDetails.getMobile());
-        return generateToken(claims);
+        return generateToken(claims, JwtProps.accessTokenExpireTime);
     }
 
     /**
-     * 根据负载生成Token
+     * 生成 RefreshToken
      */
-    public static String generateToken(Map<String, Object> claims) {
-        // 生成JWT
+    public static String generateRefreshToken(JwtUserDetails jwtUserDetails) {
+        Map<String, Object> claims = new HashMap<>(5);
+        claims.put("sub", jwtUserDetails.getMobile());
+        return generateToken(claims, JwtProps.refreshTokenExpireTime);
+    }
+
+    /**
+     * 生成 Token
+     */
+    public static String generateToken(Map<String, Object> claims, Long expiration) {
+        // 生成 JWT
         return Jwts.builder()
                 .setClaims(claims)
                 // 签发时间
                 .setIssuedAt(new Date())
                 // 失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + JwtProps.expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 // 签名算法和密钥
                 .signWith(SignatureAlgorithm.HS512, JwtProps.secret)
                 .compact();
     }
 
     /**
-     * 解析Token
+     * 解析 Token
      */
     public static Claims getClaims(String token) {
         try {
@@ -49,9 +58,9 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token过期");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 过期");
         } catch (JwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token无效");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 无效");
         }
     }
 

@@ -21,8 +21,10 @@ jwt:
   secret: JWTSecret
   # JWT 存储的请求头
   header: Authorization
-  # JWT 超期限时间(60*60*24*7 604800)
-  expiration: 604800
+  # JWT AccessToken 过期时间(60*60*24*7 604800)
+  accessTokenExpireTime: 604800
+  # JWT RefreshToken 过期时间(60*60*24*30 604800)
+  refreshTokenExpireTime: 2592000
 
 # 认证
 auth:

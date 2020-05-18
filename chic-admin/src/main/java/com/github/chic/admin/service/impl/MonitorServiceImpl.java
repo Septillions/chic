@@ -19,7 +19,7 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public List<RedisJwtAdminDTO> listOnlineAdmin() {
-        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_ADMIN_PREFIX.getKey() + "*");
+        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_ADMIN_JWT_ACCESS_PREFIX.getKey() + "*");
         List<RedisJwtAdminDTO> redisJwtAdminDTOList = new ArrayList<>();
         for (String key : keys) {
             RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(key);
@@ -32,7 +32,7 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public List<RedisJwtUserDTO> listOnlineUser() {
-        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_JWT_USER_PREFIX.getKey() + "*");
+        Set<String> keys = redisService.keys(RedisKeyEnum.AUTH_USER_JWT_ACCESS_PREFIX.getKey() + "*");
         List<RedisJwtUserDTO> redisJwtUserDTOList = new ArrayList<>();
         for (String key : keys) {
             RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(key);

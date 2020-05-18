@@ -18,9 +18,13 @@ public class JwtProps {
      */
     public static String header;
     /**
-     * JWT 超期限时间
+     * JWT AccessToken 过期时间
      */
-    public static Long expiration;
+    public static Long accessTokenExpireTime;
+    /**
+     * JWT RefreshToken 过期时间
+     */
+    public static Long refreshTokenExpireTime;
 
     public void setSecret(String secret) {
         JwtProps.secret = secret;
@@ -30,7 +34,11 @@ public class JwtProps {
         JwtProps.header = header;
     }
 
-    public void setExpiration(Long expiration) {
-        JwtProps.expiration = expiration;
+    public void setAccessTokenExpireTime(Long accessTokenExpireTime) {
+        JwtProps.accessTokenExpireTime = accessTokenExpireTime;
+    }
+
+    public void setRefreshTokenExpireTime(Long refreshTokenExpireTime) {
+        JwtProps.refreshTokenExpireTime = refreshTokenExpireTime;
     }
 }

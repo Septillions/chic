@@ -8,11 +8,15 @@ import com.github.chic.admin.mapper.AdminMapper;
 import com.github.chic.admin.mapper.PermissionMapper;
 import com.github.chic.admin.mapper.RoleMapper;
 import com.github.chic.admin.model.param.LoginParam;
+import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
+import com.github.chic.admin.model.vo.LoginVO;
+import com.github.chic.admin.model.vo.RefreshVO;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.JwtUtils;
 import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.common.exception.AuthException;
@@ -65,7 +69,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
-    public String login(LoginParam loginParam) {
+    public LoginVO login(LoginParam loginParam) {
         // 获取用户
         Admin admin = getByUsername(loginParam.getUsername());
         if (admin == null) {
@@ -79,26 +83,62 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
-        String jwt = JwtUtils.generateToken(jwtAdminDetails);
+        String accessToken = JwtUtils.generateAccessToken(jwtAdminDetails);
+        String refreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails);
         // Redis
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), admin.getUsername(), jwt);
-        UserAgent ua = ServletUtils.getUserAgent();
-        RedisJwtAdminDTO redisJwtAdminDTO = new RedisJwtAdminDTO();
-        redisJwtAdminDTO.setUsername(admin.getUsername());
-        redisJwtAdminDTO.setJwt(jwt);
-        redisJwtAdminDTO.setOs(ua.getOs().toString());
-        redisJwtAdminDTO.setPlatform(ua.getPlatform().toString());
-        redisJwtAdminDTO.setIp(ServletUtils.getIpAddress());
-        redisJwtAdminDTO.setLoginTime(LocalDateTime.now());
-        redisService.set(redisJwtKey, redisJwtAdminDTO, JwtProps.expiration);
-        return jwt;
+        redisCacheToken(admin.getUsername(), accessToken, refreshToken);
+        LoginVO loginVO = new LoginVO();
+        loginVO.setAccessToken(accessToken);
+        loginVO.setRefreshToken(refreshToken);
+        return loginVO;
     }
 
     @Override
-    public void logout(String token) {
-        String username = JwtUtils.getUsername(token);
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_ADMIN_FORMAT.getKey(), username, token);
-        redisService.delete(redisJwtKey);
+    public void logout(String accessToken) {
+        String username = JwtUtils.getUsername(accessToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
+        RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisAccessTokenKey);
+        if (redisJwtAdminDTO != null) {
+            redisService.delete(redisAccessTokenKey);
+            String refreshToken = redisJwtAdminDTO.getRefreshToken();
+            String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
+            redisService.delete(redisRefreshTokenKey);
+        }
+    }
+
+    @Override
+    public RefreshVO refresh(RefreshParam refreshParam) {
+        // 移除旧 Token
+        String oldAccessToken = refreshParam.getAccessToken();
+        String oldRefreshToken = refreshParam.getRefreshToken();
+        String username = JwtUtils.getUsername(oldRefreshToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_ACCESS_FORMAT.getKey(), username, oldAccessToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_REFRESH_FORMAT.getKey(), username, oldRefreshToken);
+        RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisRefreshTokenKey);
+        if (redisJwtAdminDTO == null) {
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
+        }
+        redisService.delete(redisAccessTokenKey);
+        redisService.delete(redisRefreshTokenKey);
+        // 生成新 Token
+        Admin admin = getByUsername(username);
+        if (admin == null) {
+            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+        }
+        // Security
+        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // JWT
+        String accessToken = JwtUtils.generateAccessToken(jwtAdminDetails);
+        String refreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails);
+        // Redis
+        redisCacheToken(username, accessToken, refreshToken);
+        // VO
+        RefreshVO refreshVO = new RefreshVO();
+        refreshVO.setAccessToken(accessToken);
+        refreshVO.setRefreshToken(refreshToken);
+        return refreshVO;
     }
 
     @Override
@@ -116,5 +156,21 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Permission> listPermissionByAdminId(Integer adminId) {
         return permissionMapper.selectPermissionListByAdminId(adminId);
+    }
+
+    private void redisCacheToken(String username, String accessToken, String refreshToken) {
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
+        UserAgent ua = ServletUtils.getUserAgent();
+        RedisJwtAdminDTO redisJwtAdminDTO = new RedisJwtAdminDTO();
+        redisJwtAdminDTO.setUsername(username);
+        redisJwtAdminDTO.setAccessToken(accessToken);
+        redisJwtAdminDTO.setRefreshToken(refreshToken);
+        redisJwtAdminDTO.setOs(ua.getOs().toString());
+        redisJwtAdminDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtAdminDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtAdminDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisAccessTokenKey, redisJwtAdminDTO, JwtProps.accessTokenExpireTime);
+        redisService.set(redisRefreshTokenKey, redisJwtAdminDTO, JwtProps.refreshTokenExpireTime);
     }
 }

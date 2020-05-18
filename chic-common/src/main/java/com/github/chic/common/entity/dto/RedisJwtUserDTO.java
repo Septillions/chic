@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 @Data
 public class RedisJwtUserDTO {
     private String mobile;
-    private String jwt;
+    private String accessToken;
+    private String refreshToken;
     private String ip;
     private String os;
     private String platform;

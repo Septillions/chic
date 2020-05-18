@@ -5,6 +5,7 @@ import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
 import com.github.chic.common.entity.dto.RedisJwtUserDTO;
 import com.github.chic.common.exception.AuthException;
@@ -17,7 +18,10 @@ import com.github.chic.portal.mapper.PermissionMapper;
 import com.github.chic.portal.mapper.RoleMapper;
 import com.github.chic.portal.mapper.UserMapper;
 import com.github.chic.portal.model.param.LoginParam;
+import com.github.chic.portal.model.param.RefreshParam;
 import com.github.chic.portal.model.param.RegisterParam;
+import com.github.chic.portal.model.vo.LoginVO;
+import com.github.chic.portal.model.vo.RefreshVO;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import com.github.chic.portal.service.UserService;
 import com.github.chic.portal.util.JwtUtils;
@@ -66,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String login(LoginParam loginParam) {
+    public LoginVO login(LoginParam loginParam) {
         // 获取用户
         User user = getByMobile(loginParam.getMobile());
         if (user == null) {
@@ -76,30 +80,67 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new AuthException(1003, "帐号或密码错误(Account or Password Error)");
         }
         // Security
-        JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(loginParam.getMobile());
+        JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getMobile());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
-        String jwt = JwtUtils.generateToken(jwtUserDetails);
+        String accessToken = JwtUtils.generateAccessToken(jwtUserDetails);
+        String refreshToken = JwtUtils.generateRefreshToken(jwtUserDetails);
         // Redis
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), user.getUsername(), jwt);
-        UserAgent ua = ServletUtils.getUserAgent();
-        RedisJwtUserDTO redisJwtUserDTO = new RedisJwtUserDTO();
-        redisJwtUserDTO.setMobile(user.getMobile());
-        redisJwtUserDTO.setJwt(jwt);
-        redisJwtUserDTO.setOs(ua.getOs().toString());
-        redisJwtUserDTO.setPlatform(ua.getPlatform().toString());
-        redisJwtUserDTO.setIp(ServletUtils.getIpAddress());
-        redisJwtUserDTO.setLoginTime(LocalDateTime.now());
-        redisService.set(redisJwtKey, redisJwtUserDTO, JwtProps.expiration);
-        return jwt;
+        redisCacheToken(user.getMobile(), accessToken, refreshToken);
+        // VO
+        LoginVO loginVO = new LoginVO();
+        loginVO.setAccessToken(accessToken);
+        loginVO.setRefreshToken(refreshToken);
+        return loginVO;
     }
 
     @Override
-    public void logout(String token) {
-        String mobile = JwtUtils.getMobile(token);
-        String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_JWT_USER_FORMAT.getKey(), mobile, token);
-        redisService.delete(redisJwtKey);
+    public void logout(String accessToken) {
+        String mobile = JwtUtils.getMobile(accessToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisAccessTokenKey);
+        if (redisJwtUserDTO != null) {
+            redisService.delete(redisAccessTokenKey);
+            String refreshToken = redisJwtUserDTO.getRefreshToken();
+            String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+            redisService.delete(redisRefreshTokenKey);
+        }
+    }
+
+    @Override
+    public RefreshVO refresh(RefreshParam refreshParam) {
+        // 移除旧 Token
+        String oldAccessToken = refreshParam.getAccessToken();
+        String oldRefreshToken = refreshParam.getRefreshToken();
+        String mobile = JwtUtils.getMobile(oldRefreshToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
+        RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisRefreshTokenKey);
+        if (redisJwtUserDTO == null) {
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
+        }
+        redisService.delete(redisAccessTokenKey);
+        redisService.delete(redisRefreshTokenKey);
+        // 生成新 Token
+        User user = getByMobile(mobile);
+        if (user == null) {
+            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+        }
+        // Security
+        JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(mobile);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // JWT
+        String accessToken = JwtUtils.generateAccessToken(jwtUserDetails);
+        String refreshToken = JwtUtils.generateRefreshToken(jwtUserDetails);
+        // Redis
+        redisCacheToken(mobile, accessToken, refreshToken);
+        // VO
+        RefreshVO refreshVO = new RefreshVO();
+        refreshVO.setAccessToken(accessToken);
+        refreshVO.setRefreshToken(refreshToken);
+        return refreshVO;
     }
 
     @Override
@@ -117,5 +158,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<Permission> listPermissionByUserId(Integer userId) {
         return permissionMapper.selectPermissionListByUserId(userId);
+    }
+
+    private void redisCacheToken(String mobile, String accessToken, String refreshToken) {
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+        UserAgent ua = ServletUtils.getUserAgent();
+        RedisJwtUserDTO redisJwtUserDTO = new RedisJwtUserDTO();
+        redisJwtUserDTO.setMobile(mobile);
+        redisJwtUserDTO.setAccessToken(accessToken);
+        redisJwtUserDTO.setRefreshToken(refreshToken);
+        redisJwtUserDTO.setOs(ua.getOs().toString());
+        redisJwtUserDTO.setPlatform(ua.getPlatform().toString());
+        redisJwtUserDTO.setIp(ServletUtils.getIpAddress());
+        redisJwtUserDTO.setLoginTime(LocalDateTime.now());
+        redisService.set(redisAccessTokenKey, redisJwtUserDTO, JwtProps.accessTokenExpireTime);
+        redisService.set(redisRefreshTokenKey, redisJwtUserDTO, JwtProps.refreshTokenExpireTime);
     }
 }
