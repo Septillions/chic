@@ -23,7 +23,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<User> listByParam(PageParam pageParam, UserParam userParam) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         if (StrUtil.isNotBlank(userParam.getUsername())) {
-            wrapper.lambda().eq(User::getUsername, userParam.getMobile());
+            wrapper.lambda().eq(User::getUsername, userParam.getUsername());
         }
         if (StrUtil.isNotBlank(userParam.getUsername())) {
             wrapper.lambda().eq(User::getMobile, userParam.getMobile());
