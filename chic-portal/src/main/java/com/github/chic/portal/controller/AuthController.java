@@ -65,7 +65,7 @@ public class AuthController {
      */
     @ApiOperation("刷新")
     @PostMapping("/refresh")
-    public ApiResult<RefreshVO> refresh(@RequestBody RefreshParam refreshParam) {
+    public ApiResult<RefreshVO> refresh(@RequestBody @Valid RefreshParam refreshParam) {
         RefreshVO refreshVO = userService.refresh(refreshParam);
         return ApiResult.success(refreshVO);
     }

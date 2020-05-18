@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.entity.constant.RedisKeyEnum;
+import com.github.chic.common.entity.dto.RedisJwtBufferDTO;
 import com.github.chic.common.entity.dto.RedisJwtUserDTO;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.service.RedisService;
@@ -112,16 +113,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public RefreshVO refresh(RefreshParam refreshParam) {
-        // 移除旧 Token
-        String oldAccessToken = refreshParam.getAccessToken();
         String oldRefreshToken = refreshParam.getRefreshToken();
         String mobile = JwtUtils.getMobile(oldRefreshToken);
-        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
+        // 重复刷新请求
+        String redisBufferTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
+        RedisJwtBufferDTO redisJwtBufferDTO = (RedisJwtBufferDTO) redisService.get(redisBufferTokenKey);
+        if (redisJwtBufferDTO != null) {
+            RefreshVO refreshVO = new RefreshVO();
+            refreshVO.setAccessToken(redisJwtBufferDTO.getNewAccessToken());
+            refreshVO.setRefreshToken(redisJwtBufferDTO.getNewRefreshToken());
+            return refreshVO;
+        }
+        // 校验是否有效
         String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisRefreshTokenKey);
         if (redisJwtUserDTO == null) {
             throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
         }
+        // 移除旧 Token
+        String oldAccessToken = redisJwtUserDTO.getAccessToken();
+        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
         redisService.delete(redisAccessTokenKey);
         redisService.delete(redisRefreshTokenKey);
         // 生成新 Token
@@ -134,14 +145,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
-        String accessToken = JwtUtils.generateAccessToken(jwtUserDetails);
-        String refreshToken = JwtUtils.generateRefreshToken(jwtUserDetails);
+        String newAccessToken = JwtUtils.generateAccessToken(jwtUserDetails);
+        String newRefreshToken = JwtUtils.generateRefreshToken(jwtUserDetails);
         // Redis
-        redisCacheToken(mobile, accessToken, refreshToken);
+        redisCacheToken(mobile, newAccessToken, newRefreshToken);
+        redisCacheBuffer(mobile, oldAccessToken, oldRefreshToken, newAccessToken, newRefreshToken);
         // VO
         RefreshVO refreshVO = new RefreshVO();
-        refreshVO.setAccessToken(accessToken);
-        refreshVO.setRefreshToken(refreshToken);
+        refreshVO.setAccessToken(newAccessToken);
+        refreshVO.setRefreshToken(newRefreshToken);
         return refreshVO;
     }
 
@@ -176,5 +188,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisJwtUserDTO.setLoginTime(LocalDateTime.now());
         redisService.set(redisAccessTokenKey, redisJwtUserDTO, JwtProps.accessTokenExpireTime);
         redisService.set(redisRefreshTokenKey, redisJwtUserDTO, JwtProps.refreshTokenExpireTime);
+    }
+
+    private void redisCacheBuffer(String mobile, String oldAccessToken, String oldRefreshToken, String newAccessToken, String newRefreshToken) {
+        String redisBufferTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
+        RedisJwtBufferDTO redisJwtBufferDTO = new RedisJwtBufferDTO();
+        redisJwtBufferDTO.setOldAccessToken(oldAccessToken);
+        redisJwtBufferDTO.setOldRefreshToken(oldRefreshToken);
+        redisJwtBufferDTO.setNewAccessToken(newAccessToken);
+        redisJwtBufferDTO.setNewRefreshToken(newRefreshToken);
+        redisJwtBufferDTO.setRefreshTime(LocalDateTime.now());
+        redisService.set(redisBufferTokenKey, redisJwtBufferDTO, JwtProps.bufferTokenExpireTime);
+        redisCacheToken(mobile, newAccessToken, newRefreshToken);
     }
 }

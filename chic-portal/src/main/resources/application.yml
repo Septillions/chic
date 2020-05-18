@@ -25,6 +25,8 @@ jwt:
   accessTokenExpireTime: 604800
   # JWT RefreshToken 过期时间(60*60*24*30 604800)
   refreshTokenExpireTime: 2592000
+  # JWT BufferToken 过期时间(60*5 300)
+  bufferTokenExpireTime: 300
 
 # 认证
 auth:
