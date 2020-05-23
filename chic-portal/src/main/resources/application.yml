@@ -38,3 +38,4 @@ auth:
       - /auth/login
       - /auth/logout
       - /auth/refresh
+      - /rabbit/sendDelayMsg

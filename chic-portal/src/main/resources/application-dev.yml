@@ -71,10 +71,20 @@ spring:
 
   # RabbitMQ
   rabbitmq:
-    host: localhost
+    host: 192.168.10.24
     port: 5672
     username: chic
     password: chic
     virtual-host: /
     publisher-returns: true
     publisher-confirm-type: simple
+    listener:
+      simple:
+        acknowledge-mode: auto
+        prefetch: 1
+        retry:
+          enabled: true
+          initial-interval: 60000
+          multiplier: 2
+          max-attempts: 10
+          max-interval: 86400000
