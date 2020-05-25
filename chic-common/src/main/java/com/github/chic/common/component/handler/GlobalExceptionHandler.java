@@ -2,9 +2,7 @@ package com.github.chic.common.component.handler;
 
 import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.entity.api.ApiResult;
-import com.github.chic.common.exception.AuthException;
-import com.github.chic.common.exception.ServiceException;
-import com.github.chic.common.exception.VerifyException;
+import com.github.chic.common.exception.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,7 +30,7 @@ public class GlobalExceptionHandler {
      * 全局异常 统一JSON格式返回
      */
     @ExceptionHandler(Exception.class)
-    public ApiResult<Object> exception(HttpServletRequest request, Exception e) {
+    public ApiResult<Object> exception(Exception e) {
         LOGGER.error("GlobalExceptionHandler:", e);
         return ApiResult.failed(e.getMessage());
     }
@@ -42,7 +39,7 @@ public class GlobalExceptionHandler {
      * Spring Security 未登录异常
      */
     @ExceptionHandler(AuthenticationException.class)
-    public ApiResult<Object> authenticationException(HttpServletRequest request, AuthenticationException e) {
+    public ApiResult<Object> authenticationException(AuthenticationException e) {
         return ApiResult.failed(ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
     }
 
@@ -50,7 +47,7 @@ public class GlobalExceptionHandler {
      * Spring Security 无权限异常
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ApiResult<Object> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+    public ApiResult<Object> accessDeniedException(AccessDeniedException e) {
         return ApiResult.failed(ApiCodeEnum.FORBIDDEN.getCode(), ApiCodeEnum.FORBIDDEN.getMsg());
     }
 
@@ -58,7 +55,7 @@ public class GlobalExceptionHandler {
      * Spring Validation 校验异常
      */
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
-    public ApiResult<Object> validationException(HttpServletRequest request, Exception e) {
+    public ApiResult<Object> validationException(Exception e) {
         BindingResult bindingResult;
         if (e instanceof BindException) {
             bindingResult = ((BindException) e).getBindingResult();
@@ -75,29 +72,10 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 自定义 认证相关异常
-     * errCode 1xxx 格式
+     * 自定义 API接口异常
      */
-    @ExceptionHandler(AuthException.class)
-    public ApiResult<Object> authException(HttpServletRequest request, AuthException e) {
-        return ApiResult.failed(e.getErrCode(), e.getErrMsg());
-    }
-
-    /**
-     * 自定义 校验相关异常
-     * errCode 2xxx 格式
-     */
-    @ExceptionHandler(VerifyException.class)
-    public ApiResult<Object> verifyException(HttpServletRequest request, VerifyException e) {
-        return ApiResult.failed(e.getErrCode(), e.getErrMsg());
-    }
-
-    /**
-     * 自定义 业务相关异常
-     * errCode 3xxx 格式
-     */
-    @ExceptionHandler(ServiceException.class)
-    public ApiResult<Object> serviceException(HttpServletRequest request, ServiceException e) {
+    @ExceptionHandler(ApiException.class)
+    public ApiResult<Object> apiException(ApiException e) {
         return ApiResult.failed(e.getErrCode(), e.getErrMsg());
     }
 }
