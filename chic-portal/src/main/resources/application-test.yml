@@ -71,7 +71,7 @@ spring:
 
   # RabbitMQ
   rabbitmq:
-    host: 192.168.10.24
+    host: rabbitmq
     port: 5672
     username: chic
     password: chic
