@@ -1,0 +1,20 @@
+version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    ports:
+      - 51000:8080
+      - 50000:50000
+    volumes:
+      - /docker/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - project-network
+networks:
+  project-network:
+    external: true
