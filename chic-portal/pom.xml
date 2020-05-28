@@ -38,6 +38,10 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <docker.registry>registry.cn-chengdu.aliyuncs.com/septillions</docker.registry>
+    </properties>
+
     <build>
         <finalName>portal</finalName>
         <plugins>
@@ -51,16 +55,17 @@
                 <version>2.3.0</version>
                 <configuration>
                     <from>
-                        <image>openjdk:8-jdk-alpine</image>
+                        <image>${docker.registry}/openjdk:8-jdk-alpine</image>
                     </from>
                     <to>
-                        <image>registry.cn-chengdu.aliyuncs.com/septillions/github/${project.artifactId}</image>
+                        <image>${docker.registry}/${project.artifactId}:latest</image>
                     </to>
                     <container>
                         <mainClass>com.github.chic.portal.ChicPortalApplication</mainClass>
                         <ports>
                             <port>8080</port>
                         </ports>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
                 </configuration>
                 <executions>
