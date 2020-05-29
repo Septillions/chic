@@ -75,10 +75,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // 获取用户
         Admin admin = getByUsername(loginParam.getUsername());
         if (admin == null) {
-            throw new AuthException(1004, "该帐号不存在(The account does not exist)");
+            throw new AuthException(1003, "该帐号不存在");
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), admin.getPassword())) {
-            throw new AuthException(1004, "帐号或密码错误(Account or Password Error)");
+            throw new AuthException(1004, "帐号或密码错误");
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());
@@ -136,7 +136,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // 生成新 Token
         Admin admin = getByUsername(username);
         if (admin == null) {
-            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+            throw new AuthException(1003, "该帐号不存在");
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(username);

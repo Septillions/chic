@@ -76,10 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 获取用户
         User user = getByMobile(loginParam.getMobile());
         if (user == null) {
-            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+            throw new AuthException(1003, "该帐号不存在");
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
-            throw new AuthException(1003, "帐号或密码错误(Account or Password Error)");
+            throw new AuthException(1004, "帐号或密码错误");
         }
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getMobile());
@@ -138,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 生成新 Token
         User user = getByMobile(mobile);
         if (user == null) {
-            throw new AuthException(1003, "该帐号不存在(The account does not exist)");
+            throw new AuthException(1003, "该帐号不存在");
         }
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(mobile);

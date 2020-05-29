@@ -49,7 +49,7 @@ public class JwtUtils {
     }
 
     /**
-     * 解析Token
+     * 解析 Token
      */
     public static Claims getClaims(String token) {
         try {
@@ -58,14 +58,14 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token过期");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 过期");
         } catch (JwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token无效");
+            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 无效");
         }
     }
 
     /**
-     * 获取Token中的用户名
+     * 获取 Token 中的用户名
      */
     public static String getUsername(String token) {
         return getClaims(token).getSubject();

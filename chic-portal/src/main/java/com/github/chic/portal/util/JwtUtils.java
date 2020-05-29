@@ -65,7 +65,7 @@ public class JwtUtils {
     }
 
     /**
-     * 获取Token中的手机号
+     * 获取 Token 中的手机号
      */
     public static String getMobile(String token) {
         return getClaims(token).getSubject();

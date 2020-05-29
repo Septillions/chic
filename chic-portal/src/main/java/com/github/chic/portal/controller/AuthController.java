@@ -27,9 +27,6 @@ public class AuthController {
     @Resource
     private UserService userService;
 
-    /**
-     * 注册
-     */
     @ApiOperation("注册")
     @PostMapping("/register")
     public ApiResult<Object> register(@RequestBody @Valid RegisterParam registerParam) {
@@ -37,9 +34,6 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    /**
-     * 登陆
-     */
     @ApiOperation("登陆")
     @PostMapping("/login")
     public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
@@ -47,9 +41,6 @@ public class AuthController {
         return ApiResult.success(loginVO);
     }
 
-    /**
-     * 登出
-     */
     @ApiOperation("登出")
     @PostMapping("/logout")
     public ApiResult<Object> logout(HttpServletRequest request) {
@@ -60,9 +51,6 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    /**
-     * 刷新
-     */
     @ApiOperation("刷新")
     @PostMapping("/refresh")
     public ApiResult<RefreshVO> refresh(@RequestBody @Valid RefreshParam refreshParam) {

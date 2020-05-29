@@ -28,9 +28,6 @@ public class AuthController {
     @Resource
     private AdminService adminService;
 
-    /**
-     * 注册
-     */
     @ApiOperation("注册")
     @PostMapping("/register")
     public ApiResult<Object> register(@RequestBody @Valid RegisterParam registerParam) {
@@ -38,9 +35,6 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    /**
-     * 登陆
-     */
     @ApiOperation("登陆")
     @PostMapping("/login")
     public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
@@ -48,9 +42,6 @@ public class AuthController {
         return ApiResult.success(loginVO);
     }
 
-    /**
-     * 登出
-     */
     @ApiOperation("登出")
     @PostMapping("/logout")
     public ApiResult<Object> logout(HttpServletRequest request) {
@@ -61,9 +52,6 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    /**
-     * 刷新
-     */
     @ApiOperation("刷新")
     @PostMapping("/refresh")
     public ApiResult<RefreshVO> refresh(@RequestBody @Valid RefreshParam refreshParam) {
@@ -71,17 +59,13 @@ public class AuthController {
         return ApiResult.success(refreshVO);
     }
 
-    /**
-     * Token测试
-     */
+    @ApiOperation("Token测试")
     @PostMapping("/test/token")
     public ApiResult<Object> testToken() {
         return ApiResult.success();
     }
 
-    /**
-     * 角色测试
-     */
+    @ApiOperation("角色测试")
     @PreAuthorize("hasRole('admin')")
     @PostMapping("/test/role")
     public ApiResult<Object> testRole() {
