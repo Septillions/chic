@@ -62,6 +62,11 @@
                     </to>
                     <container>
                         <mainClass>com.github.chic.portal.ChicPortalApplication</mainClass>
+                        <jvmFlags>
+                            <jvmFlag>-javaagent:/skywalking/agent/skywalking-agent.jar</jvmFlag>
+                            <jvmFlag>-Dskywalking.agent.service_name=chic-portal</jvmFlag>
+                            <jvmFlag>-Dskywalking.collector.backend_service=skywalking-oap:11800</jvmFlag>
+                        </jvmFlags>
                         <ports>
                             <port>8080</port>
                         </ports>
