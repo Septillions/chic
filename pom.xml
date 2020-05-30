@@ -42,6 +42,7 @@
         <swagger.version>2.9.2</swagger.version>
         <swagger-ui.version>2.9.2</swagger-ui.version>
         <logstash.version>6.3</logstash.version>
+        <jib.version>2.3.0</jib.version>
         <chic.version>1.0.0</chic.version>
     </properties>
 

@@ -52,7 +52,7 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>2.3.0</version>
+                <version>${jib.version}</version>
                 <configuration>
                     <from>
                         <image>${docker.registry}/openjdk:8-jdk-alpine</image>
