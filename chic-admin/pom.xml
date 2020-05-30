@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.chic</groupId>
     <artifactId>chic-admin</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>1.0.0</version>
     <name>chic-admin</name>
 
@@ -40,5 +40,44 @@
 
     <build>
         <finalName>admin</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+                <configuration>
+                    <from>
+                        <image>${docker.registry}/openjdk:8-jdk-alpine</image>
+                    </from>
+                    <to>
+                        <image>${docker.registry}/${project.artifactId}:latest</image>
+                    </to>
+                    <container>
+                        <mainClass>com.github.chic.admin.ChicAdminApplication</mainClass>
+                        <jvmFlags>
+                            <jvmFlag>-javaagent:/skywalking/agent/skywalking-agent.jar</jvmFlag>
+                            <jvmFlag>-Dskywalking.agent.service_name=${project.artifactId}</jvmFlag>
+                            <jvmFlag>-Dskywalking.collector.backend_service=skywalking-oap:11800</jvmFlag>
+                        </jvmFlags>
+                        <ports>
+                            <port>8080</port>
+                        </ports>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

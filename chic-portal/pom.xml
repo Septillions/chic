@@ -38,10 +38,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <docker.registry>registry.cn-chengdu.aliyuncs.com/septillions</docker.registry>
-    </properties>
-
     <build>
         <finalName>portal</finalName>
         <plugins>
@@ -64,7 +60,7 @@
                         <mainClass>com.github.chic.portal.ChicPortalApplication</mainClass>
                         <jvmFlags>
                             <jvmFlag>-javaagent:/skywalking/agent/skywalking-agent.jar</jvmFlag>
-                            <jvmFlag>-Dskywalking.agent.service_name=chic-portal</jvmFlag>
+                            <jvmFlag>-Dskywalking.agent.service_name=${project.artifactId}</jvmFlag>
                             <jvmFlag>-Dskywalking.collector.backend_service=skywalking-oap:11800</jvmFlag>
                         </jvmFlags>
                         <ports>
