@@ -1,30 +1,30 @@
 version: '3'
 services:
   chic-portal:
-    image: tomcat:8
+    image: registry.cn-chengdu.aliyuncs.com/septillions/chic-portal
     container_name: chic-portal
     ports:
       - 8081:8080
     volumes:
       - /docker/chic-portal/logs:/logs
-      - /docker/chic-portal/logs/debug:/usr/local/tomcat/logs
-      - /docker/chic-portal/webapps:/usr/local/tomcat/webapps
+      - /docker/skywalking:/skywalking
       - /etc/localtime:/etc/localtime:ro
     environment:
+      SPRING_PROFILES_ACTIVE: test
       TZ: Asia/Shanghai
     networks:
       - project-network
   chic-admin:
-    image: tomcat:8
+    image: registry.cn-chengdu.aliyuncs.com/septillions/chic-admin
     container_name: chic-admin
     ports:
       - 8082:8080
     volumes:
       - /docker/chic-admin/logs:/logs
-      - /docker/chic-admin/logs/debug:/usr/local/tomcat/logs
-      - /docker/chic-admin/webapps:/usr/local/tomcat/webapps
+      - /docker/skywalking:/skywalking
       - /etc/localtime:/etc/localtime:ro
     environment:
+      SPRING_PROFILES_ACTIVE: test
       TZ: Asia/Shanghai
     networks:
       - project-network
