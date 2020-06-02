@@ -13,7 +13,6 @@ import com.github.chic.common.entity.dto.RedisJwtAdminDTO;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,17 +36,17 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
      * 自定义认证配置类
      */
-    @Autowired
+    @Resource
     private AuthProps authProps;
     /**
      * Redis 业务类
      */
-    @Autowired
+    @Resource
     private RedisService redisService;
     /**
      * Security 用户服务类
      */
-    @Autowired
+    @Resource
     private UserDetailsService userDetailsService;
 
     @Override
