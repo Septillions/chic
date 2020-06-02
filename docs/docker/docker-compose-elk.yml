@@ -19,7 +19,8 @@ services:
     image: logstash:6.8.8
     container_name: logstash
     ports:
-      - 4560:4560
+      - 4561:4561
+      - 4562:4562
     volumes:
       - /docker/logstash/conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - /etc/localtime:/etc/localtime:ro

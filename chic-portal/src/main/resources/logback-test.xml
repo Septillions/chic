@@ -84,7 +84,7 @@
     <!-- LOGSTASH 输出日志 -->
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <!-- Logstash 服务端 -->
-        <destination>logstash:4560</destination>
+        <destination>logstash:4561</destination>
         <!-- 设置编码 -->
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
