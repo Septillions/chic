@@ -30,8 +30,8 @@ jwt:
 
 # 认证
 auth:
-  # 不需要认证的接口
-  ignores:
+  # 忽略认证的接口
+  ignore:
     # GET 请求
     get:
       - /monitor/findOnlineAdminList

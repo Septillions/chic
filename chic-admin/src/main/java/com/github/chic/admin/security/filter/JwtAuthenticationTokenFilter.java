@@ -93,21 +93,21 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         Set<String> ignores = new HashSet<>();
         switch (httpMethod) {
             case GET:
-                ignores.addAll(authProps.getIgnores().getGet());
+                ignores.addAll(authProps.getIgnore().getGet());
                 break;
             case POST:
-                ignores.addAll(authProps.getIgnores().getPost());
+                ignores.addAll(authProps.getIgnore().getPost());
                 break;
             case PUT:
-                ignores.addAll(authProps.getIgnores().getPut());
+                ignores.addAll(authProps.getIgnore().getPut());
                 break;
             case DELETE:
-                ignores.addAll(authProps.getIgnores().getDelete());
+                ignores.addAll(authProps.getIgnore().getDelete());
                 break;
             default:
                 break;
         }
-        ignores.addAll(authProps.getIgnores().getPattern());
+        ignores.addAll(authProps.getIgnore().getPattern());
         if (CollUtil.isNotEmpty(ignores)) {
             for (String ignore : ignores) {
                 AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);

@@ -86,15 +86,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         // 忽略 GET
-        authProps.getIgnores().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
+        authProps.getIgnore().getGet().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.GET, url));
         // 忽略 POST
-        authProps.getIgnores().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
+        authProps.getIgnore().getPost().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.POST, url));
         // 忽略 PUT
-        authProps.getIgnores().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
+        authProps.getIgnore().getPut().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.PUT, url));
         // 忽略 DELETE
-        authProps.getIgnores().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
+        authProps.getIgnore().getDelete().forEach(url -> webSecurity.ignoring().antMatchers(HttpMethod.DELETE, url));
         // 按照请求格式忽略
-        authProps.getIgnores().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
+        authProps.getIgnore().getPattern().forEach(url -> webSecurity.ignoring().antMatchers(url));
     }
 
     @Override
