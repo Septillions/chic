@@ -13,12 +13,11 @@ services:
     networks:
       - project-network
   mysql:
-    image: mysql:5.6
+    image: mysql:5.7
     container_name: mysql
     ports:
       - 3306:3306
     volumes:
-      - /docker/mysql/logs:/logs
       - /docker/mysql/data:/var/lib/mysql
       - /docker/mysql/conf:/etc/mysql/conf.d
       - /etc/localtime:/etc/localtime:ro
