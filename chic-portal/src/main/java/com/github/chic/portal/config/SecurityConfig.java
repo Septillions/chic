@@ -30,7 +30,7 @@ import javax.annotation.Resource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
-     * 自定义认证配置类
+     * Auth 配置参数类
      */
     @Resource
     private AuthProps authProps;

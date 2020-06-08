@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
-     * 自定义认证配置类
+     * Auth 配置参数类
      */
     @Resource
     private AuthProps authProps;

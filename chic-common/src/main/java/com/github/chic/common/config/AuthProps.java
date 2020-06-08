@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Auth 配置类
+ * Auth 配置参数类
  */
 @Data
 @Component

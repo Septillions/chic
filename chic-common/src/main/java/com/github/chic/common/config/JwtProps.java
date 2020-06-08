@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * JWT 配置类
+ * JWT 配置参数类
  */
 @Component
 @ConfigurationProperties(prefix = "jwt")
