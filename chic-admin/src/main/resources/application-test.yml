@@ -68,3 +68,8 @@ spring:
         max-idle: 8
         # 最小空闲连接
         min-idle: 0
+
+# Swagger
+swagger:
+  # 文档开关
+  enable: true

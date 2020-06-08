@@ -11,6 +11,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +21,16 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+    /**
+     * Swagger 配置参数类
+     */
+    @Resource
+    private SwaggerProps swaggerProps;
 
     @Bean
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swaggerProps.getEnable())
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())

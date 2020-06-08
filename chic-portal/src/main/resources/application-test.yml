@@ -88,3 +88,8 @@ spring:
           multiplier: 2
           max-attempts: 10
           max-interval: 86400000
+
+# Swagger
+swagger:
+  # 文档开关
+  enable: true
