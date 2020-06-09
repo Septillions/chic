@@ -3,6 +3,8 @@ package com.github.chic.common.service.impl;
 import com.github.chic.common.service.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -18,6 +20,7 @@ public class RedisServiceImpl implements RedisService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
