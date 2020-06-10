@@ -21,7 +21,7 @@ public class RabbitConfig {
 
     @Bean
     public CustomExchange delayExchange() {
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<>(5);
         args.put("x-delayed-type", "direct");
         return new CustomExchange(DELAYED_EXCHANGE, "x-delayed-message", true, false, args);
     }

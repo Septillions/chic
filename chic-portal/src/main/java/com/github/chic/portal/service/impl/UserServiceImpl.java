@@ -111,7 +111,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public RefreshVO refresh(RefreshParam refreshParam) {
         String oldRefreshToken = refreshParam.getRefreshToken();
         String mobile = JwtUtils.getMobile(oldRefreshToken);

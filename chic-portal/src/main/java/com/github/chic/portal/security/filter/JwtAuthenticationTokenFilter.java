@@ -51,11 +51,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // 获得TokenHeader
+        // 获取 Token
         String token = request.getHeader(JwtProps.header);
-        // 获取请求头中JWT的Token
         if (!StrUtil.isEmpty(token)) {
-            // 获取
+            // 获取手机号
             String mobile = null;
             try {
                 mobile = JwtUtils.getMobile(token);
@@ -63,7 +62,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 ServletUtils.writeJson(response, e.getErrCode(), e.getErrMsg());
                 return;
             }
-            // Redis有效控制
+            // Redis 有效控制
             String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, token);
             RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisJwtKey);
             if (redisJwtUserDTO == null) {
@@ -81,7 +80,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 不需要认证的接口不执行过滤
+     * 忽略认证的接口不执行过滤
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {

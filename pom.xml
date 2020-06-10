@@ -11,8 +11,8 @@
     <modules>
         <module>chic-admin</module>
         <module>chic-common</module>
-        <module>chic-portal</module>
         <module>chic-mbg</module>
+        <module>chic-portal</module>
     </modules>
 
     <parent>

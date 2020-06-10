@@ -109,7 +109,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public RefreshVO refresh(RefreshParam refreshParam) {
         String oldRefreshToken = refreshParam.getRefreshToken();
         String username = JwtUtils.getUsername(oldRefreshToken);
