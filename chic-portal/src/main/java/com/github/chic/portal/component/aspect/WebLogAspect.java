@@ -2,6 +2,7 @@ package com.github.chic.portal.component.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.chic.common.util.ServletUtils;
+import com.github.chic.portal.util.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,6 +35,7 @@ public class WebLogAspect {
         // 记录请求内容
         log.append(request.getMethod()).append(" : ").append(request.getRequestURL()).append(" - ");
         log.append("ARGS : ").append(Arrays.toString(joinPoint.getArgs())).append(" - ");
+        log.append("UID : ").append(getCurrentUserId()).append(" - ");
         log.append("IP : ").append(ServletUtil.getClientIP(request)).append(" - ");
         try {
             // 执行请求方法
@@ -45,6 +47,17 @@ public class WebLogAspect {
             log.append("SPEND TIME : ").append(System.currentTimeMillis() - startTime);
             LOGGER.info(log.toString());
             throw e;
+        }
+    }
+
+    /**
+     * 获取当前用户 ID
+     */
+    private Integer getCurrentUserId() {
+        try {
+            return SecurityUtils.getCurrentUserId();
+        } catch (Exception e) {
+            return null;
         }
     }
 }
