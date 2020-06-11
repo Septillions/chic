@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ApiResult<Object> exception(Exception e) {
-        LOGGER.error("GlobalExceptionHandler:", e);
+        LOGGER.error("服务器未知异常", e);
         return ApiResult.failed(e.getMessage());
     }
 
