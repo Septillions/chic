@@ -35,6 +35,8 @@
         <!-- 级别过滤器匹配 INFO 级别日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
 
