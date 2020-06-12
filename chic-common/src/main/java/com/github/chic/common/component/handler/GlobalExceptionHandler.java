@@ -3,8 +3,7 @@ package com.github.chic.common.component.handler;
 import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.entity.api.ApiResult;
 import com.github.chic.common.exception.ApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
@@ -19,19 +18,15 @@ import java.util.List;
 /**
  * 全局异常处理类
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    /**
-     * LOGGER
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     /**
      * 全局异常 统一JSON格式返回
      */
     @ExceptionHandler(Exception.class)
     public ApiResult<Object> exception(Exception e) {
-        LOGGER.error("服务器未知异常", e);
+        log.error("服务器未知异常", e);
         return ApiResult.failed(e.getMessage());
     }
 
