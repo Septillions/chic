@@ -3,11 +3,10 @@ package com.github.chic.portal.component.aspect;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.github.chic.common.util.ServletUtils;
 import com.github.chic.portal.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +15,15 @@ import java.util.Arrays;
 /**
  * 统一日志处理切面
  */
+@Slf4j
 @Aspect
 @Component
 public class WebLogAspect {
     /**
-     * LOGGER
+     * LOG TEMPLATE
+     * {METHOD} - {URL} - ARGS : {} - UID : {} - IP : {} - SPEND TIME : {}
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
+    private static final String LOG_TEMPLATE = "{} : {} - ARGS : {} - UID : {} - IP : {} - SPEND TIME : {}";
 
     @Around("execution(public * com.github.chic.portal.controller..*.*(..))")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -30,23 +31,20 @@ public class WebLogAspect {
         long startTime = System.currentTimeMillis();
         // 请求
         HttpServletRequest request = ServletUtils.getRequest();
-        // 日志
-        StringBuilder log = new StringBuilder();
         // 记录请求内容
-        log.append(request.getMethod()).append(" : ").append(request.getRequestURL()).append(" - ");
-        log.append("ARGS : ").append(Arrays.toString(joinPoint.getArgs())).append(" - ");
-        log.append("UID : ").append(getCurrentUserId()).append(" - ");
-        log.append("IP : ").append(ServletUtil.getClientIP(request)).append(" - ");
+        String method = request.getMethod();
+        String url = request.getRequestURL().toString();
+        String args = Arrays.toString(joinPoint.getArgs());
+        Integer uid = getCurrentUserId();
+        String ip = ServletUtil.getClientIP(request);
         try {
             // 执行请求方法
-            Object result = joinPoint.proceed(joinPoint.getArgs());
-            log.append("SPEND TIME : ").append(System.currentTimeMillis() - startTime);
-            LOGGER.info(log.toString());
-            return result;
-        } catch (Throwable e) {
-            log.append("SPEND TIME : ").append(System.currentTimeMillis() - startTime);
-            LOGGER.info(log.toString());
-            throw e;
+            return joinPoint.proceed(joinPoint.getArgs());
+        } finally {
+            // 记录结束时间
+            long endTime = System.currentTimeMillis();
+            // {METHOD} - {URL} - ARGS : {} - UID : {} - IP : {} - SPEND TIME : {}
+            log.info(LOG_TEMPLATE, method, url, args, uid, ip, endTime - startTime);
         }
     }
 
