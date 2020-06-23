@@ -21,6 +21,12 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public Boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }

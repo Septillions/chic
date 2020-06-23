@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public interface RedisService {
+    Boolean hasKey(String key);
+
     Object get(String key);
 
     void set(String key, Object value);
