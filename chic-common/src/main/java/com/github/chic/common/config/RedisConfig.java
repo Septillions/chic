@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Redis 配置类
@@ -16,11 +17,12 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<Object, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         RedisSerializer<Object> fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setKeySerializer(fastJsonRedisSerializer);
+        redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashKeySerializer(fastJsonRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.afterPropertiesSet();
