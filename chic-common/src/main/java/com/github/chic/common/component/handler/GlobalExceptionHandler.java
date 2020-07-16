@@ -1,8 +1,8 @@
 package com.github.chic.common.component.handler;
 
-import com.github.chic.common.entity.api.ApiCodeEnum;
-import com.github.chic.common.entity.api.ApiResult;
+import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.exception.ApiException;
+import com.github.chic.common.model.api.ApiResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;

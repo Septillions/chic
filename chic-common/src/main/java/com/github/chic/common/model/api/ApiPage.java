@@ -1,4 +1,4 @@
-package com.github.chic.common.entity.api;
+package com.github.chic.common.model.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

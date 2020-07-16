@@ -8,7 +8,7 @@ import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshVO;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.entity.api.ApiResult;
+import com.github.chic.common.model.api.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;

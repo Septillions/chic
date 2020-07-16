@@ -1,6 +1,6 @@
 package com.github.chic.portal.controller;
 
-import com.github.chic.common.entity.api.ApiResult;
+import com.github.chic.common.model.api.ApiResult;
 import com.github.chic.portal.component.mq.RabbitProducer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

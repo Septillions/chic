@@ -2,7 +2,7 @@ package com.github.chic.portal.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.entity.api.ApiResult;
+import com.github.chic.common.model.api.ApiResult;
 import com.github.chic.portal.model.param.LoginParam;
 import com.github.chic.portal.model.param.RefreshParam;
 import com.github.chic.portal.model.param.RegisterParam;

@@ -1,4 +1,4 @@
-package com.github.chic.common.entity.api;
+package com.github.chic.common.component.constant;
 
 /**
  * API 返回状态码

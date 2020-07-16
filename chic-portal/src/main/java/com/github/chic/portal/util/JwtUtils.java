@@ -1,7 +1,7 @@
 package com.github.chic.portal.util;
 
+import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.entity.api.ApiCodeEnum;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.portal.security.entity.JwtUserDetails;
 import io.jsonwebtoken.*;

@@ -2,7 +2,7 @@ package com.github.chic.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.chic.admin.model.param.UserParam;
-import com.github.chic.common.entity.param.PageParam;
+import com.github.chic.common.model.param.PageParam;
 import com.github.chic.entity.User;
 
 import java.util.List;

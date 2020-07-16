@@ -1,6 +1,6 @@
 package com.github.chic.portal.security.component;
 
-import com.github.chic.common.entity.api.ApiCodeEnum;
+import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

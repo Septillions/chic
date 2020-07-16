@@ -1,4 +1,4 @@
-package com.github.chic.common.entity.constant;
+package com.github.chic.common.component.constant;
 
 /**
  * Redis Key 枚举类

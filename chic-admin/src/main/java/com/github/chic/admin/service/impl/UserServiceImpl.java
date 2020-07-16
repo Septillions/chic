@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.admin.mapper.UserMapper;
 import com.github.chic.admin.model.param.UserParam;
 import com.github.chic.admin.service.UserService;
-import com.github.chic.common.entity.param.PageParam;
+import com.github.chic.common.model.param.PageParam;
 import com.github.chic.entity.User;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
