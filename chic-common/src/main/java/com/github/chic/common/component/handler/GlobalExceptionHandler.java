@@ -58,12 +58,12 @@ public class GlobalExceptionHandler {
             bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
         }
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        StringBuilder errorMsg = new StringBuilder("校验异常(ValidException):");
+        StringBuilder errorMsg = new StringBuilder("校验异常(VerifyException):");
         for (FieldError error : fieldErrors) {
             errorMsg.append(error.getField()).append("-").append(error.getDefaultMessage()).append(",");
         }
         errorMsg.deleteCharAt(errorMsg.length() - 1);
-        return ApiResult.failed(3001, errorMsg.toString());
+        return ApiResult.failed(2001, errorMsg.toString());
     }
 
     /**

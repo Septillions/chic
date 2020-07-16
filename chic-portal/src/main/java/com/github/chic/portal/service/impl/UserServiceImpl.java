@@ -59,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.lambda().eq(User::getMobile, registerParam.getMobile());
         Integer count = userMapper.selectCount(wrapper);
         if (count > 0) {
-            throw new AuthException(1005, "手机号已经注册");
+            throw new AuthException(1103, "手机号已经注册");
         }
         // 创建用户
         User user = new User();
@@ -76,10 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 获取用户
         User user = getByMobile(loginParam.getMobile());
         if (user == null) {
-            throw new AuthException(1003, "该帐号不存在");
+            throw new AuthException(1101, "该帐号不存在");
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
-            throw new AuthException(1004, "帐号或密码错误");
+            throw new AuthException(1102, "帐号或密码错误");
         }
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getMobile());
@@ -138,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 生成新 Token
         User user = getByMobile(mobile);
         if (user == null) {
-            throw new AuthException(1003, "该帐号不存在");
+            throw new AuthException(1101, "该帐号不存在");
         }
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(mobile);
