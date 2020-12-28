@@ -1,4 +1,4 @@
-package com.github.chic.admin.model.param;
+package com.github.chic.admin.model.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @ApiModel("用户参数")
 @Data
-public class UserParam {
+public class UserQuery {
     @ApiModelProperty(value = "用户名")
     private String username;
     @ApiModelProperty(value = "手机号")

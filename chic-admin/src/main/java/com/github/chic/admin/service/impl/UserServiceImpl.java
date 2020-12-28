@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.admin.mapper.UserMapper;
-import com.github.chic.admin.model.param.UserParam;
+import com.github.chic.admin.model.query.UserQuery;
 import com.github.chic.admin.service.UserService;
 import com.github.chic.common.model.param.PageParam;
 import com.github.chic.entity.User;
@@ -20,13 +20,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
-    public List<User> listByParam(PageParam pageParam, UserParam userParam) {
+    public List<User> pageQuery(PageParam pageParam, UserQuery userQuery) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(userParam.getUsername())) {
-            wrapper.lambda().eq(User::getUsername, userParam.getUsername());
+        if (StrUtil.isNotBlank(userQuery.getUsername())) {
+            wrapper.lambda().eq(User::getUsername, userQuery.getUsername());
         }
-        if (StrUtil.isNotBlank(userParam.getUsername())) {
-            wrapper.lambda().eq(User::getMobile, userParam.getMobile());
+        if (StrUtil.isNotBlank(userQuery.getUsername())) {
+            wrapper.lambda().eq(User::getMobile, userQuery.getMobile());
         }
         PageHelper.startPage(pageParam.getPageIndex(), pageParam.getPageSize());
         return userMapper.selectList(wrapper);

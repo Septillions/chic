@@ -1,7 +1,7 @@
 package com.github.chic.admin.controller;
 
 import com.github.chic.admin.model.converter.UserConverter;
-import com.github.chic.admin.model.param.UserParam;
+import com.github.chic.admin.model.query.UserQuery;
 import com.github.chic.admin.model.vo.UserVO;
 import com.github.chic.admin.service.UserService;
 import com.github.chic.common.model.api.ApiPage;
@@ -29,8 +29,8 @@ public class UserController {
 
     @ApiOperation("获取用户列表")
     @GetMapping("/list")
-    public ApiResult<ApiPage<UserVO>> list(PageParam pageParam, UserParam userParam) {
-        List<User> userList = userService.listByParam(pageParam, userParam);
+    public ApiResult<ApiPage<UserVO>> list(PageParam pageParam, UserQuery userQuery) {
+        List<User> userList = userService.pageQuery(pageParam, userQuery);
         return ApiResult.success(userConverter.entity2vo((Page<User>) userList));
     }
 }
