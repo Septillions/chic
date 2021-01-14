@@ -1,6 +1,6 @@
 package com.github.chic.admin.controller;
 
-import com.github.chic.admin.model.converter.UserConverter;
+import com.github.chic.admin.model.converter.BaseUserConverter;
 import com.github.chic.admin.model.query.UserQuery;
 import com.github.chic.admin.model.vo.UserVO;
 import com.github.chic.admin.service.UserService;
@@ -25,7 +25,7 @@ public class UserController {
     @Resource
     private UserService userService;
     @Resource
-    private UserConverter userConverter;
+    private BaseUserConverter userConverter;
 
     @ApiOperation("获取用户列表")
     @GetMapping("/list")

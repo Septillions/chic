@@ -55,9 +55,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void register(RegisterParam registerParam) {
         // 检查是否有相同用户名
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(User::getMobile, registerParam.getMobile());
-        Integer count = userMapper.selectCount(wrapper);
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.lambda().eq(User::getMobile, registerParam.getMobile());
+        Integer count = userMapper.selectCount(qw);
         if (count > 0) {
             throw new AuthException(1103, "手机号已经注册");
         }
@@ -159,9 +159,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getByMobile(String mobile) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(User::getMobile, mobile);
-        return userMapper.selectOne(wrapper);
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.lambda().eq(User::getMobile, mobile);
+        return userMapper.selectOne(qw);
     }
 
     @Override

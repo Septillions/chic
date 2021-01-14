@@ -21,14 +21,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<User> pageQuery(PageParam pageParam, UserQuery userQuery) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        QueryWrapper<User> qw = new QueryWrapper<>();
         if (StrUtil.isNotBlank(userQuery.getUsername())) {
-            wrapper.lambda().eq(User::getUsername, userQuery.getUsername());
+            qw.lambda().eq(User::getUsername, userQuery.getUsername());
         }
         if (StrUtil.isNotBlank(userQuery.getUsername())) {
-            wrapper.lambda().eq(User::getMobile, userQuery.getMobile());
+            qw.lambda().eq(User::getMobile, userQuery.getMobile());
         }
         PageHelper.startPage(pageParam.getPageIndex(), pageParam.getPageSize());
-        return userMapper.selectList(wrapper);
+        return userMapper.selectList(qw);
     }
 }

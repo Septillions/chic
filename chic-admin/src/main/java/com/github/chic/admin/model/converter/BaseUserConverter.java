@@ -6,5 +6,5 @@ import com.github.chic.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public abstract class UserConverter extends BaseConverter<User, UserVO> {
+public abstract class BaseUserConverter extends BaseConverter<User, UserVO> {
 }

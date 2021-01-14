@@ -55,9 +55,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public void register(RegisterParam registerParam) {
         // 检查是否有相同用户名
-        QueryWrapper<Admin> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Admin::getUsername, registerParam.getUsername());
-        Integer count = adminMapper.selectCount(wrapper);
+        QueryWrapper<Admin> qw = new QueryWrapper<>();
+        qw.lambda().eq(Admin::getUsername, registerParam.getUsername());
+        Integer count = adminMapper.selectCount(qw);
         if (count > 0) {
             throw new AuthException(1103, "用户名已经注册");
         }
@@ -157,9 +157,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public Admin getByUsername(String username) {
-        QueryWrapper<Admin> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Admin::getUsername, username);
-        return adminMapper.selectOne(wrapper);
+        QueryWrapper<Admin> qw = new QueryWrapper<>();
+        qw.lambda().eq(Admin::getUsername, username);
+        return adminMapper.selectOne(qw);
     }
 
     @Override
