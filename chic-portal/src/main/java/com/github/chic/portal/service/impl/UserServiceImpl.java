@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -73,6 +73,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
             throw new AuthException(1102, "帐号或密码错误");
         }
+        // 删除已登录Token 保证Token唯一
+        redisRemoveToken(user.getMobile());
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getMobile());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
@@ -182,5 +184,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisJwtBufferDTO.setRefreshTime(LocalDateTime.now());
         redisService.set(redisBufferTokenKey, redisJwtBufferDTO, JwtProps.bufferTokenExpireTime);
         redisCacheToken(mobile, newAccessToken, newRefreshToken);
+    }
+
+    private void redisRemoveToken(String mobile) {
+        Set<String> redisAccessTokenKeys = redisService.keys(RedisKeyEnum.AUTH_USER_JWT_ACCESS_PREFIX.getKey() + mobile);
+        Set<String> redisRefreshTokenKeys = redisService.keys(RedisKeyEnum.AUTH_USER_JWT_REFRESH_PREFIX.getKey() + mobile);
+        redisService.delete(redisAccessTokenKeys);
+        redisService.delete(redisRefreshTokenKeys);
     }
 }
