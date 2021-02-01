@@ -1,7 +1,6 @@
 package com.github.chic.portal.security.entity;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.github.chic.entity.Role;
 import com.github.chic.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,8 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Spring Security 用户实现
@@ -20,7 +19,7 @@ public class JwtUserDetails implements UserDetails {
     /**
      * ID
      */
-    private Integer userId;
+    private Integer id;
     /**
      * 用户名
      */
@@ -34,7 +33,7 @@ public class JwtUserDetails implements UserDetails {
      */
     private String mobile;
     /**
-     * 角色
+     * 角色列表
      */
     private Collection<? extends GrantedAuthority> authorities;
     /**
@@ -54,10 +53,8 @@ public class JwtUserDetails implements UserDetails {
      */
     private boolean isEnabled = true;
 
-    public static JwtUserDetails create(User user, List<Role> roleList) {
-        List<SimpleGrantedAuthority> authorities = roleList.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleCode()))
-                .collect(Collectors.toList());
+    public static JwtUserDetails create(User user) {
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_PORTAL"));
         JwtUserDetails jwtUserDetails = new JwtUserDetails();
         BeanUtil.copyProperties(user, jwtUserDetails);
         jwtUserDetails.setAuthorities(authorities);

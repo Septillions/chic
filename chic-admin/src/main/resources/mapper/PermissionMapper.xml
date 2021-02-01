@@ -4,9 +4,10 @@
     <select id="selectPermissionListByAdminId" resultType="com.github.chic.entity.Permission">
         SELECT p.*
         FROM t_admin_role_relation arr
-                 INNER JOIN t_role r ON arr.role_id = r.role_id
-                 INNER JOIN t_role_permission_relation rpr ON r.role_id = rpr.role_id
-                 INNER JOIN t_permission p ON rpr.permission_id = p.permission_id
+                 INNER JOIN t_role r ON arr.role_id = r.id
+                 INNER JOIN t_role_permission_relation rpr ON r.id = rpr.role_id
+                 INNER JOIN t_permission p ON rpr.permission_id = p.id
         WHERE arr.admin_id = #{adminId}
+        GROUP BY p.id
     </select>
 </mapper>

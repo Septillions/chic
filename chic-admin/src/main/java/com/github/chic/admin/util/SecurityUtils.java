@@ -20,6 +20,6 @@ public class SecurityUtils {
      * 获取当前用户ID
      */
     public static Integer getCurrentAdminId() {
-        return getCurrentAdmin().getAdminId();
+        return getCurrentAdmin().getId();
     }
 }

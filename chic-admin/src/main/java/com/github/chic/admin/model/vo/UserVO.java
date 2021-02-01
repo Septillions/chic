@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserVO {
-    private Integer userId;
+    private Integer id;
     private String username;
     private String mobile;
     private String nickname;

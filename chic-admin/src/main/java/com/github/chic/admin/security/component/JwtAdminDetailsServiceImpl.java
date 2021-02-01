@@ -28,7 +28,7 @@ public class JwtAdminDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("无效用户");
         }
         // 获取角色列表
-        List<Role> roleList = adminService.listRoleByAdminId(admin.getAdminId());
+        List<Role> roleList = adminService.listRoleByAdminId(admin.getId());
         // 构建Security用户
         return JwtAdminDetails.create(admin, roleList);
     }

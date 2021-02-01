@@ -20,18 +20,23 @@ public class Permission implements Serializable {
     /**
      * ID
      */
-    @TableId(value = "permission_id", type = IdType.AUTO)
-    private Integer permissionId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
+    /**
+     * 显示名称
+     */
+    private String title;
 
     /**
      * 权限名称
      */
-    private String permissionName;
+    private String name;
 
     /**
      * 权限代码
      */
-    private String permissionCode;
+    private String code;
 
     /**
      * URL路径
@@ -39,19 +44,29 @@ public class Permission implements Serializable {
     private String url;
 
     /**
-     * 请求方法
+     * 组件路径
      */
-    private String method;
+    private String component;
 
     /**
-     * 父级ID
+     * 显示图标
      */
-    private Integer parentId;
+    private String icon;
+
+    /**
+     * 显示排序
+     */
+    private Integer sort;
 
     /**
      * 权限类型(0目录,1菜单,2按钮)
      */
     private Integer type;
+
+    /**
+     * 父级ID
+     */
+    private Integer parentId;
 
     /**
      * 创建时间

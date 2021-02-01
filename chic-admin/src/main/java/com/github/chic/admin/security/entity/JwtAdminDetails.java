@@ -20,7 +20,7 @@ public class JwtAdminDetails implements UserDetails {
     /**
      * ID
      */
-    private Integer adminId;
+    private Integer id;
     /**
      * 用户名
      */
@@ -52,7 +52,7 @@ public class JwtAdminDetails implements UserDetails {
 
     public static JwtAdminDetails create(Admin admin, List<Role> roleList) {
         List<SimpleGrantedAuthority> authorities = roleList.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleCode()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getCode()))
                 .collect(Collectors.toList());
         JwtAdminDetails jwtAdminDetails = new JwtAdminDetails();
         BeanUtil.copyProperties(admin, jwtAdminDetails);

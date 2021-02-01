@@ -20,18 +20,18 @@ public class Role implements Serializable {
     /**
      * ID
      */
-    @TableId(value = "role_id", type = IdType.AUTO)
-    private Integer roleId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 角色名称
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色代码
      */
-    private String roleCode;
+    private String code;
 
     /**
      * 创建时间

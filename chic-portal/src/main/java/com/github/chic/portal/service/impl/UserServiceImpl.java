@@ -12,11 +12,7 @@ import com.github.chic.common.model.dto.RedisJwtBufferDTO;
 import com.github.chic.common.model.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
-import com.github.chic.entity.Permission;
-import com.github.chic.entity.Role;
 import com.github.chic.entity.User;
-import com.github.chic.portal.mapper.PermissionMapper;
-import com.github.chic.portal.mapper.RoleMapper;
 import com.github.chic.portal.mapper.UserMapper;
 import com.github.chic.portal.model.param.LoginParam;
 import com.github.chic.portal.model.param.RefreshParam;
@@ -41,10 +37,6 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private RoleMapper roleMapper;
-    @Resource
-    private PermissionMapper permissionMapper;
     @Resource
     private UserDetailsService userDetailsService;
     @Resource
@@ -162,16 +154,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.lambda().eq(User::getMobile, mobile);
         return userMapper.selectOne(qw);
-    }
-
-    @Override
-    public List<Role> listRoleByUserId(Integer userId) {
-        return roleMapper.selectRoleListByUserId(userId);
-    }
-
-    @Override
-    public List<Permission> listPermissionByUserId(Integer userId) {
-        return permissionMapper.selectPermissionListByUserId(userId);
     }
 
     private void redisCacheToken(String mobile, String accessToken, String refreshToken) {
