@@ -23,7 +23,7 @@ jwt:
   header: Authorization
   # JWT AccessToken 过期时间(60*60*24*7 604800)
   accessTokenExpireTime: 604800
-  # JWT RefreshToken 过期时间(60*60*24*30 604800)
+  # JWT RefreshToken 过期时间(60*60*24*30 2592000)
   refreshTokenExpireTime: 2592000
   # JWT BufferToken 过期时间(60*5 300)
   bufferTokenExpireTime: 300
