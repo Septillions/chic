@@ -5,8 +5,6 @@ import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.admin.mapper.AdminMapper;
-import com.github.chic.admin.mapper.PermissionMapper;
-import com.github.chic.admin.mapper.RoleMapper;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
@@ -14,6 +12,8 @@ import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshVO;
 import com.github.chic.admin.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
+import com.github.chic.admin.service.PermissionService;
+import com.github.chic.admin.service.RoleService;
 import com.github.chic.admin.util.JwtUtils;
 import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.component.constant.RedisKeyEnum;
@@ -42,9 +42,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Resource
     private AdminMapper adminMapper;
     @Resource
-    private RoleMapper roleMapper;
+    private RoleService roleService;
     @Resource
-    private PermissionMapper permissionMapper;
+    private PermissionService permissionService;
     @Resource
     private UserDetailsService userDetailsService;
     @Resource
@@ -164,12 +164,12 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public List<Role> listRoleByAdminId(Integer adminId) {
-        return roleMapper.selectRoleListByAdminId(adminId);
+        return roleService.listByAdminId(adminId);
     }
 
     @Override
     public List<Permission> listPermissionByAdminId(Integer adminId) {
-        return permissionMapper.selectPermissionListByAdminId(adminId);
+        return permissionService.listByAdminId(adminId);
     }
 
     private void redisCacheToken(String username, String accessToken, String refreshToken) {

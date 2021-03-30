@@ -9,5 +9,5 @@ import java.util.List;
  * 权限表 Mapper 接口
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
-    List<Permission> selectPermissionListByAdminId(Integer adminId);
+    List<Permission> listByAdminId(Integer adminId);
 }
