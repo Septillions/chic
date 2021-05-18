@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 /**
  * MyBatis-Plus-Generator 代码生成器
- * 配置参考 https://mp.baomidou.com/guide/generator.html
+ * 配置参考
+ * https://mp.baomidou.com/guide/generator.html
+ * https://mp.baomidou.com/config/generator-config.html
  */
 public class CodeGenerator {
     public static void main(String[] args) {
@@ -26,16 +28,23 @@ public class CodeGenerator {
         gc.setOutputDir(projectPath + "/chic-mbg/src/main/java");
         gc.setFileOverride(true);
         gc.setOpen(false);
+        gc.setBaseResultMap(false);
+        gc.setControllerName("%sController");
+        gc.setServiceName("%sService");
+        gc.setServiceImplName("%sServiceImpl");
+        gc.setMapperName("%sMapper");
+        gc.setXmlName("%sMapper");
         generator.setGlobalConfig(gc);
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.github.chic");
         generator.setPackageInfo(pc);
-        // 配置模板
+        // 模板配置
         TemplateConfig tc = new TemplateConfig();
         tc.setController(null);
         tc.setService(null);
         tc.setServiceImpl(null);
+        tc.setMapper(null);
         tc.setXml(null);
         generator.setTemplate(tc);
         // 策略配置
@@ -44,6 +53,7 @@ public class CodeGenerator {
         sc.setColumnNaming(NamingStrategy.underline_to_camel);
         sc.setEntityLombokModel(true);
         sc.setControllerMappingHyphenStyle(true);
+        sc.setRestControllerStyle(true);
         sc.setTablePrefix("t_");
         generator.setStrategy(sc);
         // 模板引擎
