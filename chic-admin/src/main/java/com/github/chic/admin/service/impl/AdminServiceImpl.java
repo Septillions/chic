@@ -65,6 +65,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         Admin admin = new Admin();
         admin.setUsername(registerParam.getUsername());
         admin.setPassword(passwordEncoder.encode(registerParam.getPassword()));
+        admin.setStatus(1);
         admin.setCreateTime(LocalDateTime.now());
         admin.setUpdateTime(LocalDateTime.now());
         adminMapper.insert(admin);
@@ -79,6 +80,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), admin.getPassword())) {
             throw new AuthException(1102, "帐号或密码错误");
+        }
+        if (admin.getStatus() != 1) {
+            throw new AuthException(1104, "该帐号已被限制登陆");
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());

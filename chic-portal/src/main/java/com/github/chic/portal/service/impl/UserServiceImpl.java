@@ -58,6 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUsername(registerParam.getMobile());
         user.setMobile(registerParam.getMobile());
         user.setPassword(passwordEncoder.encode(registerParam.getPassword()));
+        user.setStatus(1);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userMapper.insert(user);
@@ -72,6 +73,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         if (!passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
             throw new AuthException(1102, "帐号或密码错误");
+        }
+        if (user.getStatus() != 1) {
+            throw new AuthException(1104, "该帐号已被限制登陆");
         }
         // 删除已登录Token 保证Token唯一
         redisRemoveToken(user.getMobile());

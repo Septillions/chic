@@ -59,7 +59,7 @@ public class Permission implements Serializable {
     private Integer sort;
 
     /**
-     * 权限类型(0目录,1菜单,2按钮)
+     * 权限类型(1目录,2菜单,3按钮)
      */
     private Integer type;
 

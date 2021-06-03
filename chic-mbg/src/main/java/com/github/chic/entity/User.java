@@ -49,6 +49,11 @@ public class User implements Serializable {
     private String avatarUrl;
 
     /**
+     * 状态(1正常,2禁用)
+     */
+    private Integer status;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;
