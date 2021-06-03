@@ -10,7 +10,7 @@ import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshVO;
-import com.github.chic.admin.security.entity.JwtAdminDetails;
+import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.service.PermissionService;
 import com.github.chic.admin.service.RoleService;

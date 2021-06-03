@@ -1,9 +1,9 @@
-package com.github.chic.admin.security.filter;
+package com.github.chic.admin.component.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.chic.admin.security.entity.JwtAdminDetails;
+import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.util.JwtUtils;
 import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.component.constant.RedisKeyEnum;

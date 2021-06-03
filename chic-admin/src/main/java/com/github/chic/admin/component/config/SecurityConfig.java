@@ -1,9 +1,9 @@
-package com.github.chic.portal.config;
+package com.github.chic.admin.component.config;
 
+import com.github.chic.admin.component.security.component.RestAccessDeniedHandler;
+import com.github.chic.admin.component.security.component.RestAuthenticationEntryPoint;
+import com.github.chic.admin.component.security.filter.JwtAuthenticationTokenFilter;
 import com.github.chic.common.config.AuthProps;
-import com.github.chic.portal.security.component.RestAccessDeniedHandler;
-import com.github.chic.portal.security.component.RestAuthenticationEntryPoint;
-import com.github.chic.portal.security.filter.JwtAuthenticationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

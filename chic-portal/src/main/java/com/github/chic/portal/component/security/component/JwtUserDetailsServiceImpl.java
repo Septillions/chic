@@ -1,7 +1,7 @@
-package com.github.chic.portal.security.component;
+package com.github.chic.portal.component.security.component;
 
 import com.github.chic.entity.User;
-import com.github.chic.portal.security.entity.JwtUserDetails;
+import com.github.chic.portal.component.security.entity.JwtUserDetails;
 import com.github.chic.portal.service.UserService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

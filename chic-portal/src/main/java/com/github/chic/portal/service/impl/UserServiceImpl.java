@@ -19,7 +19,7 @@ import com.github.chic.portal.model.param.RefreshParam;
 import com.github.chic.portal.model.param.RegisterParam;
 import com.github.chic.portal.model.vo.LoginVO;
 import com.github.chic.portal.model.vo.RefreshVO;
-import com.github.chic.portal.security.entity.JwtUserDetails;
+import com.github.chic.portal.component.security.entity.JwtUserDetails;
 import com.github.chic.portal.service.UserService;
 import com.github.chic.portal.util.JwtUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

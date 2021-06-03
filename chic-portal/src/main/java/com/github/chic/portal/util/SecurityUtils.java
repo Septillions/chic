@@ -1,6 +1,6 @@
 package com.github.chic.portal.util;
 
-import com.github.chic.portal.security.entity.JwtUserDetails;
+import com.github.chic.portal.component.security.entity.JwtUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

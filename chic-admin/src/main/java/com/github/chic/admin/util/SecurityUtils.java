@@ -1,6 +1,6 @@
 package com.github.chic.admin.util;
 
-import com.github.chic.admin.security.entity.JwtAdminDetails;
+import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

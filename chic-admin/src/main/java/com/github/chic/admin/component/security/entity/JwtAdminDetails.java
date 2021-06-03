@@ -1,21 +1,22 @@
-package com.github.chic.portal.security.entity;
+package com.github.chic.admin.component.security.entity;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.github.chic.entity.User;
+import com.github.chic.entity.Admin;
+import com.github.chic.entity.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security 用户实现
  */
 @Data
-public class JwtUserDetails implements UserDetails {
+public class JwtAdminDetails implements UserDetails {
     /**
      * ID
      */
@@ -28,10 +29,6 @@ public class JwtUserDetails implements UserDetails {
      * 密码
      */
     private String password;
-    /**
-     * 手机号
-     */
-    private String mobile;
     /**
      * 角色列表
      */
@@ -53,12 +50,14 @@ public class JwtUserDetails implements UserDetails {
      */
     private boolean isEnabled = true;
 
-    public static JwtUserDetails create(User user) {
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_PORTAL"));
-        JwtUserDetails jwtUserDetails = new JwtUserDetails();
-        BeanUtil.copyProperties(user, jwtUserDetails);
-        jwtUserDetails.setAuthorities(authorities);
-        return jwtUserDetails;
+    public static JwtAdminDetails create(Admin admin, List<Role> roleList) {
+        List<SimpleGrantedAuthority> authorities = roleList.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getCode()))
+                .collect(Collectors.toList());
+        JwtAdminDetails jwtAdminDetails = new JwtAdminDetails();
+        BeanUtil.copyProperties(admin, jwtAdminDetails);
+        jwtAdminDetails.setAuthorities(authorities);
+        return jwtAdminDetails;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.chic.portal.security.filter;
+package com.github.chic.portal.component.security.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -11,7 +11,7 @@ import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.model.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
-import com.github.chic.portal.security.entity.JwtUserDetails;
+import com.github.chic.portal.component.security.entity.JwtUserDetails;
 import com.github.chic.portal.util.JwtUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

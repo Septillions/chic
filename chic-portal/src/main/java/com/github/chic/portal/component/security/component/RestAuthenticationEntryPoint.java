@@ -1,4 +1,4 @@
-package com.github.chic.admin.security.component;
+package com.github.chic.portal.component.security.component;
 
 import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;

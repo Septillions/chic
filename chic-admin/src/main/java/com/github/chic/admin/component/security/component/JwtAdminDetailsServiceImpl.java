@@ -1,6 +1,6 @@
-package com.github.chic.admin.security.component;
+package com.github.chic.admin.component.security.component;
 
-import com.github.chic.admin.security.entity.JwtAdminDetails;
+import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.entity.Admin;
 import com.github.chic.entity.Role;
