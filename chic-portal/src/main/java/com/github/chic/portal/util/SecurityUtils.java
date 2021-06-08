@@ -19,7 +19,7 @@ public class SecurityUtils {
     /**
      * 获取当前用户ID
      */
-    public static Integer getCurrentUserId() {
+    public static Long getCurrentUserId() {
         return getCurrentUser().getId();
     }
 }

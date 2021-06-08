@@ -29,12 +29,12 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
-    public List<Role> listRoleByAdminId(Integer adminId) {
+    public List<Role> listRoleByAdminId(Long adminId) {
         return roleService.listByAdminId(adminId);
     }
 
     @Override
-    public List<Permission> listPermissionByAdminId(Integer adminId) {
+    public List<Permission> listPermissionByAdminId(Long adminId) {
         return permissionService.listByAdminId(adminId);
     }
 }

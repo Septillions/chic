@@ -35,7 +35,7 @@ public class WebLogAspect {
         String method = request.getMethod();
         String url = request.getRequestURL().toString();
         String args = Arrays.toString(joinPoint.getArgs());
-        Integer uid = getCurrentUserId();
+        Long uid = getCurrentUserId();
         String ip = ServletUtil.getClientIP(request);
         try {
             // 执行请求方法
@@ -51,7 +51,7 @@ public class WebLogAspect {
     /**
      * 获取当前用户 ID
      */
-    private Integer getCurrentUserId() {
+    private Long getCurrentUserId() {
         try {
             return SecurityUtils.getCurrentUserId();
         } catch (Exception e) {

@@ -6,5 +6,5 @@ import com.github.chic.entity.Permission;
 import java.util.List;
 
 public interface PermissionService extends IService<Permission> {
-    List<Permission> listByAdminId(Integer adminId);
+    List<Permission> listByAdminId(Long adminId);
 }

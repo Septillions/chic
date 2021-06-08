@@ -20,15 +20,15 @@ public class AdminRoleRelation implements Serializable {
      * ID
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 管理员ID
      */
-    private Integer adminId;
+    private Long adminId;
 
     /**
      * 角色ID
      */
-    private Integer roleId;
+    private Long roleId;
 }

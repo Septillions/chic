@@ -9,5 +9,5 @@ import java.util.List;
  * 角色表 Mapper 接口
  */
 public interface RoleMapper extends BaseMapper<Role> {
-    List<Role> listByAdminId(Integer adminId);
+    List<Role> listByAdminId(Long adminId);
 }

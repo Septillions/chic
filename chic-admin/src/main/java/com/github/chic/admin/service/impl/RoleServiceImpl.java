@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     @Override
-    public List<Role> listByAdminId(Integer adminId) {
+    public List<Role> listByAdminId(Long adminId) {
         return this.baseMapper.listByAdminId(adminId);
     }
 }

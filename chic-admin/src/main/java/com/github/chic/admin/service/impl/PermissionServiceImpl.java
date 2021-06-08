@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
     @Override
-    public List<Permission> listByAdminId(Integer adminId) {
+    public List<Permission> listByAdminId(Long adminId) {
         return this.baseMapper.listByAdminId(adminId);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public interface AdminService extends IService<Admin> {
     Admin getByUsername(String username);
 
-    List<Role> listRoleByAdminId(Integer adminId);
+    List<Role> listRoleByAdminId(Long adminId);
 
-    List<Permission> listPermissionByAdminId(Integer adminId);
+    List<Permission> listPermissionByAdminId(Long adminId);
 }

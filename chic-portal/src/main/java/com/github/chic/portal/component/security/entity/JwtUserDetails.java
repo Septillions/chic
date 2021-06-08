@@ -19,7 +19,7 @@ public class JwtUserDetails implements UserDetails {
     /**
      * ID
      */
-    private Integer id;
+    private Long id;
     /**
      * 用户名
      */
