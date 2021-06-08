@@ -6,7 +6,7 @@ import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshVO;
-import com.github.chic.admin.service.AdminService;
+import com.github.chic.admin.service.AuthService;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.model.api.ApiResult;
 import io.swagger.annotations.Api;
@@ -26,19 +26,19 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
     @Resource
-    private AdminService adminService;
+    private AuthService authService;
 
     @ApiOperation("注册")
     @PostMapping("/register")
     public ApiResult<Object> register(@RequestBody @Valid RegisterParam registerParam) {
-        adminService.register(registerParam);
+        authService.register(registerParam);
         return ApiResult.success();
     }
 
     @ApiOperation("登陆")
     @PostMapping("/login")
     public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
-        LoginVO loginVO = adminService.login(loginParam);
+        LoginVO loginVO = authService.login(loginParam);
         return ApiResult.success(loginVO);
     }
 
@@ -47,7 +47,7 @@ public class AuthController {
     public ApiResult<Object> logout(HttpServletRequest request) {
         String token = request.getHeader(JwtProps.header);
         if (StrUtil.isNotBlank(token)) {
-            adminService.logout(token);
+            authService.logout(token);
         }
         return ApiResult.success();
     }
@@ -55,7 +55,7 @@ public class AuthController {
     @ApiOperation("刷新")
     @PostMapping("/refresh")
     public ApiResult<RefreshVO> refresh(@RequestBody @Valid RefreshParam refreshParam) {
-        RefreshVO refreshVO = adminService.refresh(refreshParam);
+        RefreshVO refreshVO = authService.refresh(refreshParam);
         return ApiResult.success(refreshVO);
     }
 
