@@ -54,6 +54,7 @@ public class CodeGenerator {
         sc.setEntityLombokModel(true);
         sc.setControllerMappingHyphenStyle(true);
         sc.setRestControllerStyle(true);
+        sc.setEntityTableFieldAnnotationEnable(true);
         sc.setTablePrefix("t_");
         generator.setStrategy(sc);
         // 模板引擎

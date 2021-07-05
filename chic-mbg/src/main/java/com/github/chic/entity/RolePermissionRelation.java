@@ -1,6 +1,7 @@
 package com.github.chic.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -25,10 +26,12 @@ public class RolePermissionRelation implements Serializable {
     /**
      * 角色ID
      */
+    @TableField("role_id")
     private Long roleId;
 
     /**
      * 权限ID
      */
+    @TableField("permission_id")
     private Long permissionId;
 }
