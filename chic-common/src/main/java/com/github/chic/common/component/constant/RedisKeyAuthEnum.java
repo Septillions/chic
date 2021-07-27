@@ -32,32 +32,32 @@ public enum RedisKeyAuthEnum {
      */
     ADMIN_AUTH_JWT_BUFFER_PREFIX("admin:auth:jwt:buffer:"),
     /**
-     * USER AUTH JWT ACCESS 格式
-     * user:auth:jwt:access{mobile}:{jwt}
+     * PORTAL AUTH JWT ACCESS 格式
+     * portal:auth:jwt:access{mobile}:{jwt}
      */
-    USER_AUTH_JWT_ACCESS_FORMAT("user:auth:jwt:access:{}:{}"),
+    PORTAL_AUTH_JWT_ACCESS_FORMAT("portal:auth:jwt:access:{}:{}"),
     /**
-     * USER AUTH JWT ACCESS 前缀
+     * PORTAL AUTH JWT ACCESS 前缀
      */
-    USER_AUTH_JWT_ACCESS_PREFIX("user:auth:jwt:access:"),
+    PORTAL_AUTH_JWT_ACCESS_PREFIX("portal:auth:jwt:access:"),
     /**
-     * USER AUTH JWT REFRESH 格式
-     * user:auth:jwt:refresh:{mobile}:{jwt}
+     * PORTAL AUTH JWT REFRESH 格式
+     * portal:auth:jwt:refresh:{mobile}:{jwt}
      */
-    USER_AUTH_JWT_REFRESH_FORMAT("user:auth:jwt:refresh:{}:{}"),
+    PORTAL_AUTH_JWT_REFRESH_FORMAT("portal:auth:jwt:refresh:{}:{}"),
     /**
-     * USER AUTH JWT REFRESH 前缀
+     * PORTAL AUTH JWT REFRESH 前缀
      */
-    USER_AUTH_JWT_REFRESH_PREFIX("user:auth:jwt:refresh:"),
+    PORTAL_AUTH_JWT_REFRESH_PREFIX("portal:auth:jwt:refresh:"),
     /**
-     * USER AUTH JWT BUFFER 格式
-     * user:auth:jwt:buffer:{mobile}:{jwt}
+     * PORTAL AUTH JWT BUFFER 格式
+     * portal:auth:jwt:buffer:{mobile}:{jwt}
      */
-    USER_AUTH_JWT_BUFFER_FORMAT("user:auth:jwt:buffer:{}:{}"),
+    PORTAL_AUTH_JWT_BUFFER_FORMAT("portal:auth:jwt:buffer:{}:{}"),
     /**
-     * USER AUTH JWT BUFFER 前缀
+     * PORTAL AUTH JWT BUFFER 前缀
      */
-    USER_AUTH_JWT_BUFFER_PREFIX("user:auth:jwt:buffer:");
+    PORTAL_AUTH_JWT_BUFFER_PREFIX("portal:auth:jwt:buffer:");
 
     private final String key;
 

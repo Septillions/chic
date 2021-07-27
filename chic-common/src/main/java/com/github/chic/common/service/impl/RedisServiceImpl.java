@@ -70,4 +70,9 @@ public class RedisServiceImpl implements RedisService {
     public void expire(String key, Long timeout, TimeUnit unit) {
         redisTemplate.expire(key, timeout, unit);
     }
+
+    @Override
+    public Long ttl(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
 }

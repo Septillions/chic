@@ -1,7 +1,7 @@
 package com.github.chic.admin.component.security.component;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.github.chic.admin.service.PermissionService;
+import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.SecurityUtils;
 import com.github.chic.entity.Permission;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class JwtMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
-    private final PermissionService permissionService = SpringUtil.getBean(PermissionService.class);
+    private final AdminService adminService = SpringUtil.getBean(AdminService.class);
 
     private Object filterObject;
     private Object returnObject;
@@ -26,18 +26,13 @@ public class JwtMethodSecurityExpressionRoot extends SecurityExpressionRoot impl
     }
 
     public boolean hasPermission(String permission) {
-        List<Permission> list = permissionService.listByAdminId(SecurityUtils.getCurrentAdminId());
+        List<Permission> list = adminService.listPermissionByAdminId(SecurityUtils.getCurrentAdminId());
         for (Permission p : list) {
-            if (p.getCode().equals(permission)) {
+            if (permission.equals(p.getCode())) {
                 return true;
             }
         }
         return false;
-    }
-
-    @Override
-    public void setFilterObject(Object filterObject) {
-        this.filterObject = filterObject;
     }
 
     @Override
@@ -46,13 +41,18 @@ public class JwtMethodSecurityExpressionRoot extends SecurityExpressionRoot impl
     }
 
     @Override
-    public void setReturnObject(Object returnObject) {
-        this.returnObject = returnObject;
+    public void setFilterObject(Object filterObject) {
+        this.filterObject = filterObject;
     }
 
     @Override
     public Object getReturnObject() {
         return returnObject;
+    }
+
+    @Override
+    public void setReturnObject(Object returnObject) {
+        this.returnObject = returnObject;
     }
 
     @Override

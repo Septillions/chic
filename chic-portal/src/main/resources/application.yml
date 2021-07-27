@@ -38,3 +38,8 @@ auth:
       - /auth/login
       - /auth/logout
       - /auth/refresh
+
+# 缓存
+cache:
+  # Cache 默认过期时间(60*60*24*7 604800)
+  default-expire-time: 604800

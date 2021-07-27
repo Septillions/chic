@@ -63,7 +63,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
             // Redis 有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, token);
+            String redisJwtKey = StrUtil.format(RedisKeyAuthEnum.PORTAL_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, token);
             RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisJwtKey);
             if (redisJwtUserDTO == null) {
                 ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token 失效");
