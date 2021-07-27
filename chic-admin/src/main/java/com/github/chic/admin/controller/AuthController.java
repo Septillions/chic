@@ -71,4 +71,11 @@ public class AuthController {
     public ApiResult<Object> testRole() {
         return ApiResult.success();
     }
+
+    @ApiOperation("权限测试")
+    @PreAuthorize("hasPermission('user:list:view')")
+    @PostMapping("/test/permission")
+    public ApiResult<Object> testPermission() {
+        return ApiResult.success();
+    }
 }

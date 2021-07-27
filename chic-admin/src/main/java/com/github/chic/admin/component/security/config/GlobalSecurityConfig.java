@@ -1,4 +1,4 @@
-package com.github.chic.admin.component.config;
+package com.github.chic.admin.component.security.config;
 
 import com.github.chic.admin.component.security.component.RestAccessDeniedHandler;
 import com.github.chic.admin.component.security.component.RestAuthenticationEntryPoint;
@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,12 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.annotation.Resource;
 
 /**
- * Spring Security 配置类
+ * Spring Security 全局安全配置类
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class GlobalSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Auth 配置参数类
      */
