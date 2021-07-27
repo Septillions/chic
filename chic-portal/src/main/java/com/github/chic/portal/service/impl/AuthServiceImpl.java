@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyEnum;
+import com.github.chic.common.component.constant.RedisKeyAuthEnum;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.model.dto.RedisJwtBufferDTO;
@@ -97,12 +97,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String accessToken) {
         String mobile = JwtUtils.getMobile(accessToken);
-        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisAccessTokenKey);
         if (redisJwtUserDTO != null) {
             redisService.delete(redisAccessTokenKey);
             String refreshToken = redisJwtUserDTO.getRefreshToken();
-            String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+            String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
             redisService.delete(redisRefreshTokenKey);
         }
     }
@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
         String oldRefreshToken = refreshParam.getRefreshToken();
         String mobile = JwtUtils.getMobile(oldRefreshToken);
         // 重复刷新请求
-        String redisBufferTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
+        String redisBufferTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtBufferDTO redisJwtBufferDTO = (RedisJwtBufferDTO) redisService.get(redisBufferTokenKey);
         if (redisJwtBufferDTO != null) {
             RefreshVO refreshVO = new RefreshVO();
@@ -122,14 +122,14 @@ public class AuthServiceImpl implements AuthService {
             return refreshVO;
         }
         // 校验是否有效
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisRefreshTokenKey);
         if (redisJwtUserDTO == null) {
             throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
         }
         // 移除旧 Token
         String oldAccessToken = redisJwtUserDTO.getAccessToken();
-        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
         redisService.delete(redisAccessTokenKey);
         redisService.delete(redisRefreshTokenKey);
         // 生成新 Token
@@ -155,8 +155,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void redisCacheToken(String mobile, String accessToken, String refreshToken) {
-        String redisAccessTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
         UserAgent ua = ServletUtils.getUserAgent();
         RedisJwtUserDTO redisJwtUserDTO = new RedisJwtUserDTO();
         redisJwtUserDTO.setMobile(mobile);
@@ -171,7 +171,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void redisCacheBuffer(String mobile, String oldAccessToken, String oldRefreshToken, String newAccessToken, String newRefreshToken) {
-        String redisBufferTokenKey = StrUtil.format(RedisKeyEnum.AUTH_USER_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
+        String redisBufferTokenKey = StrUtil.format(RedisKeyAuthEnum.USER_AUTH_JWT_BUFFER_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtBufferDTO redisJwtBufferDTO = new RedisJwtBufferDTO();
         redisJwtBufferDTO.setOldAccessToken(oldAccessToken);
         redisJwtBufferDTO.setOldRefreshToken(oldRefreshToken);
@@ -183,8 +183,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void redisRemoveToken(String mobile) {
-        Set<String> redisAccessTokenKeys = redisService.keys(RedisKeyEnum.AUTH_USER_JWT_ACCESS_PREFIX.getKey() + mobile);
-        Set<String> redisRefreshTokenKeys = redisService.keys(RedisKeyEnum.AUTH_USER_JWT_REFRESH_PREFIX.getKey() + mobile);
+        Set<String> redisAccessTokenKeys = redisService.keys(RedisKeyAuthEnum.USER_AUTH_JWT_ACCESS_PREFIX.getKey() + mobile);
+        Set<String> redisRefreshTokenKeys = redisService.keys(RedisKeyAuthEnum.USER_AUTH_JWT_REFRESH_PREFIX.getKey() + mobile);
         redisService.delete(redisAccessTokenKeys);
         redisService.delete(redisRefreshTokenKeys);
     }

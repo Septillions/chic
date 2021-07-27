@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.util.JwtUtils;
 import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyEnum;
+import com.github.chic.common.component.constant.RedisKeyAuthEnum;
 import com.github.chic.common.config.AuthProps;
 import com.github.chic.common.config.JwtProps;
 import com.github.chic.common.exception.AuthException;
@@ -63,7 +63,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
             // Redis 有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyEnum.AUTH_ADMIN_JWT_ACCESS_FORMAT.getKey(), username, token);
+            String redisJwtKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, token);
             RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisJwtKey);
             if (redisJwtAdminDTO == null) {
                 ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token 失效");
