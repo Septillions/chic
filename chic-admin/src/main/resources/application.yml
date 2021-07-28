@@ -22,11 +22,11 @@ jwt:
   # JWT 存储的请求头
   header: Authorization
   # JWT AccessToken 过期时间(60*60*24*7 604800)
-  accessTokenExpireTime: 604800
+  access-token-expire-time: 604800
   # JWT RefreshToken 过期时间(60*60*24*30 2592000)
-  refreshTokenExpireTime: 2592000
+  refresh-token-expire-time: 2592000
   # JWT BufferToken 过期时间(60*5 300)
-  bufferTokenExpireTime: 300
+  buffer-token-expire-time: 300
 
 # 认证
 auth:

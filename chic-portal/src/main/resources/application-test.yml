@@ -7,42 +7,42 @@ spring:
     # Druid
     druid:
       # 初始化连接数
-      initialSize: 1
+      initial-size: 1
       # 最小连接数
-      minIdle: 1
+      min-idle: 1
       # 最大连接数
-      maxActive: 20
+      max-active: 20
       # 获取连接超时时间
-      maxWait: 2000
+      max-wait: 2000
       # 连接有效性检测间隔时间
-      timeBetweenEvictionRunsMillis: 60000
+      time-between-eviction-runs-millis: 60000
       # 连接最小生存时间
-      minEvictableIdleTimeMillis: 600000
+      min-evictable-idle-time-millis: 600000
       # PSCache
-      poolPreparedStatements: true
+      pool-prepared-statements: true
       # 连接 PSCache 大小
-      maxOpenPreparedStatements: 100
+      max-open-prepared-statements: 100
       # 获取连接时检测
-      testOnBorrow: false
+      test-on-borrow: false
       # 放回连接时检测
-      testOnReturn: false
+      test-on-return: false
       # 空闲时检测
-      testWhileIdle: true
+      test-while-idle: true
       # 检测连接的查询语句
-      validationQuery: SELECT 1
+      validation-query: SELECT 1
       # 监控统计拦截的 filters
       filters: stat,wall
       # 监控页面
-      statViewServlet:
+      stat-view-servlet:
         enabled: true
-        loginUsername: admin
-        loginPassword: admin
-        resetEnable: false
-        urlPattern: /druid/*
+        login-username: admin
+        login-password: admin
+        reset-enable: false
+        url-pattern: /druid/*
       # 网络统计
-      webStatFilter:
+      web-stat-filter:
         enabled: true
-        urlPattern: /*
+        url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
 
   # Redis

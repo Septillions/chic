@@ -30,20 +30,40 @@ public class JwtProps {
      */
     public static Long bufferTokenExpireTime;
 
+    public String getSecret() {
+        return secret;
+    }
+
     public void setSecret(String secret) {
         JwtProps.secret = secret;
+    }
+
+    public String getHeader() {
+        return header;
     }
 
     public void setHeader(String header) {
         JwtProps.header = header;
     }
 
+    public Long getAccessTokenExpireTime() {
+        return accessTokenExpireTime;
+    }
+
     public void setAccessTokenExpireTime(Long accessTokenExpireTime) {
         JwtProps.accessTokenExpireTime = accessTokenExpireTime;
     }
 
+    public Long getRefreshTokenExpireTime() {
+        return refreshTokenExpireTime;
+    }
+
     public void setRefreshTokenExpireTime(Long refreshTokenExpireTime) {
         JwtProps.refreshTokenExpireTime = refreshTokenExpireTime;
+    }
+
+    public Long getBufferTokenExpireTime() {
+        return bufferTokenExpireTime;
     }
 
     public void setBufferTokenExpireTime(Long bufferTokenExpireTime) {
