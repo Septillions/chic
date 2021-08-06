@@ -1,5 +1,6 @@
 package com.github.chic.admin.util;
 
+import cn.hutool.core.convert.Convert;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.chic.common.config.JwtProps;
@@ -19,6 +20,7 @@ public class JwtUtils {
      */
     public static String generateAccessToken(JwtAdminDetails jwtAdminDetails) {
         Map<String, Object> claims = new HashMap<>(5);
+        claims.put("aud", jwtAdminDetails.getId());
         claims.put("sub", jwtAdminDetails.getUsername());
         return generateToken(claims, JwtProps.accessTokenExpireTime);
     }
@@ -28,6 +30,7 @@ public class JwtUtils {
      */
     public static String generateRefreshToken(JwtAdminDetails jwtAdminDetails) {
         Map<String, Object> claims = new HashMap<>(5);
+        claims.put("aud", jwtAdminDetails.getId());
         claims.put("sub", jwtAdminDetails.getUsername());
         return generateToken(claims, JwtProps.refreshTokenExpireTime);
     }
@@ -62,6 +65,14 @@ public class JwtUtils {
         } catch (JwtException e) {
             throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 无效");
         }
+    }
+
+    /**
+     * 获取 Token 中的管理员ID
+     */
+    public static Long getAdminId(String token) {
+        String adminId = getClaims(token).getAudience();
+        return Convert.toLong(adminId);
     }
 
     /**

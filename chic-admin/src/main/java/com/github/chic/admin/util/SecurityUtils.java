@@ -22,4 +22,11 @@ public class SecurityUtils {
     public static Long getCurrentAdminId() {
         return getCurrentAdmin().getId();
     }
+
+    /**
+     * 获取当前用户名
+     */
+    public static String getCurrentUsername() {
+        return getCurrentAdmin().getUsername();
+    }
 }
