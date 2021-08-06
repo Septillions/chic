@@ -3,6 +3,7 @@ package com.github.chic.admin.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.chic.admin.component.constant.RedisKeyCacheEnum;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RefreshParam;
@@ -91,14 +92,23 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(String accessToken) {
+        Long adminId = JwtUtils.getAdminId(accessToken);
         String username = JwtUtils.getUsername(accessToken);
         String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
         RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisAccessTokenKey);
         if (redisJwtAdminDTO != null) {
+            // 删除 AccessToken 缓存
             redisService.delete(redisAccessTokenKey);
+            // 删除 RefreshToken 缓存
             String refreshToken = redisJwtAdminDTO.getRefreshToken();
             String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
             redisService.delete(redisRefreshTokenKey);
+            // 删除 Role 缓存
+            String redisRoleKey = RedisKeyCacheEnum.ADMIN_CACHE_ROLE_PREFIX.getKey() + adminId;
+            redisService.delete(redisRoleKey);
+            // 删除 Permission 缓存
+            String redisPermissionKey = RedisKeyCacheEnum.ADMIN_CACHE_PERMISSION_PREFIX.getKey() + adminId;
+            redisService.delete(redisPermissionKey);
         }
     }
 
