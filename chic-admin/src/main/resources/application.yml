@@ -38,6 +38,7 @@ auth:
       - /monitor/findOnlineUserList
     # POST 请求
     post:
+      - /auth/captcha
       - /auth/register
       - /auth/login
       - /auth/logout

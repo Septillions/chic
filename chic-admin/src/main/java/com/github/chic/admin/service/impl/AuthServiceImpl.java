@@ -1,5 +1,6 @@
 package com.github.chic.admin.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -8,6 +9,7 @@ import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.RefreshParam;
 import com.github.chic.admin.model.param.RegisterParam;
+import com.github.chic.admin.model.vo.CaptchaVO;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshVO;
 import com.github.chic.admin.service.AdminService;
@@ -22,6 +24,7 @@ import com.github.chic.common.model.dto.RedisJwtBufferDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
 import com.github.chic.entity.Admin;
+import com.wf.captcha.SpecCaptcha;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -42,6 +46,19 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
     @Resource
     private RedisService redisService;
+
+    @Override
+    public CaptchaVO captcha() {
+        SpecCaptcha captcha = new SpecCaptcha(130, 48, 4);
+        String code = captcha.text().toLowerCase();
+        String uuid = IdUtil.fastSimpleUUID();
+        String key = RedisKeyAuthEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + uuid;
+        redisService.set(key, code, 300L);
+        CaptchaVO vo = new CaptchaVO();
+        vo.setUuid(uuid);
+        vo.setImage(captcha.toBase64());
+        return vo;
+    }
 
     @Override
     public void register(RegisterParam registerParam) {
@@ -57,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
         admin.setUsername(registerParam.getUsername());
         admin.setPassword(passwordEncoder.encode(registerParam.getPassword()));
         admin.setStatus(1);
+        admin.setNickname(registerParam.getUsername());
         admin.setCreateTime(LocalDateTime.now());
         admin.setUpdateTime(LocalDateTime.now());
         adminService.save(admin);
@@ -64,6 +82,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginVO login(LoginParam loginParam) {
+        // 校验验证码
+        String captchaKey = RedisKeyAuthEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + loginParam.getUuid();
+        String captcha = (String) redisService.get(captchaKey);
+        if (!StrUtil.equalsIgnoreCase(captcha, loginParam.getCaptcha().trim())) {
+            throw new AuthException(1201, "验证码不正确");
+        }
         // 获取用户
         Admin admin = adminService.getByUsername(loginParam.getUsername());
         if (admin == null) {
@@ -80,13 +104,28 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
-        String accessToken = JwtUtils.generateAccessToken(jwtAdminDetails);
-        String refreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails);
+        Date accessExpire = new Date(System.currentTimeMillis() + JwtProps.accessTokenExpireTime * 1000);
+        String accessToken = JwtUtils.generateAccessToken(jwtAdminDetails, accessExpire);
+        Date refreshExpire = new Date(System.currentTimeMillis() + JwtProps.refreshTokenExpireTime * 1000);
+        String refreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails, refreshExpire);
         // Redis
         redisCacheToken(admin.getUsername(), accessToken, refreshToken);
+        // AdminVO
+        LoginVO.Admin adminVO = new LoginVO.Admin();
+        adminVO.setId(admin.getId());
+        adminVO.setUsername(admin.getUsername());
+        adminVO.setNickname(admin.getNickname());
+        adminVO.setAvatarUrl(admin.getAvatarUrl());
+        // TokenVO
+        LoginVO.Token tokenVO = new LoginVO.Token();
+        tokenVO.setAccessExpire(accessExpire);
+        tokenVO.setAccessToken(accessToken);
+        tokenVO.setRefreshExpire(refreshExpire);
+        tokenVO.setRefreshToken(refreshToken);
+        // VO
         LoginVO loginVO = new LoginVO();
-        loginVO.setAccessToken(accessToken);
-        loginVO.setRefreshToken(refreshToken);
+        loginVO.setAdmin(adminVO);
+        loginVO.setToken(tokenVO);
         return loginVO;
     }
 
@@ -147,8 +186,10 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
-        String newAccessToken = JwtUtils.generateAccessToken(jwtAdminDetails);
-        String newRefreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails);
+        Date newAccessExpire = new Date(System.currentTimeMillis() + JwtProps.accessTokenExpireTime * 1000);
+        Date newRefreshExpire = new Date(System.currentTimeMillis() + JwtProps.refreshTokenExpireTime * 1000);
+        String newAccessToken = JwtUtils.generateAccessToken(jwtAdminDetails, newAccessExpire);
+        String newRefreshToken = JwtUtils.generateRefreshToken(jwtAdminDetails, newRefreshExpire);
         // Redis
         redisCacheToken(username, newAccessToken, newRefreshToken);
         redisCacheBuffer(username, oldAccessToken, oldRefreshToken, newAccessToken, newRefreshToken);

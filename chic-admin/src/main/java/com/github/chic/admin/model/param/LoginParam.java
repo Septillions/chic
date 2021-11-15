@@ -15,4 +15,8 @@ public class LoginParam {
     @ApiModelProperty(value = "密码", required = true, example = "admin")
     @NotBlank(message = "密码不能为空")
     private String password;
+    @NotBlank(message = "验证码不能为空")
+    private String captcha;
+    @NotBlank(message = "UUID不能为空")
+    private String uuid;
 }

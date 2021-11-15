@@ -18,34 +18,34 @@ public class JwtUtils {
     /**
      * 生成 AccessToken
      */
-    public static String generateAccessToken(JwtAdminDetails jwtAdminDetails) {
+    public static String generateAccessToken(JwtAdminDetails jwtAdminDetails, Date jwtExpireTime) {
         Map<String, Object> claims = new HashMap<>(5);
         claims.put("aud", jwtAdminDetails.getId());
         claims.put("sub", jwtAdminDetails.getUsername());
-        return generateToken(claims, JwtProps.accessTokenExpireTime);
+        return generateToken(claims, jwtExpireTime);
     }
 
     /**
      * 生成 RefreshToken
      */
-    public static String generateRefreshToken(JwtAdminDetails jwtAdminDetails) {
+    public static String generateRefreshToken(JwtAdminDetails jwtAdminDetails, Date jwtExpireTime) {
         Map<String, Object> claims = new HashMap<>(5);
         claims.put("aud", jwtAdminDetails.getId());
         claims.put("sub", jwtAdminDetails.getUsername());
-        return generateToken(claims, JwtProps.refreshTokenExpireTime);
+        return generateToken(claims, jwtExpireTime);
     }
 
     /**
      * 生成 Token
      */
-    public static String generateToken(Map<String, Object> claims, Long expiration) {
+    public static String generateToken(Map<String, Object> claims, Date expiration) {
         // 生成JWT
         return Jwts.builder()
                 .setClaims(claims)
                 // 签发时间
                 .setIssuedAt(new Date())
                 // 失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+                .setExpiration(expiration)
                 // 签名算法和密钥
                 .signWith(SignatureAlgorithm.HS512, JwtProps.secret)
                 .compact();

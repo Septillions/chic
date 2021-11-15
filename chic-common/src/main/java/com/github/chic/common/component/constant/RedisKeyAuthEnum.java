@@ -32,6 +32,16 @@ public enum RedisKeyAuthEnum {
      */
     ADMIN_AUTH_JWT_BUFFER_PREFIX("admin:auth:jwt:buffer:"),
     /**
+     * AUTH ADMIN CAPTCHA 格式
+     * admin:auth:captcha:{uuid}
+     */
+    ADMIN_AUTH_CAPTCHA_FORMAT("admin:auth:captcha:{}"),
+    /**
+     * AUTH ADMIN CAPTCHA 前缀
+     */
+    ADMIN_AUTH_CAPTCHA_PREFIX("admin:auth:captcha:"),
+
+    /**
      * PORTAL AUTH JWT ACCESS 格式
      * portal:auth:jwt:access{mobile}:{jwt}
      */
