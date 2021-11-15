@@ -71,8 +71,8 @@ public class JwtUtils {
      * 获取 Token 中的用户ID
      */
     public static Long getUserId(String token) {
-        String adminId = getClaims(token).getAudience();
-        return Convert.toLong(adminId);
+        String userId = getClaims(token).getAudience();
+        return Convert.toLong(userId);
     }
 
     /**
