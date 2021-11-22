@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
             bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
         }
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        StringBuilder errorMsg = new StringBuilder("校验异常(VerifyException):");
+        StringBuilder errorMsg = new StringBuilder();
         for (FieldError error : fieldErrors) {
             errorMsg.append(error.getField()).append("-").append(error.getDefaultMessage()).append(",");
         }
