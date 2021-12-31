@@ -2,6 +2,7 @@ package com.github.chic.common.model.api;
 
 import com.github.chic.common.component.constant.ApiCodeEnum;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResult<T> {
+    @ApiModelProperty(value = "状态码 (0成功,>0失败)", position = 1)
     private Integer code;
+    @ApiModelProperty(value = "状态码描述", position = 2)
     private String msg;
+    @ApiModelProperty(value = "结果数据", position = 3)
     private T data;
 
     public static <T> ApiResult<T> success() {

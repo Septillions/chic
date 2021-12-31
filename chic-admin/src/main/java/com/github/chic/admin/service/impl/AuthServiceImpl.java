@@ -196,7 +196,9 @@ public class AuthServiceImpl implements AuthService {
         // VO
         RefreshVO refreshVO = new RefreshVO();
         refreshVO.setAccessToken(newAccessToken);
+        refreshVO.setAccessExpire(newAccessExpire);
         refreshVO.setRefreshToken(newRefreshToken);
+        refreshVO.setRefreshExpire(newRefreshExpire);
         return refreshVO;
     }
 

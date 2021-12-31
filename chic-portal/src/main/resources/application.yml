@@ -43,3 +43,22 @@ auth:
 cache:
   # Cache 默认过期时间(60*60*24*7 604800)
   default-expire-time: 604800
+
+# Swagger
+swagger:
+  # 分组名称
+  group-name: Chic Portal
+  # 标题
+  title: Chic Portal API 文档
+  # 描述
+  description: Chic Portal REST API
+  # 版本
+  version: 1.0.0
+  # 作者
+  contact:
+    # 名字
+    name: Septillions
+    # 主页
+    url: https://github.com/septillions
+    # 邮箱
+    email: eolinker@gmail.com

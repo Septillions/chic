@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@ApiModel("刷新参数")
+@ApiModel(description = "刷新参数")
 @Data
 public class RefreshParam {
     @ApiModelProperty(value = "RefreshToken", required = true)

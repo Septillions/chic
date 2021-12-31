@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@ApiModel("用户参数")
+@ApiModel(description = "用户查询")
 @Data
 public class UserQuery {
     @ApiModelProperty(value = "用户名")

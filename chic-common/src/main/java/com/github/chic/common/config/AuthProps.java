@@ -17,7 +17,7 @@ public class AuthProps {
     /**
      * 忽略认证的接口
      */
-    private AuthProps.Ignore ignore;
+    private Ignore ignore;
 
     @Data
     public static class Ignore {

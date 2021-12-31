@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@ApiModel("注册参数")
+@ApiModel(description = "注册参数")
 @Data
 public class RegisterParam {
     @ApiModelProperty(value = "用户名", required = true)

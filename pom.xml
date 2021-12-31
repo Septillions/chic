@@ -40,7 +40,7 @@
         <hutool.version>5.7.14</hutool.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
-        <swagger.version>2.9.2</swagger.version>
+        <knife4j.version>2.0.9</knife4j.version>
         <logstash.version>6.6</logstash.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <jib.version>2.7.1</jib.version>
@@ -194,17 +194,11 @@
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-            <!-- Swagger -->
+            <!-- Knife4j Swagger -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <!-- Swagger UI -->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
             <!-- Logstash -->
             <dependency>

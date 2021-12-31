@@ -69,7 +69,19 @@ spring:
         # 最小空闲连接
         min-idle: 0
 
-# Swagger
-swagger:
-  # 文档开关
+# Knife4j
+# https://doc.xiaominfo.com/knife4j/documentation/enhance.html
+knife4j:
+  # 开启增强配置
   enable: true
+  # 开启生产环境屏蔽文档
+  production: false
+  setting:
+    # 显示 Swagger Model
+    enableSwaggerModels: true
+    # 显示文档管理
+    enableDocumentManage: true
+    # 显示 Footer
+    enableFooter: false
+    # 开启版本控制
+    enableVersion: true
