@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/druid/**").permitAll()
                 // 放行swagger文档资源
                 .antMatchers("/swagger-ui.html",
+                        "/doc.html",
+                        "/favicon.ico",
                         "/v2/api-docs",
                         "/webjars/**",
                         "/swagger-resources/**").permitAll()
