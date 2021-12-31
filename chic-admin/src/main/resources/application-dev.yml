@@ -78,10 +78,10 @@ knife4j:
   production: false
   setting:
     # 显示 Swagger Model
-    enableSwaggerModels: true
+    enable-swagger-models: true
     # 显示文档管理
-    enableDocumentManage: true
+    enable-document-manage: true
     # 显示 Footer
-    enableFooter: false
+    enable-footer: false
     # 开启版本控制
-    enableVersion: true
+    enable-version: true
