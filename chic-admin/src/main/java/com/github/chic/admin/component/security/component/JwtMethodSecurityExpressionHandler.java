@@ -17,9 +17,9 @@ public class JwtMethodSecurityExpressionHandler extends DefaultMethodSecurityExp
     @Override
     protected MethodSecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication, MethodInvocation invocation) {
         JwtMethodSecurityExpressionRoot root = new JwtMethodSecurityExpressionRoot(authentication);
-        root.setPermissionEvaluator(getPermissionEvaluator());
+        root.setPermissionEvaluator(super.getPermissionEvaluator());
+        root.setRoleHierarchy(super.getRoleHierarchy());
         root.setTrustResolver(this.trustResolver);
-        root.setRoleHierarchy(getRoleHierarchy());
         return root;
     }
 }
