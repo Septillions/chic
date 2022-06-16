@@ -23,15 +23,6 @@ public enum RedisKeyAuthEnum {
      */
     ADMIN_AUTH_JWT_REFRESH_PREFIX("admin:auth:jwt:refresh:"),
     /**
-     * ADMIN AUTH JWT BUFFER 格式
-     * admin:auth:jwt:buffer:{username}:{jwt}
-     */
-    ADMIN_AUTH_JWT_BUFFER_FORMAT("admin:auth:jwt:buffer:{}:{}"),
-    /**
-     * ADMIN AUTH JWT BUFFER 前缀
-     */
-    ADMIN_AUTH_JWT_BUFFER_PREFIX("admin:auth:jwt:buffer:"),
-    /**
      * AUTH ADMIN CAPTCHA 格式
      * admin:auth:captcha:{uuid}
      */
@@ -58,16 +49,7 @@ public enum RedisKeyAuthEnum {
     /**
      * PORTAL AUTH JWT REFRESH 前缀
      */
-    PORTAL_AUTH_JWT_REFRESH_PREFIX("portal:auth:jwt:refresh:"),
-    /**
-     * PORTAL AUTH JWT BUFFER 格式
-     * portal:auth:jwt:buffer:{mobile}:{jwt}
-     */
-    PORTAL_AUTH_JWT_BUFFER_FORMAT("portal:auth:jwt:buffer:{}:{}"),
-    /**
-     * PORTAL AUTH JWT BUFFER 前缀
-     */
-    PORTAL_AUTH_JWT_BUFFER_PREFIX("portal:auth:jwt:buffer:");
+    PORTAL_AUTH_JWT_REFRESH_PREFIX("portal:auth:jwt:refresh:");
 
     private final String key;
 

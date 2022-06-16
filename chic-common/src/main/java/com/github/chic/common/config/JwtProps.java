@@ -25,10 +25,6 @@ public class JwtProps {
      * JWT RefreshToken 过期时间
      */
     public static Long refreshTokenExpireTime;
-    /**
-     * JWT BufferToken 过期时间
-     */
-    public static Long bufferTokenExpireTime;
 
     public String getSecret() {
         return secret;
@@ -60,13 +56,5 @@ public class JwtProps {
 
     public void setRefreshTokenExpireTime(Long refreshTokenExpireTime) {
         JwtProps.refreshTokenExpireTime = refreshTokenExpireTime;
-    }
-
-    public Long getBufferTokenExpireTime() {
-        return bufferTokenExpireTime;
-    }
-
-    public void setBufferTokenExpireTime(Long bufferTokenExpireTime) {
-        JwtProps.bufferTokenExpireTime = bufferTokenExpireTime;
     }
 }
