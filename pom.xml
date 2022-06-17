@@ -36,7 +36,7 @@
         <pagehelper.version>1.3.1</pagehelper.version>
         <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <hutool.version>5.7.14</hutool.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
