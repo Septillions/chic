@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException(1102, "帐号或密码错误");
         }
         if (user.getStatus() != 1) {
-            throw new AuthException(1104, "该帐号已被限制登陆");
+            throw new AuthException(1104, "该帐号已被限制登录");
         }
         // 删除已登录Token 保证Token唯一
         redisRemoveToken(user.getMobile());

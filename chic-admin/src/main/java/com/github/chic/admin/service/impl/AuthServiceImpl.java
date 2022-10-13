@@ -96,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException(1102, "帐号或密码错误");
         }
         if (admin.getStatus() != 1) {
-            throw new AuthException(1104, "该帐号已被限制登陆");
+            throw new AuthException(1104, "该帐号已被限制登录");
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());

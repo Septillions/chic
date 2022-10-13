@@ -34,7 +34,7 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    @ApiOperation("登陆")
+    @ApiOperation("登录")
     @PostMapping("/login")
     public ApiResult<LoginVO> login(@RequestBody @Valid LoginParam loginParam) {
         LoginVO loginVO = authService.login(loginParam);
