@@ -33,23 +33,23 @@ public enum RedisKeyAuthEnum {
     ADMIN_AUTH_CAPTCHA_PREFIX("admin:auth:captcha:"),
 
     /**
-     * PORTAL AUTH JWT ACCESS 格式
-     * portal:auth:jwt:access{mobile}:{jwt}
+     * APP AUTH JWT ACCESS 格式
+     * app:auth:jwt:access{mobile}:{jwt}
      */
-    PORTAL_AUTH_JWT_ACCESS_FORMAT("portal:auth:jwt:access:{}:{}"),
+    APP_AUTH_JWT_ACCESS_FORMAT("app:auth:jwt:access:{}:{}"),
     /**
-     * PORTAL AUTH JWT ACCESS 前缀
+     * APP AUTH JWT ACCESS 前缀
      */
-    PORTAL_AUTH_JWT_ACCESS_PREFIX("portal:auth:jwt:access:"),
+    APP_AUTH_JWT_ACCESS_PREFIX("app:auth:jwt:access:"),
     /**
-     * PORTAL AUTH JWT REFRESH 格式
-     * portal:auth:jwt:refresh:{mobile}:{jwt}
+     * APP AUTH JWT REFRESH 格式
+     * app:auth:jwt:refresh:{mobile}:{jwt}
      */
-    PORTAL_AUTH_JWT_REFRESH_FORMAT("portal:auth:jwt:refresh:{}:{}"),
+    APP_AUTH_JWT_REFRESH_FORMAT("app:auth:jwt:refresh:{}:{}"),
     /**
-     * PORTAL AUTH JWT REFRESH 前缀
+     * APP AUTH JWT REFRESH 前缀
      */
-    PORTAL_AUTH_JWT_REFRESH_PREFIX("portal:auth:jwt:refresh:");
+    APP_AUTH_JWT_REFRESH_PREFIX("app:auth:jwt:refresh:");
 
     private final String key;
 

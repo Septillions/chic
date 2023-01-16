@@ -1,0 +1,62 @@
+# 开发环境
+spring:
+  profiles:
+    active: dev
+
+# Logback
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
+
+# MyBatis Plus
+mybatis-plus:
+  global-config:
+    banner: false
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT
+jwt:
+  # JWT 加解密使用的密钥
+  secret: JWTSecret
+  # JWT 存储的请求头
+  header: Authorization
+  # JWT AccessToken 过期时间(60*60*24*7 604800)
+  access-token-expire-time: 604800
+  # JWT RefreshToken 过期时间(60*60*24*30 2592000)
+  refresh-token-expire-time: 2592000
+
+# 认证
+auth:
+  # 忽略认证的接口
+  ignore:
+    # POST 请求
+    post:
+      - /auth/register
+      - /auth/login
+      - /auth/logout
+      - /auth/refresh
+
+# 缓存
+cache:
+  # Cache 默认过期时间(60*60*24*7 604800)
+  default-expire-time: 604800
+
+# Swagger
+swagger:
+  # 分组名称
+  group-name: Chic APP
+  # 标题
+  title: Chic APP API 文档
+  # 描述
+  description: Chic APP REST API
+  # 版本
+  version: 1.0.0
+  # 作者
+  contact:
+    # 名字
+    name: Septillions
+    # 主页
+    url: https://github.com/septillions
+    # 邮箱
+    email: eolinker@gmail.com

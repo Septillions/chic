@@ -1,5 +1,5 @@
 #!/bin/bash
-app_name="chic-portal"
+app_name="chic-app"
 docker_registry="registry.cn-chengdu.aliyuncs.com/septillions"
 echo "1.停止容器"
 docker stop ${app_name}
