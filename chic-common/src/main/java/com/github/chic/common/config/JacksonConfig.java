@@ -1,5 +1,6 @@
 package com.github.chic.common.config;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,10 +22,6 @@ import java.time.format.DateTimeFormatter;
 @JsonComponent
 public class JacksonConfig {
     /**
-     * LocalDateTime 格式
-     */
-    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    /**
      * LocalDate 格式
      */
     private static final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -39,7 +36,7 @@ public class JacksonConfig {
     public static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
         @Override
         public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(LOCAL_DATE_TIME_FORMATTER.format(localDateTime));
+            jsonGenerator.writeNumber(LocalDateTimeUtil.toEpochMilli(localDateTime));
         }
     }
 
@@ -49,7 +46,7 @@ public class JacksonConfig {
     public static class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
         @Override
         public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-            return LocalDateTime.parse(jsonParser.getText(), LOCAL_DATE_TIME_FORMATTER);
+            return LocalDateTimeUtil.of(jsonParser.getLongValue());
         }
     }
 
