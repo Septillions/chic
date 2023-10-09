@@ -4,21 +4,25 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.chic.admin.component.constant.RedisKeyCacheEnum;
+import com.github.chic.admin.component.constant.ApiCodeEnum;
+import com.github.chic.admin.component.constant.RedisKeyEnum;
+import com.github.chic.admin.component.exception.ApiException;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.model.param.LoginParam;
-import com.github.chic.admin.model.param.RefreshParam;
+import com.github.chic.admin.model.param.PasswordResetParam;
+import com.github.chic.admin.model.param.RefreshTokenParam;
 import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.CaptchaVO;
 import com.github.chic.admin.model.vo.LoginVO;
-import com.github.chic.admin.model.vo.RefreshVO;
+import com.github.chic.admin.model.vo.RefreshTokenVO;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.service.AuthService;
 import com.github.chic.admin.util.JwtUtils;
-import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyAuthEnum;
+import com.github.chic.admin.util.SecurityUtils;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.common.component.constant.BaseRedisKeyEnum;
+import com.github.chic.common.component.exception.BaseException;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.model.dto.RedisJwtAdminDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
@@ -51,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
         SpecCaptcha captcha = new SpecCaptcha(130, 48, 4);
         String code = captcha.text().toLowerCase();
         String uuid = IdUtil.fastSimpleUUID();
-        String key = RedisKeyAuthEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + uuid;
+        String key = BaseRedisKeyEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + uuid;
         redisService.set(key, code, 300L);
         CaptchaVO vo = new CaptchaVO();
         vo.setUuid(uuid);
@@ -60,46 +64,50 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void register(RegisterParam registerParam) {
+    public void register(RegisterParam param) {
         // 检查是否有相同用户名
         QueryWrapper<Admin> qw = new QueryWrapper<>();
-        qw.lambda().eq(Admin::getUsername, registerParam.getUsername());
+        qw.lambda().eq(Admin::getUsername, param.getUsername());
         int count = adminService.count(qw);
         if (count > 0) {
-            throw new AuthException(1103, "用户名已经注册");
+            throw new ApiException(ApiCodeEnum.AUTH_USERNAME_EXIST);
         }
         // 创建用户
         Admin admin = new Admin();
-        admin.setUsername(registerParam.getUsername());
-        admin.setPassword(passwordEncoder.encode(registerParam.getPassword()));
+        admin.setUsername(param.getUsername());
+        admin.setPassword(passwordEncoder.encode(param.getPassword()));
         admin.setStatus(1);
-        admin.setNickname(registerParam.getUsername());
+        admin.setNickname(param.getUsername());
         admin.setCreateTime(LocalDateTime.now());
         admin.setUpdateTime(LocalDateTime.now());
         adminService.save(admin);
     }
 
     @Override
-    public LoginVO login(LoginParam loginParam) {
+    public LoginVO login(LoginParam param) {
         // 校验验证码
-        String captchaKey = RedisKeyAuthEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + loginParam.getUuid();
+        String captchaKey = BaseRedisKeyEnum.ADMIN_AUTH_CAPTCHA_PREFIX.getKey() + param.getUuid();
         String captcha = (String) redisService.get(captchaKey);
-        if (!StrUtil.equalsIgnoreCase(captcha, loginParam.getCaptcha().trim())) {
-            throw new AuthException(1201, "验证码不正确");
+        if (!StrUtil.equalsIgnoreCase(captcha, param.getCaptcha().trim())) {
+            // 验证码不正确
+            throw new ApiException(ApiCodeEnum.AUTH_CAPTCHA_ERROR);
         }
         // 获取用户
-        Admin admin = adminService.getByUsername(loginParam.getUsername());
+        Admin admin = adminService.getByUsername(param.getUsername());
         if (admin == null) {
-            throw new AuthException(1101, "该帐号不存在");
+            // 用户名不存在
+            throw new ApiException(ApiCodeEnum.AUTH_USERNAME_NOT_EXIST);
         }
-        if (!passwordEncoder.matches(loginParam.getPassword(), admin.getPassword())) {
-            throw new AuthException(1102, "帐号或密码错误");
+        if (!passwordEncoder.matches(param.getPassword(), admin.getPassword())) {
+            // 密码错误
+            throw new ApiException(ApiCodeEnum.AUTH_PASSWORD_ERROR);
         }
         if (admin.getStatus() != 1) {
-            throw new AuthException(1104, "该帐号已被限制登录");
+            // 账号已被禁用
+            throw new ApiException(ApiCodeEnum.AUTH_STATUS_ERROR);
         }
         // Security
-        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(loginParam.getUsername());
+        JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(param.getUsername());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtAdminDetails, null, jwtAdminDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT
@@ -132,44 +140,44 @@ public class AuthServiceImpl implements AuthService {
     public void logout(String accessToken) {
         Long adminId = JwtUtils.getAdminId(accessToken);
         String username = JwtUtils.getUsername(accessToken);
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
         RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisAccessTokenKey);
         if (redisJwtAdminDTO != null) {
             // 删除 AccessToken 缓存
             redisService.delete(redisAccessTokenKey);
             // 删除 RefreshToken 缓存
             String refreshToken = redisJwtAdminDTO.getRefreshToken();
-            String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
+            String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
             redisService.delete(redisRefreshTokenKey);
             // 删除 Role 缓存
-            String redisRoleKey = RedisKeyCacheEnum.ADMIN_CACHE_ROLE_PREFIX.getKey() + adminId;
+            String redisRoleKey = RedisKeyEnum.ADMIN_CACHE_ROLE_PREFIX.getKey() + adminId;
             redisService.delete(redisRoleKey);
             // 删除 Permission 缓存
-            String redisPermissionKey = RedisKeyCacheEnum.ADMIN_CACHE_PERMISSION_PREFIX.getKey() + adminId;
+            String redisPermissionKey = RedisKeyEnum.ADMIN_CACHE_MENU_PREFIX.getKey() + adminId;
             redisService.delete(redisPermissionKey);
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RefreshVO refresh(RefreshParam refreshParam) {
-        String oldRefreshToken = refreshParam.getRefreshToken();
+    public RefreshTokenVO refreshToken(RefreshTokenParam param) {
+        String oldRefreshToken = param.getRefreshToken();
         String username = JwtUtils.getUsername(oldRefreshToken);
         // 校验是否有效
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, oldRefreshToken);
+        String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, oldRefreshToken);
         RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisRefreshTokenKey);
         if (redisJwtAdminDTO == null) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
+            throw new BaseException(BaseApiCodeEnum.TOKEN_EXPIRED);
         }
         // 移除旧 Token
         String oldAccessToken = redisJwtAdminDTO.getAccessToken();
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, oldAccessToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, oldAccessToken);
         redisService.delete(redisAccessTokenKey);
         redisService.delete(redisRefreshTokenKey);
         // 生成新 Token
         Admin admin = adminService.getByUsername(username);
         if (admin == null) {
-            throw new AuthException(1101, "该帐号不存在");
+            throw new ApiException(ApiCodeEnum.AUTH_USERNAME_NOT_EXIST);
         }
         // Security
         JwtAdminDetails jwtAdminDetails = (JwtAdminDetails) userDetailsService.loadUserByUsername(username);
@@ -183,17 +191,28 @@ public class AuthServiceImpl implements AuthService {
         // Redis
         redisCacheToken(username, newAccessToken, newRefreshToken);
         // VO
-        RefreshVO refreshVO = new RefreshVO();
-        refreshVO.setAccessToken(newAccessToken);
-        refreshVO.setAccessExpire(newAccessExpire);
-        refreshVO.setRefreshToken(newRefreshToken);
-        refreshVO.setRefreshExpire(newRefreshExpire);
-        return refreshVO;
+        RefreshTokenVO refreshTokenVO = new RefreshTokenVO();
+        refreshTokenVO.setAccessToken(newAccessToken);
+        refreshTokenVO.setAccessExpire(newAccessExpire);
+        refreshTokenVO.setRefreshToken(newRefreshToken);
+        refreshTokenVO.setRefreshExpire(newRefreshExpire);
+        return refreshTokenVO;
+    }
+
+    @Override
+    public void resetPassword(PasswordResetParam param) {
+        Admin admin = adminService.getById(SecurityUtils.getCurrentAdminId());
+        if (!passwordEncoder.matches(param.getPasswordOld(), admin.getPassword())) {
+            // 原账号密码错误
+            throw new ApiException(ApiCodeEnum.AUTH_RESET_PASSWORD_ERROR);
+        }
+        admin.setPassword(passwordEncoder.encode(param.getPassword()));
+        adminService.updateById(admin);
     }
 
     private void redisCacheToken(String username, String accessToken, String refreshToken) {
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, accessToken);
+        String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_REFRESH_FORMAT.getKey(), username, refreshToken);
         UserAgent ua = ServletUtils.getUserAgent();
         RedisJwtAdminDTO redisJwtAdminDTO = new RedisJwtAdminDTO();
         redisJwtAdminDTO.setUsername(username);

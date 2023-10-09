@@ -9,6 +9,7 @@ import java.util.Date;
 public class LoginVO {
     @ApiModelProperty(value = "Admin")
     private Admin admin;
+
     @ApiModelProperty(value = "Token")
     private Token token;
 
@@ -16,10 +17,13 @@ public class LoginVO {
     public static class Admin {
         @ApiModelProperty(value = "ID")
         private Long id;
+
         @ApiModelProperty(value = "用户名")
         private String username;
+
         @ApiModelProperty(value = "昵称")
         private String nickname;
+
         @ApiModelProperty(value = "头像")
         private String avatarUrl;
     }
@@ -28,10 +32,13 @@ public class LoginVO {
     public static class Token {
         @ApiModelProperty(value = "accessToken")
         private String accessToken;
+
         @ApiModelProperty(value = "accessToken 过期时间")
         private Date accessExpire;
+
         @ApiModelProperty(value = "refreshToken")
         private String refreshToken;
+
         @ApiModelProperty(value = "refreshToken 过期时间")
         private Date refreshExpire;
     }

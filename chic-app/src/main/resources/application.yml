@@ -15,6 +15,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+# PageHelper
+pagehelper:
+  page-size-zero: true
+
 # JWT
 jwt:
   # JWT 加解密使用的密钥

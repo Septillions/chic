@@ -1,6 +1,6 @@
 package com.github.chic.admin.component.security.component;
 
-import com.github.chic.common.component.constant.ApiCodeEnum;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -18,6 +18,6 @@ import java.io.IOException;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        ServletUtils.writeJson(response, ApiCodeEnum.UNAUTHORIZED.getCode(), ApiCodeEnum.UNAUTHORIZED.getMsg());
+        ServletUtils.writeJson(response, BaseApiCodeEnum.UNAUTHORIZED.getCode(), BaseApiCodeEnum.UNAUTHORIZED.getMsg());
     }
 }

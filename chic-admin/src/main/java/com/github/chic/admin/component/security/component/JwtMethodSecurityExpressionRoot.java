@@ -3,7 +3,7 @@ package com.github.chic.admin.component.security.component;
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.util.SecurityUtils;
-import com.github.chic.entity.Permission;
+import com.github.chic.entity.Menu;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
@@ -26,9 +26,9 @@ public class JwtMethodSecurityExpressionRoot extends SecurityExpressionRoot impl
     }
 
     public boolean hasPermission(String permission) {
-        List<Permission> list = adminService.listPermissionByAdminId(SecurityUtils.getCurrentAdminId());
-        for (Permission p : list) {
-            if (permission.equals(p.getCode())) {
+        List<Menu> list = adminService.listMenuByAdminId(SecurityUtils.getCurrentAdminId());
+        for (Menu menu : list) {
+            if (permission.equals(menu.getCode())) {
                 return true;
             }
         }
@@ -58,9 +58,5 @@ public class JwtMethodSecurityExpressionRoot extends SecurityExpressionRoot impl
     @Override
     public Object getThis() {
         return target;
-    }
-
-    public void setThis(Object target) {
-        this.target = target;
     }
 }

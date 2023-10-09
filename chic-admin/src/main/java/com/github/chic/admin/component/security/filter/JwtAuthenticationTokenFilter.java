@@ -5,11 +5,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.util.JwtUtils;
-import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyAuthEnum;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.common.component.constant.BaseRedisKeyEnum;
+import com.github.chic.common.component.exception.BaseException;
 import com.github.chic.common.config.AuthProps;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.model.dto.RedisJwtAdminDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
@@ -58,15 +58,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String username = null;
             try {
                 username = JwtUtils.getUsername(token);
-            } catch (AuthException e) {
+            } catch (BaseException e) {
                 ServletUtils.writeJson(response, e.getErrCode(), e.getErrMsg());
                 return;
             }
             // Redis 有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyAuthEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, token);
+            String redisJwtKey = StrUtil.format(BaseRedisKeyEnum.ADMIN_AUTH_JWT_ACCESS_FORMAT.getKey(), username, token);
             RedisJwtAdminDTO redisJwtAdminDTO = (RedisJwtAdminDTO) redisService.get(redisJwtKey);
             if (redisJwtAdminDTO == null) {
-                ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token 失效");
+                ServletUtils.writeJson(response, BaseApiCodeEnum.TOKEN_EXPIRED.getCode(), BaseApiCodeEnum.TOKEN_EXPIRED.getMsg());
                 return;
             }
             // 认证

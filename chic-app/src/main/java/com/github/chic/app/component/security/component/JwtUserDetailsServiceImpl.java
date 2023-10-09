@@ -1,8 +1,8 @@
 package com.github.chic.app.component.security.component;
 
-import com.github.chic.entity.User;
 import com.github.chic.app.component.security.entity.JwtUserDetails;
 import com.github.chic.app.service.UserService;
+import com.github.chic.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;

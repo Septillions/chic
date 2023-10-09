@@ -7,7 +7,7 @@ import com.github.chic.common.model.api.ApiPage;
 import com.github.chic.common.model.api.ApiResult;
 import com.github.chic.common.model.dto.RedisJwtAdminDTO;
 import com.github.chic.common.model.dto.RedisJwtUserDTO;
-import com.github.chic.common.model.param.PageParam;
+import com.github.chic.common.model.param.PageQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ public class MonitorController {
 
     @ApiOperation("获取在线管理员列表")
     @GetMapping("/findOnlineAdminList")
-    public ApiResult<ApiPage<RedisJwtAdminDTO>> findOnlineAdminList(PageParam pageParam) {
+    public ApiResult<ApiPage<RedisJwtAdminDTO>> findOnlineAdminList(PageQuery page) {
         // 列表
         List<RedisJwtAdminDTO> redisJwtAdminDTOList = monitorService.listOnlineAdmin();
         // 比较器
@@ -38,11 +38,11 @@ public class MonitorController {
             return t1.compareTo(t2);
         };
         // 分页
-        List<RedisJwtAdminDTO> data = CollUtil.sortPageAll(pageParam.getPageIndex() - 1, pageParam.getPageSize(), comparator, redisJwtAdminDTOList);
+        List<RedisJwtAdminDTO> data = CollUtil.sortPageAll(page.getPageIndex() - 1, page.getPageSize(), comparator, redisJwtAdminDTOList);
         ApiPage<RedisJwtAdminDTO> apiPage = new ApiPage<>();
-        apiPage.setPageIndex(pageParam.getPageIndex());
-        apiPage.setPageSize(pageParam.getPageSize());
-        apiPage.setPages(PageUtil.totalPage(redisJwtAdminDTOList.size(), pageParam.getPageSize()));
+        apiPage.setPageIndex(page.getPageIndex());
+        apiPage.setPageSize(page.getPageSize());
+        apiPage.setPages(PageUtil.totalPage(redisJwtAdminDTOList.size(), page.getPageSize()));
         apiPage.setTotal((long) redisJwtAdminDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);
@@ -50,7 +50,7 @@ public class MonitorController {
 
     @ApiOperation("获取在线用户列表")
     @GetMapping("/findOnlineUserList")
-    public ApiResult<ApiPage<RedisJwtUserDTO>> findOnlineUserList(PageParam pageParam) {
+    public ApiResult<ApiPage<RedisJwtUserDTO>> findOnlineUserList(PageQuery page) {
         // 列表
         List<RedisJwtUserDTO> redisJwtUserDTOList = monitorService.listOnlineUser();
         // 比较器
@@ -60,11 +60,11 @@ public class MonitorController {
             return t1.compareTo(t2);
         };
         // 分页
-        List<RedisJwtUserDTO> data = CollUtil.sortPageAll(pageParam.getPageIndex() - 1, pageParam.getPageSize(), comparator, redisJwtUserDTOList);
+        List<RedisJwtUserDTO> data = CollUtil.sortPageAll(page.getPageIndex() - 1, page.getPageSize(), comparator, redisJwtUserDTOList);
         ApiPage<RedisJwtUserDTO> apiPage = new ApiPage<>();
-        apiPage.setPageIndex(pageParam.getPageIndex());
-        apiPage.setPageSize(pageParam.getPageSize());
-        apiPage.setPages(PageUtil.totalPage(redisJwtUserDTOList.size(), pageParam.getPageSize()));
+        apiPage.setPageIndex(page.getPageIndex());
+        apiPage.setPageSize(page.getPageSize());
+        apiPage.setPages(PageUtil.totalPage(redisJwtUserDTOList.size(), page.getPageSize()));
         apiPage.setTotal((long) redisJwtUserDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);

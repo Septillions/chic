@@ -1,7 +1,7 @@
 package com.github.chic.app.controller;
 
-import com.github.chic.common.model.api.ApiResult;
 import com.github.chic.app.component.mq.RabbitProducer;
+import com.github.chic.common.model.api.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;

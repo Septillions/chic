@@ -1,10 +1,10 @@
 package com.github.chic.app.util;
 
 import cn.hutool.core.convert.Convert;
-import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.exception.AuthException;
 import com.github.chic.app.component.security.entity.JwtUserDetails;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.common.component.exception.BaseException;
+import com.github.chic.common.config.JwtProps;
 import io.jsonwebtoken.*;
 
 import java.util.Date;
@@ -61,9 +61,9 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 过期");
+            throw new BaseException(BaseApiCodeEnum.TOKEN_EXPIRED);
         } catch (JwtException e) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "Token 无效");
+            throw new BaseException(BaseApiCodeEnum.TOKEN_INVALID);
         }
     }
 

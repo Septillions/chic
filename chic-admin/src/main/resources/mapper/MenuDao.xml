@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.chic.admin.dao.MenuDao">
+    <select id="listByAdminId" resultType="com.github.chic.entity.Menu">
+        SELECT m.*
+        FROM t_admin_role_relation arr
+                 INNER JOIN t_role r ON arr.role_id = r.id
+                 INNER JOIN t_role_menu_relation rpr ON r.id = rpr.role_id
+                 INNER JOIN t_menu m ON rpr.menu_id = m.id
+        WHERE arr.admin_id = #{adminId}
+          AND r.status = 1
+          AND m.status = 1
+        GROUP BY m.id
+        ORDER BY m.sort
+    </select>
+
+    <select id="listByRole" resultType="com.github.chic.entity.Menu">
+        SELECT m.*
+        FROM t_role_menu_relation rmr
+                 LEFT JOIN t_role r ON rmr.role_id = r.id
+                 LEFT JOIN t_menu m ON rmr.menu_id = m.id
+        WHERE rmr.role_id = #{query.roleId}
+    </select>
+</mapper>

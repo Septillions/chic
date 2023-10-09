@@ -37,6 +37,30 @@ public class Role implements Serializable {
     private String code;
 
     /**
+     * 显示排序
+     */
+    @TableField("sort")
+    private Integer sort;
+
+    /**
+     * 角色说明
+     */
+    @TableField("description")
+    private String description;
+
+    /**
+     * 系统保留(0否,1是)
+     */
+    @TableField("is_system")
+    private Integer isSystem;
+
+    /**
+     * 状态(0禁用,1启用)
+     */
+    @TableField("status")
+    private Integer status;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")

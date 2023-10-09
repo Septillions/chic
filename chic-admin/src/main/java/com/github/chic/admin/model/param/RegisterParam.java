@@ -9,10 +9,11 @@ import javax.validation.constraints.NotBlank;
 @ApiModel(description = "注册参数")
 @Data
 public class RegisterParam {
-    @ApiModelProperty(value = "用户名", required = true)
     @NotBlank(message = "用户名不能为空")
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
-    @ApiModelProperty(value = "密码", required = true)
+
     @NotBlank(message = "密码不能为空")
+    @ApiModelProperty(value = "密码", required = true)
     private String password;
 }

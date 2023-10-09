@@ -3,14 +3,8 @@ package com.github.chic.app.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyAuthEnum;
-import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.exception.AuthException;
-import com.github.chic.common.model.dto.RedisJwtUserDTO;
-import com.github.chic.common.service.RedisService;
-import com.github.chic.common.util.ServletUtils;
-import com.github.chic.entity.User;
+import com.github.chic.app.component.constant.ApiCodeEnum;
+import com.github.chic.app.component.exception.ApiException;
 import com.github.chic.app.component.security.entity.JwtUserDetails;
 import com.github.chic.app.model.param.LoginParam;
 import com.github.chic.app.model.param.RefreshParam;
@@ -20,6 +14,14 @@ import com.github.chic.app.model.vo.RefreshVO;
 import com.github.chic.app.service.AuthService;
 import com.github.chic.app.service.UserService;
 import com.github.chic.app.util.JwtUtils;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.common.component.constant.BaseRedisKeyEnum;
+import com.github.chic.common.component.exception.BaseException;
+import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.model.dto.RedisJwtUserDTO;
+import com.github.chic.common.service.RedisService;
+import com.github.chic.common.util.ServletUtils;
+import com.github.chic.entity.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,19 +45,19 @@ public class AuthServiceImpl implements AuthService {
     private RedisService redisService;
 
     @Override
-    public void register(RegisterParam registerParam) {
+    public void register(RegisterParam param) {
         // 检查是否有相同用户名
         QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.lambda().eq(User::getMobile, registerParam.getMobile());
+        qw.lambda().eq(User::getMobile, param.getMobile());
         int count = userService.count(qw);
         if (count > 0) {
-            throw new AuthException(1103, "手机号已经注册");
+            throw new ApiException(ApiCodeEnum.AUTH_MOBILE_EXIST);
         }
         // 创建用户
         User user = new User();
-        user.setUsername(registerParam.getMobile());
-        user.setMobile(registerParam.getMobile());
-        user.setPassword(passwordEncoder.encode(registerParam.getPassword()));
+        user.setUsername(param.getMobile());
+        user.setMobile(param.getMobile());
+        user.setPassword(passwordEncoder.encode(param.getPassword()));
         user.setStatus(1);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
@@ -63,17 +65,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginVO login(LoginParam loginParam) {
+    public LoginVO login(LoginParam param) {
         // 获取用户
-        User user = userService.getByMobile(loginParam.getMobile());
+        User user = userService.getByMobile(param.getMobile());
         if (user == null) {
-            throw new AuthException(1101, "该帐号不存在");
+            // 手机号不存在
+            throw new ApiException(ApiCodeEnum.AUTH_MOBILE_NOT_EXIST);
         }
-        if (!passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
-            throw new AuthException(1102, "帐号或密码错误");
+        if (!passwordEncoder.matches(param.getPassword(), user.getPassword())) {
+            // 密码错误
+            throw new ApiException(ApiCodeEnum.AUTH_PASSWORD_ERROR);
         }
         if (user.getStatus() != 1) {
-            throw new AuthException(1104, "该帐号已被限制登录");
+            // 账号已被禁用
+            throw new ApiException(ApiCodeEnum.AUTH_STATUS_ERROR);
         }
         // 删除已登录Token 保证Token唯一
         redisRemoveToken(user.getMobile());
@@ -96,36 +101,36 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(String accessToken) {
         String mobile = JwtUtils.getMobile(accessToken);
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisAccessTokenKey);
         if (redisJwtUserDTO != null) {
             redisService.delete(redisAccessTokenKey);
             String refreshToken = redisJwtUserDTO.getRefreshToken();
-            String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+            String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
             redisService.delete(redisRefreshTokenKey);
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RefreshVO refresh(RefreshParam refreshParam) {
-        String oldRefreshToken = refreshParam.getRefreshToken();
+    public RefreshVO refresh(RefreshParam param) {
+        String oldRefreshToken = param.getRefreshToken();
         String mobile = JwtUtils.getMobile(oldRefreshToken);
         // 校验是否有效
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
+        String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisRefreshTokenKey);
         if (redisJwtUserDTO == null) {
-            throw new AuthException(ApiCodeEnum.INVALID.getCode(), "RefreshToken 失效");
+            throw new BaseException(BaseApiCodeEnum.TOKEN_EXPIRED);
         }
         // 移除旧 Token
         String oldAccessToken = redisJwtUserDTO.getAccessToken();
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, oldAccessToken);
         redisService.delete(redisAccessTokenKey);
         redisService.delete(redisRefreshTokenKey);
         // 生成新 Token
         User user = userService.getByMobile(mobile);
         if (user == null) {
-            throw new AuthException(1101, "该帐号不存在");
+            throw new ApiException(ApiCodeEnum.AUTH_MOBILE_NOT_EXIST);
         }
         // Security
         JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(mobile);
@@ -144,8 +149,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void redisCacheToken(String mobile, String accessToken, String refreshToken) {
-        String redisAccessTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
-        String redisRefreshTokenKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
+        String redisAccessTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, accessToken);
+        String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, refreshToken);
         UserAgent ua = ServletUtils.getUserAgent();
         RedisJwtUserDTO redisJwtUserDTO = new RedisJwtUserDTO();
         redisJwtUserDTO.setMobile(mobile);
@@ -160,8 +165,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void redisRemoveToken(String mobile) {
-        Set<String> redisAccessTokenKeys = redisService.keys(RedisKeyAuthEnum.APP_AUTH_JWT_ACCESS_PREFIX.getKey() + mobile);
-        Set<String> redisRefreshTokenKeys = redisService.keys(RedisKeyAuthEnum.APP_AUTH_JWT_REFRESH_PREFIX.getKey() + mobile);
+        Set<String> redisAccessTokenKeys = redisService.keys(BaseRedisKeyEnum.APP_AUTH_JWT_ACCESS_PREFIX.getKey() + mobile);
+        Set<String> redisRefreshTokenKeys = redisService.keys(BaseRedisKeyEnum.APP_AUTH_JWT_REFRESH_PREFIX.getKey() + mobile);
         redisService.delete(redisAccessTokenKeys);
         redisService.delete(redisRefreshTokenKeys);
     }

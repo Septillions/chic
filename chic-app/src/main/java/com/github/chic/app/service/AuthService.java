@@ -7,11 +7,11 @@ import com.github.chic.app.model.vo.LoginVO;
 import com.github.chic.app.model.vo.RefreshVO;
 
 public interface AuthService {
-    void register(RegisterParam registerParam);
+    void register(RegisterParam param);
 
-    LoginVO login(LoginParam loginParam);
+    LoginVO login(LoginParam param);
 
     void logout(String token);
 
-    RefreshVO refresh(RefreshParam refreshParam);
+    RefreshVO refresh(RefreshParam param);
 }

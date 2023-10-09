@@ -3,16 +3,16 @@ package com.github.chic.app.component.security.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.chic.common.component.constant.ApiCodeEnum;
-import com.github.chic.common.component.constant.RedisKeyAuthEnum;
+import com.github.chic.app.component.security.entity.JwtUserDetails;
+import com.github.chic.app.util.JwtUtils;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.common.component.constant.BaseRedisKeyEnum;
+import com.github.chic.common.component.exception.BaseException;
 import com.github.chic.common.config.AuthProps;
 import com.github.chic.common.config.JwtProps;
-import com.github.chic.common.exception.AuthException;
 import com.github.chic.common.model.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
-import com.github.chic.app.component.security.entity.JwtUserDetails;
-import com.github.chic.app.util.JwtUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,15 +58,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             String mobile = null;
             try {
                 mobile = JwtUtils.getMobile(token);
-            } catch (AuthException e) {
+            } catch (BaseException e) {
                 ServletUtils.writeJson(response, e.getErrCode(), e.getErrMsg());
                 return;
             }
             // Redis 有效控制
-            String redisJwtKey = StrUtil.format(RedisKeyAuthEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, token);
+            String redisJwtKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_ACCESS_FORMAT.getKey(), mobile, token);
             RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisJwtKey);
             if (redisJwtUserDTO == null) {
-                ServletUtils.writeJson(response, ApiCodeEnum.INVALID.getCode(), "Token 失效");
+                ServletUtils.writeJson(response, BaseApiCodeEnum.INVALID.getCode(), "Token 失效");
                 return;
             }
             // 认证

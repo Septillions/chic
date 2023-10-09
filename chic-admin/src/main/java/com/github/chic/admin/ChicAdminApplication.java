@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(scanBasePackages = "com.github.chic")
-@MapperScan("com.github.chic.admin.mapper")
+@MapperScan({"com.github.chic.mapper", "com.github.chic.admin.dao"})
 @EnableTransactionManagement
 public class ChicAdminApplication {
 

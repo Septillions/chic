@@ -1,6 +1,6 @@
 package com.github.chic.common.model.api;
 
-import com.github.chic.common.component.constant.ApiCodeEnum;
+import com.github.chic.common.component.constant.BaseApiCodeEnum;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResult<T> {
-    @ApiModelProperty(value = "状态码 (0成功,>0失败)", position = 1)
+    @ApiModelProperty(value = "状态码 (0成功,!=0失败)", position = 1)
     private Integer code;
     @ApiModelProperty(value = "状态码描述", position = 2)
     private String msg;
@@ -24,14 +24,14 @@ public class ApiResult<T> {
     private T data;
 
     public static <T> ApiResult<T> success() {
-        return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), null);
+        return new ApiResult<>(BaseApiCodeEnum.SUCCESS.getCode(), BaseApiCodeEnum.SUCCESS.getMsg(), null);
     }
 
     public static <T> ApiResult<T> success(T data) {
-        return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), data);
+        return new ApiResult<>(BaseApiCodeEnum.SUCCESS.getCode(), BaseApiCodeEnum.SUCCESS.getMsg(), data);
     }
 
-    public static <T> ApiResult<ApiPage<T>> success(List<T> list) {
+    public static <T> ApiResult<ApiPage<T>> page(List<T> list) {
         ApiPage<T> apiPage = new ApiPage<>();
         PageInfo<T> pageInfo = new PageInfo<>(list);
         apiPage.setPageIndex(pageInfo.getPageNum());
@@ -39,15 +39,15 @@ public class ApiResult<T> {
         apiPage.setPages(pageInfo.getPages());
         apiPage.setTotal(pageInfo.getTotal());
         apiPage.setItems(pageInfo.getList());
-        return new ApiResult<>(ApiCodeEnum.SUCCESS.getCode(), ApiCodeEnum.SUCCESS.getMsg(), apiPage);
+        return new ApiResult<>(BaseApiCodeEnum.SUCCESS.getCode(), BaseApiCodeEnum.SUCCESS.getMsg(), apiPage);
     }
 
     public static <T> ApiResult<T> failed() {
-        return new ApiResult<>(ApiCodeEnum.FAILED.getCode(), ApiCodeEnum.FAILED.getMsg(), null);
+        return new ApiResult<>(BaseApiCodeEnum.FAILED.getCode(), BaseApiCodeEnum.FAILED.getMsg(), null);
     }
 
     public static <T> ApiResult<T> failed(String msg) {
-        return new ApiResult<>(ApiCodeEnum.FAILED.getCode(), msg, null);
+        return new ApiResult<>(BaseApiCodeEnum.FAILED.getCode(), msg, null);
     }
 
     public static <T> ApiResult<T> failed(Integer code, String msg) {
