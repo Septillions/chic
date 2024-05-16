@@ -37,7 +37,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <freemarker.version>2.3.31</freemarker.version>
         <fastjson.version>1.2.83</fastjson.version>
-        <hutool.version>5.7.14</hutool.version>
+        <hutool.version>5.8.21</hutool.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <knife4j.version>2.0.9</knife4j.version>
