@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 /**
  * MyBatis-Plus-Generator 代码生成器
  * 配置参考
- * https://baomidou.com/pages/d357af/
- * https://baomidou.com/pages/061573/
+ * https://baomidou.com/guides/code-generator/
+ * https://baomidou.com/reference/code-generator-configuration/
  */
 public class CodeGenerator {
     public static void main(String[] args) {
