@@ -43,7 +43,7 @@ public class MonitorController {
         apiPage.setPageIndex(page.getPageIndex());
         apiPage.setPageSize(page.getPageSize());
         apiPage.setPages(PageUtil.totalPage(redisJwtAdminDTOList.size(), page.getPageSize()));
-        apiPage.setTotal((long) redisJwtAdminDTOList.size());
+        apiPage.setTotal(redisJwtAdminDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);
     }
@@ -65,7 +65,7 @@ public class MonitorController {
         apiPage.setPageIndex(page.getPageIndex());
         apiPage.setPageSize(page.getPageSize());
         apiPage.setPages(PageUtil.totalPage(redisJwtUserDTOList.size(), page.getPageSize()));
-        apiPage.setTotal((long) redisJwtUserDTOList.size());
+        apiPage.setTotal(redisJwtUserDTOList.size());
         apiPage.setItems(data);
         return ApiResult.success(apiPage);
     }

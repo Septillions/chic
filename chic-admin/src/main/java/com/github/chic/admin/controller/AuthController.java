@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.PasswordResetParam;
 import com.github.chic.admin.model.param.RefreshTokenParam;
+import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.CaptchaVO;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.MenuListVO;
@@ -38,6 +39,13 @@ public class AuthController {
     public ApiResult<CaptchaVO> captcha() {
         CaptchaVO captchaVO = authService.captcha();
         return ApiResult.success(captchaVO);
+    }
+
+    @ApiOperation("注册")
+    @PostMapping("/register")
+    public ApiResult<Object> register(@RequestBody @Valid RegisterParam param) {
+        authService.register(param);
+        return ApiResult.success();
     }
 
     @ApiOperation("登录")

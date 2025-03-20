@@ -3,6 +3,7 @@ package com.github.chic.admin.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.chic.admin.component.constant.ApiCodeEnum;
 import com.github.chic.admin.component.constant.RedisKeyEnum;
 import com.github.chic.admin.component.exception.ApiException;
@@ -10,6 +11,7 @@ import com.github.chic.admin.component.security.entity.JwtAdminDetails;
 import com.github.chic.admin.model.param.LoginParam;
 import com.github.chic.admin.model.param.PasswordResetParam;
 import com.github.chic.admin.model.param.RefreshTokenParam;
+import com.github.chic.admin.model.param.RegisterParam;
 import com.github.chic.admin.model.vo.CaptchaVO;
 import com.github.chic.admin.model.vo.LoginVO;
 import com.github.chic.admin.model.vo.RefreshTokenVO;
@@ -60,6 +62,24 @@ public class AuthServiceImpl implements AuthService {
         vo.setUuid(uuid);
         vo.setImage(captcha.toBase64());
         return vo;
+    }
+
+    @Override
+    public void register(RegisterParam param) {
+        // 检查是否有相同用户名
+        QueryWrapper<Admin> qw = new QueryWrapper<>();
+        qw.lambda().eq(Admin::getUsername, param.getUsername());
+        int count = adminService.count(qw);
+        if (count > 0) {
+            throw new ApiException(ApiCodeEnum.AUTH_USERNAME_EXIST);
+        }
+        // 创建用户
+        Admin admin = new Admin();
+        admin.setUsername(param.getUsername());
+        admin.setPassword(passwordEncoder.encode(param.getPassword()));
+        admin.setStatus(1);
+        admin.setNickname(param.getUsername());
+        adminService.save(admin);
     }
 
     @Override

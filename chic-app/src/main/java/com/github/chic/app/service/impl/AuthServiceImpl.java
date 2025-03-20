@@ -54,8 +54,6 @@ public class AuthServiceImpl implements AuthService {
         user.setMobile(param.getMobile());
         user.setPassword(passwordEncoder.encode(param.getPassword()));
         user.setStatus(1);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
         userService.save(user);
     }
 
