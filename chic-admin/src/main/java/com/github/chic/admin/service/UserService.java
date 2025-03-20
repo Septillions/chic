@@ -7,6 +7,9 @@ import com.github.chic.entity.User;
 
 import java.util.List;
 
+/**
+ * 用户表 服务类
+ */
 public interface UserService extends IService<User> {
     List<User> pageQuery(PageQuery page, UserQuery query);
 }

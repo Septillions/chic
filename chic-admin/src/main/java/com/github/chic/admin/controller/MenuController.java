@@ -52,7 +52,7 @@ public class MenuController {
         return ApiResult.success();
     }
 
-    @ApiOperation("获取角色的菜单权限列表")
+    @ApiOperation("获取角色菜单权限规则")
     @GetMapping("/listByRole")
     public ApiResult<List<Menu>> listByRole(@Valid MenuRoleQuery query) {
         List<Menu> menuList = menuService.listByRole(query);

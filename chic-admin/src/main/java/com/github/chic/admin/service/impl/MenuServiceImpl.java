@@ -2,6 +2,8 @@ package com.github.chic.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.admin.component.constant.RedisKeyEnum;
@@ -12,7 +14,7 @@ import com.github.chic.admin.model.param.MenuUpdateParam;
 import com.github.chic.admin.model.query.MenuQuery;
 import com.github.chic.admin.model.query.MenuRoleQuery;
 import com.github.chic.admin.service.MenuService;
-import com.github.chic.common.config.CacheProps;
+import com.github.chic.common.component.props.CacheProps;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.entity.Menu;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 菜单表 服务实现类
+ */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuService {
     @Resource
@@ -81,7 +86,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuS
     @Override
     public List<Menu> listByAdminId(Long adminId) {
         // Redis Key
-        String key = RedisKeyEnum.ADMIN_CACHE_MENU_PREFIX.getKey() + adminId;
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_MENU_FORMAT.getKey(), adminId);
         // 查询 Redis
         List<Menu> menuList = (List<Menu>) redisService.get(key);
         if (CollUtil.isEmpty(menuList)) {
@@ -96,6 +101,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuS
     @Override
     public List<Menu> listByRole(MenuRoleQuery query) {
         return this.baseMapper.listByRole(query);
+    }
+
+    @Override
+    public void clearCacheByAdminId(Long adminId) {
+        // Redis Key
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_MENU_FORMAT.getKey(), adminId);
+        // 删除缓存
+        redisService.delete(key);
+    }
+
+    @Override
+    public void clearCache() {
+        // Redis Key
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_MENU_FORMAT.getKey(), "*");
+        // 获取所有缓存 Key
+        Set<String> keys = redisService.keys(key);
+        // 删除所有缓存
+        redisService.delete(keys);
     }
 
     /**
@@ -123,6 +146,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuS
             Menu menu = menuList.get(i);
             menu.setSort(i + 1);
         }
+        System.out.println("排序后：" + JSONUtil.toJsonStr(menuList));
         super.updateBatchById(menuList);
     }
 
@@ -147,24 +171,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuS
     /**
      * 根据父级ID获取子集ID列表
      */
-    private List<Long> getSubsetIdList(List<Menu> menuList, Long parentId) {
+    private List<Long> getSubsetIdList(List<Menu> menus, Long parentId) {
         List<Long> subsetIdList = new ArrayList<>();
-        for (Menu menu : menuList) {
+        for (Menu menu : menus) {
             if (menu.getParentId().equals(parentId)) {
                 subsetIdList.add(menu.getId());
-                subsetIdList.addAll(getSubsetIdList(menuList, menu.getId()));
+                subsetIdList.addAll(getSubsetIdList(menus, menu.getId()));
             }
         }
         return subsetIdList;
-    }
-
-    /**
-     * 清空 Redis 菜单缓存
-     */
-    public void clearCache() {
-        // Redis Key
-        Set<String> keys = redisService.keys(RedisKeyEnum.ADMIN_CACHE_MENU_PREFIX.getKey() + "*");
-        // 删除所有缓存
-        redisService.delete(keys);
     }
 }

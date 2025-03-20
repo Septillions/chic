@@ -5,7 +5,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.chic.admin.component.constant.ApiCodeEnum;
 import com.github.chic.admin.component.constant.RedisKeyEnum;
+import com.github.chic.admin.component.exception.ApiException;
 import com.github.chic.admin.model.param.AdminAddParam;
 import com.github.chic.admin.model.param.AdminDeleteParam;
 import com.github.chic.admin.model.param.AdminUpdateParam;
@@ -15,7 +17,7 @@ import com.github.chic.admin.service.AdminService;
 import com.github.chic.admin.service.MenuService;
 import com.github.chic.admin.service.RoleService;
 import com.github.chic.admin.util.SecurityUtils;
-import com.github.chic.common.config.CacheProps;
+import com.github.chic.common.component.props.CacheProps;
 import com.github.chic.common.model.param.PageQuery;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.entity.Admin;
@@ -31,6 +33,9 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 管理员表 服务实现类
+ */
 @Service
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
     @Resource
@@ -56,12 +61,20 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         if (query.getStatus() != null) {
             qw.lambda().eq(Admin::getStatus, query.getStatus());
         }
-        PageHelper.startPage(page.getPageIndex(), page.getPageSize(), page.getSort());
+        PageHelper.startPage(page.getPageIndex(), page.getPageSize());
         return super.list(qw);
     }
 
     @Override
     public void addByParam(AdminAddParam param) {
+        // 检查是否有相同用户名
+        QueryWrapper<Admin> qw = new QueryWrapper<>();
+        qw.lambda().eq(Admin::getUsername, param.getUsername());
+        int count = super.count(qw);
+        if (count > 0) {
+            throw new ApiException(ApiCodeEnum.AUTH_USERNAME_EXIST);
+        }
+        // 创建用户
         Admin admin = BeanUtil.copyProperties(param, Admin.class);
         admin.setNickname(param.getUsername());
         admin.setPassword(passwordEncoder.encode(param.getPassword()));
@@ -82,6 +95,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         Admin admin = BeanUtil.copyProperties(param, Admin.class);
         if (StrUtil.isNotBlank(param.getPassword())) {
             admin.setPassword(passwordEncoder.encode(param.getPassword()));
+        } else {
+            admin.setPassword(null);
         }
         if (CollUtil.isNotEmpty(param.getRoleIdList())) {
             List<AdminRoleRelation> relationList = new ArrayList<>();
@@ -93,21 +108,25 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             }
             adminRoleRelationService.deleteByAdminId(admin.getId());
             adminRoleRelationService.saveBatch(relationList);
+            // 清除角色缓存
+            roleService.clearCacheByAdminId(param.getId());
         }
         super.updateById(admin);
+        // 清除管理员缓存
         this.clearCacheByUsername(SecurityUtils.getCurrentUsername());
     }
 
     @Override
     public void deleteByParam(AdminDeleteParam param) {
         super.removeById(param.getId());
+        // 清除管理员缓存
         this.clearCacheByUsername(SecurityUtils.getCurrentUsername());
     }
 
     @Override
     public Admin getByUsername(String username) {
         // Redis Key
-        String key = RedisKeyEnum.ADMIN_CACHE_ADMIN_PREFIX.getKey() + username;
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_ADMIN_FORMAT.getKey(), username);
         // 查询 Redis
         Admin admin = (Admin) redisService.get(key);
         if (admin == null) {
@@ -131,9 +150,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return menuService.listByAdminId(adminId);
     }
 
-    private void clearCacheByUsername(String username) {
+    @Override
+    public void clearCacheByUsername(String username) {
         // Redis Key
-        String key = RedisKeyEnum.ADMIN_CACHE_ADMIN_PREFIX.getKey() + username;
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_ADMIN_FORMAT.getKey(), username);
         // 删除缓存
         redisService.delete(key);
     }

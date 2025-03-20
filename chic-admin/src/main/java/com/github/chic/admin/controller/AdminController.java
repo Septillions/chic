@@ -1,6 +1,6 @@
 package com.github.chic.admin.controller;
 
-import com.github.chic.admin.model.converter.BaseAdminConverter;
+import cn.hutool.core.bean.BeanUtil;
 import com.github.chic.admin.model.param.AdminAddParam;
 import com.github.chic.admin.model.param.AdminDeleteParam;
 import com.github.chic.admin.model.param.AdminUpdateParam;
@@ -11,7 +11,6 @@ import com.github.chic.common.model.api.ApiPage;
 import com.github.chic.common.model.api.ApiResult;
 import com.github.chic.common.model.param.PageQuery;
 import com.github.chic.entity.Admin;
-import com.github.pagehelper.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +25,12 @@ import java.util.List;
 public class AdminController {
     @Resource
     private AdminService adminService;
-    @Resource
-    private BaseAdminConverter adminConverter;
 
     @ApiOperation("获取管理员列表")
     @GetMapping("/list")
     public ApiResult<ApiPage<AdminVO>> list(PageQuery page, AdminQuery query) {
         List<Admin> adminList = adminService.pageQuery(page, query);
-        return ApiResult.page(adminConverter.entity2vo((Page<Admin>) adminList));
+        return ApiResult.page(BeanUtil.copyToList(adminList, AdminVO.class));
     }
 
     @ApiOperation("新增管理员")

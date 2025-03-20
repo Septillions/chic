@@ -1,4 +1,4 @@
-package com.github.chic.common.config;
+package com.github.chic.common.component.props;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

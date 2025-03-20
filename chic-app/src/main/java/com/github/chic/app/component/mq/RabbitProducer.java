@@ -1,6 +1,6 @@
 package com.github.chic.app.component.mq;
 
-import com.github.chic.common.config.RabbitConfig;
+import com.github.chic.common.component.config.RabbitConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 

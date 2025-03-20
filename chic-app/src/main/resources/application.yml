@@ -3,32 +3,16 @@ spring:
   profiles:
     active: dev
 
-# Logback
-logging:
-  config: classpath:logback-${spring.profiles.active}.xml
-
-# MyBatis Plus
-mybatis-plus:
-  global-config:
-    banner: false
-  mapper-locations: classpath:mapper/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-# PageHelper
-pagehelper:
-  page-size-zero: true
-
 # JWT
 jwt:
   # JWT 加解密使用的密钥
   secret: JWTSecret
   # JWT 存储的请求头
   header: Authorization
-  # JWT AccessToken 过期时间(60*60*24*7 604800)
-  access-token-expire-time: 604800
-  # JWT RefreshToken 过期时间(60*60*24*30 2592000)
-  refresh-token-expire-time: 2592000
+  # JWT AccessToken 过期时间(60*60*24*90天 7776000秒)
+  access-token-expire-time: 7776000
+  # JWT RefreshToken 过期时间(60*60*24*180天 15552000秒)
+  refresh-token-expire-time: 15552000
 
 # 认证
 auth:
@@ -64,3 +48,19 @@ swagger:
     url: https://github.com/septillions
     # 邮箱
     email: eolinker@gmail.com
+
+# MyBatis Plus
+mybatis-plus:
+  global-config:
+    banner: false
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# PageHelper
+pagehelper:
+  page-size-zero: true
+
+# Logback
+logging:
+  config: classpath:logback-spring-${spring.profiles.active}.xml

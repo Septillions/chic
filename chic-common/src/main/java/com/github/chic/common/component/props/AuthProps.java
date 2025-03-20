@@ -1,4 +1,4 @@
-package com.github.chic.common.config;
+package com.github.chic.common.component.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

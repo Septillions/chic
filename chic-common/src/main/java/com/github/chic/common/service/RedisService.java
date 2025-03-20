@@ -26,4 +26,6 @@ public interface RedisService {
     void expire(String key, Long timeout, TimeUnit unit);
 
     Long ttl(String key);
+
+    Long ttl(String key, TimeUnit unit);
 }

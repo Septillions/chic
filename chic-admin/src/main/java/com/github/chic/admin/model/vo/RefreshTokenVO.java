@@ -9,13 +9,10 @@ import java.util.Date;
 public class RefreshTokenVO {
     @ApiModelProperty(value = "accessToken")
     private String accessToken;
-
     @ApiModelProperty(value = "accessToken 过期时间")
     private Date accessExpire;
-
     @ApiModelProperty(value = "refreshToken")
     private String refreshToken;
-
     @ApiModelProperty(value = "refreshToken 过期时间")
     private Date refreshExpire;
 }

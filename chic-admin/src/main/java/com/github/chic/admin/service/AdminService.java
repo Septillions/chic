@@ -12,6 +12,9 @@ import com.github.chic.entity.Role;
 
 import java.util.List;
 
+/**
+ * 管理员表 服务类
+ */
 public interface AdminService extends IService<Admin> {
     List<Admin> pageQuery(PageQuery page, AdminQuery query);
 
@@ -26,4 +29,6 @@ public interface AdminService extends IService<Admin> {
     List<Role> listRoleByAdminId(Long adminId);
 
     List<Menu> listMenuByAdminId(Long adminId);
+
+    void clearCacheByUsername(String username);
 }

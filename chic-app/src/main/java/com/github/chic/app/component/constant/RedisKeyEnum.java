@@ -5,15 +5,23 @@ package com.github.chic.app.component.constant;
  */
 public enum RedisKeyEnum {
     /**
-     * APP CACHE USER 格式
+     * APP CACHE USER 前缀
      * app:cache:user:{mobile}
-     * User
      */
     APP_CACHE_USER_FORMAT("app:cache:user:{}"),
+
     /**
-     * APP CACHE USER 前缀
+     * 短信验证码限制 前缀
+     * app:aliyunsms:limit:{mobile}
      */
-    APP_CACHE_USER_PREFIX("app:cache:user:");
+    APP_ALIYUNSMS_LIMIT_FORMAT("app:aliyunsms:limit:{}"),
+
+    /**
+     * 登录短信验证码 前缀
+     * app:auth:smscode:{mobile}
+     */
+    APP_SMSCODE_USER_AUTH_FORMAT("app:smscode:user:auth:{}"),
+    ;
     private final String key;
 
     RedisKeyEnum(String key) {

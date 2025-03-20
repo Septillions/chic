@@ -21,7 +21,7 @@ public class ApiPage<T> {
     @ApiModelProperty(value = "总页数", position = 3)
     private Integer pages;
     @ApiModelProperty(value = "总条数", position = 4)
-    private Long total;
+    private Integer total;
     @ApiModelProperty(value = "数据列表", position = 5)
     private List<T> items;
 }

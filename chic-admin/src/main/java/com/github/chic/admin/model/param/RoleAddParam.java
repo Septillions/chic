@@ -14,22 +14,20 @@ public class RoleAddParam {
     @NotBlank(message = "角色名称不能为空")
     @ApiModelProperty(value = "角色名称", required = true)
     private String name;
-
     @NotBlank(message = "角色代码不能为空")
     @ApiModelProperty(value = "角色代码", required = true)
     private String code;
-
     @NotNull(message = "显示排序不能为空")
     @ApiModelProperty(value = "显示排序")
     private Integer sort;
-
     @ApiModelProperty(value = "角色说明")
     private String description;
-
+    @NotNull(message = "系统保留不能为空")
+    @ApiModelProperty(value = "系统保留(0否,1是)", required = true)
+    private Integer isSystem;
     @NotNull(message = "状态不能为空")
     @ApiModelProperty(value = "状态(0禁用,1启用)", required = true)
     private Integer status;
-
     @ApiModelProperty(value = "角色菜单ID列表")
     private List<Long> menuIdList;
 }

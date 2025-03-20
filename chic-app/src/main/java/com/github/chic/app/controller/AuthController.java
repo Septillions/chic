@@ -7,7 +7,7 @@ import com.github.chic.app.model.param.RegisterParam;
 import com.github.chic.app.model.vo.LoginVO;
 import com.github.chic.app.model.vo.RefreshVO;
 import com.github.chic.app.service.AuthService;
-import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.component.props.JwtProps;
 import com.github.chic.common.model.api.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +51,7 @@ public class AuthController {
         return ApiResult.success();
     }
 
-    @ApiOperation("刷新")
+    @ApiOperation("刷新 Token")
     @PostMapping("/refresh")
     public ApiResult<RefreshVO> refresh(@RequestBody @Valid RefreshParam param) {
         RefreshVO refreshVO = authService.refresh(param);

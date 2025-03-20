@@ -1,7 +1,9 @@
 package com.github.chic.app.component.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.json.JSONUtil;
 import com.github.chic.app.util.SecurityUtils;
+import com.github.chic.common.util.ProjectUtils;
 import com.github.chic.common.util.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -39,7 +41,11 @@ public class WebLogAspect {
         String ip = ServletUtil.getClientIP(request);
         try {
             // 执行请求方法
-            return joinPoint.proceed(joinPoint.getArgs());
+            Object proceed = joinPoint.proceed(joinPoint.getArgs());
+            if (!ProjectUtils.isProdEnv()) {
+                log.info("接口返回：" + JSONUtil.toJsonStr(proceed));
+            }
+            return proceed;
         } finally {
             // 记录结束时间
             long endTime = System.currentTimeMillis();

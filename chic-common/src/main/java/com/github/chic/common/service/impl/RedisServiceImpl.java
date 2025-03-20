@@ -19,14 +19,14 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Override
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
 
-    @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Override
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
@@ -56,6 +56,7 @@ public class RedisServiceImpl implements RedisService {
         redisTemplate.delete(keys);
     }
 
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @Override
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
@@ -71,8 +72,15 @@ public class RedisServiceImpl implements RedisService {
         redisTemplate.expire(key, timeout, unit);
     }
 
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @Override
     public Long ttl(String key) {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
+
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Override
+    public Long ttl(String key, TimeUnit unit) {
+        return redisTemplate.getExpire(key, unit);
     }
 }

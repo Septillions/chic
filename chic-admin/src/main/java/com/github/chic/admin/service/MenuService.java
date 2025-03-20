@@ -10,6 +10,9 @@ import com.github.chic.entity.Menu;
 
 import java.util.List;
 
+/**
+ * 菜单表 服务类
+ */
 public interface MenuService extends IService<Menu> {
     List<Menu> listByQuery(MenuQuery query);
 
@@ -22,4 +25,8 @@ public interface MenuService extends IService<Menu> {
     List<Menu> listByAdminId(Long adminId);
 
     List<Menu> listByRole(MenuRoleQuery query);
+
+    void clearCacheByAdminId(Long adminId);
+
+    void clearCache();
 }

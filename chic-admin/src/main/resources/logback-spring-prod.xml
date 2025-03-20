@@ -2,6 +2,8 @@
 <configuration debug="false">
     <!-- 设置存储路径变量 -->
     <property name="LOG_HOME" value="/logs/"/>
+    <!-- 设置日志存储天数 -->
+    <property name="LOG_RETENTION_DAYS" value="30"/>
 
     <!-- INFO 输出日志 -->
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -12,7 +14,7 @@
             <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/info.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
-            <MaxHistory>30</MaxHistory>
+            <MaxHistory>${LOG_RETENTION_DAYS}</MaxHistory>
         </rollingPolicy>
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -38,7 +40,7 @@
             <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
-            <MaxHistory>30</MaxHistory>
+            <MaxHistory>${LOG_RETENTION_DAYS}</MaxHistory>
         </rollingPolicy>
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -64,7 +66,7 @@
             <!-- 日志文件输出的文件名，可设置文件类型为.gz，开启文件压缩 -->
             <FileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
-            <MaxHistory>30</MaxHistory>
+            <MaxHistory>${LOG_RETENTION_DAYS}</MaxHistory>
         </rollingPolicy>
         <!-- 输出格式 -->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -81,20 +83,11 @@
         </filter>
     </appender>
 
-    <!-- LOGSTASH 输出日志 -->
-    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <!-- Logstash 服务端 -->
-        <destination>logstash:4561</destination>
-        <!-- 设置编码 -->
-        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder"/>
-    </appender>
-
     <!-- 指定基础的日志输出级别 -->
     <root level="INFO">
         <!-- appender将会添加到这个logger -->
         <appender-ref ref="INFO"/>
         <appender-ref ref="WARN"/>
         <appender-ref ref="ERROR"/>
-        <appender-ref ref="LOGSTASH"/>
     </root>
 </configuration>

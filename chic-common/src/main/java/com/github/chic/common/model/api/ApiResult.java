@@ -1,5 +1,6 @@
 package com.github.chic.common.model.api;
 
+import cn.hutool.core.convert.Convert;
 import com.github.chic.common.component.constant.BaseApiCodeEnum;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +38,7 @@ public class ApiResult<T> {
         apiPage.setPageIndex(pageInfo.getPageNum());
         apiPage.setPageSize(pageInfo.getPageSize());
         apiPage.setPages(pageInfo.getPages());
-        apiPage.setTotal(pageInfo.getTotal());
+        apiPage.setTotal(Convert.toInt(pageInfo.getTotal()));
         apiPage.setItems(pageInfo.getList());
         return new ApiResult<>(BaseApiCodeEnum.SUCCESS.getCode(), BaseApiCodeEnum.SUCCESS.getMsg(), apiPage);
     }

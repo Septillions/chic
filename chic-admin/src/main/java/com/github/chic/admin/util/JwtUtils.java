@@ -1,11 +1,14 @@
 package com.github.chic.admin.util;
 
 import cn.hutool.core.convert.Convert;
+import com.github.chic.admin.component.constant.ApiCodeEnum;
+import com.github.chic.admin.component.exception.ApiException;
 import com.github.chic.admin.component.security.entity.JwtAdminDetails;
-import com.github.chic.common.component.constant.BaseApiCodeEnum;
-import com.github.chic.common.component.exception.BaseException;
-import com.github.chic.common.config.JwtProps;
-import io.jsonwebtoken.*;
+import com.github.chic.common.component.props.JwtProps;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -60,10 +63,8 @@ public class JwtUtils {
                     .setSigningKey(JwtProps.secret)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            throw new BaseException(BaseApiCodeEnum.TOKEN_EXPIRED);
         } catch (JwtException e) {
-            throw new BaseException(BaseApiCodeEnum.TOKEN_INVALID);
+            throw new ApiException(ApiCodeEnum.AUTH_ACCESS_TOKEN_EXPIRED);
         }
     }
 

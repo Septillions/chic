@@ -1,6 +1,6 @@
 package com.github.chic.admin.component.security.component;
 
-import com.github.chic.common.component.constant.BaseApiCodeEnum;
+import com.github.chic.admin.component.constant.ApiCodeEnum;
 import com.github.chic.common.util.ServletUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -18,6 +18,6 @@ import java.io.IOException;
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        ServletUtils.writeJson(response, BaseApiCodeEnum.FORBIDDEN.getCode(), BaseApiCodeEnum.FORBIDDEN.getMsg());
+        ServletUtils.writeJson(response, ApiCodeEnum.COMMON_FORBIDDEN.getCode(), ApiCodeEnum.COMMON_FORBIDDEN.getMsg());
     }
 }

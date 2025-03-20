@@ -2,6 +2,7 @@ package com.github.chic.admin.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.chic.admin.component.constant.ApiCodeEnum;
@@ -12,9 +13,10 @@ import com.github.chic.admin.model.param.RoleAddParam;
 import com.github.chic.admin.model.param.RoleDeleteParam;
 import com.github.chic.admin.model.param.RoleUpdateParam;
 import com.github.chic.admin.model.query.RoleQuery;
+import com.github.chic.admin.service.MenuService;
 import com.github.chic.admin.service.RoleMenuRelationService;
 import com.github.chic.admin.service.RoleService;
-import com.github.chic.common.config.CacheProps;
+import com.github.chic.common.component.props.CacheProps;
 import com.github.chic.common.model.param.PageQuery;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.entity.Role;
@@ -27,10 +29,15 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 角色表 服务实现类
+ */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleService {
     @Resource
     private RedisService redisService;
+    @Resource
+    private MenuService menuService;
     @Resource
     private RoleMenuRelationService roleMenuRelationService;
 
@@ -79,6 +86,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleS
             }
             roleMenuRelationService.deleteByRoleId(role.getId());
             roleMenuRelationService.saveBatch(relationList);
+            // 清除菜单缓存
+            menuService.clearCache();
         }
         super.updateById(role);
     }
@@ -93,7 +102,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleS
     @Override
     public List<Role> listByAdminId(Long adminId) {
         // Redis Key
-        String key = RedisKeyEnum.ADMIN_CACHE_ROLE_PREFIX.getKey() + adminId;
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_ROLE_FORMAT.getKey(), adminId);
         // 查询 Redis
         List<Role> roleList = (List<Role>) redisService.get(key);
         if (CollUtil.isEmpty(roleList)) {
@@ -103,5 +112,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleS
             redisService.set(key, roleList, CacheProps.defaultExpireTime);
         }
         return roleList;
+    }
+
+    @Override
+    public void clearCacheByAdminId(Long adminId) {
+        // Redis Key
+        String key = StrUtil.format(RedisKeyEnum.ADMIN_CACHE_ROLE_FORMAT.getKey(), adminId);
+        // 清除缓存
+        redisService.delete(key);
     }
 }

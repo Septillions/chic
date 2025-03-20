@@ -1,4 +1,4 @@
-package com.github.chic.common.config;
+package com.github.chic.common.component.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

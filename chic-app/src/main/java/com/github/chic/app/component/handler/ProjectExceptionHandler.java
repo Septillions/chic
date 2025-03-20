@@ -1,18 +1,75 @@
 package com.github.chic.app.component.handler;
 
+import com.github.chic.app.component.constant.ApiCodeEnum;
 import com.github.chic.app.component.exception.ApiException;
-import com.github.chic.common.component.handler.BaseExceptionHandler;
 import com.github.chic.common.model.api.ApiResult;
+import com.github.chic.common.util.ProjectUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 /**
  * 项目模块异常处理类
  */
 @Slf4j
 @RestControllerAdvice
-public class ProjectExceptionHandler extends BaseExceptionHandler {
+public class ProjectExceptionHandler {
+    /**
+     * 全局异常 统一JSON格式返回
+     */
+    @ExceptionHandler(Exception.class)
+    public ApiResult<Object> exception(Exception e) {
+        log.error("服务器未知异常", e);
+        if (ProjectUtils.isProdEnv()) {
+            return ApiResult.failed("服务器开小差啦，请稍稍后再试 ~");
+        }
+        return ApiResult.failed(e.getMessage());
+    }
+
+    /**
+     * Spring Security 未登录异常
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ApiResult<Object> authenticationException(AuthenticationException e) {
+        return ApiResult.failed(ApiCodeEnum.COMMON_UNAUTHORIZED.getCode(), ApiCodeEnum.COMMON_UNAUTHORIZED.getMsg());
+    }
+
+    /**
+     * Spring Security 无权限异常
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiResult<Object> accessDeniedException(AccessDeniedException e) {
+        return ApiResult.failed(ApiCodeEnum.COMMON_FORBIDDEN.getCode(), ApiCodeEnum.COMMON_FORBIDDEN.getMsg());
+    }
+
+    /**
+     * Spring Validation 校验异常
+     */
+    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
+    public ApiResult<Object> validationException(Exception e) {
+        BindingResult bindingResult;
+        if (e instanceof BindException) {
+            bindingResult = ((BindException) e).getBindingResult();
+        } else {
+            bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
+        }
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        StringBuilder errorMsg = new StringBuilder();
+        for (FieldError error : fieldErrors) {
+            errorMsg.append(error.getField()).append("-").append(error.getDefaultMessage()).append(",");
+        }
+        errorMsg.deleteCharAt(errorMsg.length() - 1);
+        return ApiResult.failed(ApiCodeEnum.COMMON_PARAM_ERROR.getCode(), errorMsg.toString());
+    }
+
     /**
      * 自定义 API 接口异常
      */

@@ -1,6 +1,6 @@
 package com.github.chic.app.component.mq;
 
-import com.github.chic.common.config.RabbitConfig;
+import com.github.chic.common.component.config.RabbitConfig;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

@@ -3,7 +3,7 @@ package com.github.chic.admin.component.security.config;
 import com.github.chic.admin.component.security.component.RestAccessDeniedHandler;
 import com.github.chic.admin.component.security.component.RestAuthenticationEntryPoint;
 import com.github.chic.admin.component.security.filter.JwtAuthenticationTokenFilter;
-import com.github.chic.common.config.AuthProps;
+import com.github.chic.common.component.props.AuthProps;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

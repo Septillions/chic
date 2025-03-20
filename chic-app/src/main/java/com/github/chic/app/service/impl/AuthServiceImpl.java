@@ -2,7 +2,6 @@ package com.github.chic.app.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.chic.app.component.constant.ApiCodeEnum;
 import com.github.chic.app.component.exception.ApiException;
 import com.github.chic.app.component.security.entity.JwtUserDetails;
@@ -14,10 +13,8 @@ import com.github.chic.app.model.vo.RefreshVO;
 import com.github.chic.app.service.AuthService;
 import com.github.chic.app.service.UserService;
 import com.github.chic.app.util.JwtUtils;
-import com.github.chic.common.component.constant.BaseApiCodeEnum;
 import com.github.chic.common.component.constant.BaseRedisKeyEnum;
-import com.github.chic.common.component.exception.BaseException;
-import com.github.chic.common.config.JwtProps;
+import com.github.chic.common.component.props.JwtProps;
 import com.github.chic.common.model.dto.RedisJwtUserDTO;
 import com.github.chic.common.service.RedisService;
 import com.github.chic.common.util.ServletUtils;
@@ -47,10 +44,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void register(RegisterParam param) {
         // 检查是否有相同用户名
-        QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.lambda().eq(User::getMobile, param.getMobile());
-        int count = userService.count(qw);
-        if (count > 0) {
+        User mobileUser = userService.getByMobile(param.getMobile());
+        if (mobileUser != null) {
             throw new ApiException(ApiCodeEnum.AUTH_MOBILE_EXIST);
         }
         // 创建用户
@@ -78,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
         }
         if (user.getStatus() != 1) {
             // 账号已被禁用
-            throw new ApiException(ApiCodeEnum.AUTH_STATUS_ERROR);
+            throw new ApiException(ApiCodeEnum.AUTH_STATUS_BAN);
         }
         // 删除已登录Token 保证Token唯一
         redisRemoveToken(user.getMobile());
@@ -120,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
         String redisRefreshTokenKey = StrUtil.format(BaseRedisKeyEnum.APP_AUTH_JWT_REFRESH_FORMAT.getKey(), mobile, oldRefreshToken);
         RedisJwtUserDTO redisJwtUserDTO = (RedisJwtUserDTO) redisService.get(redisRefreshTokenKey);
         if (redisJwtUserDTO == null) {
-            throw new BaseException(BaseApiCodeEnum.TOKEN_EXPIRED);
+            throw new ApiException(ApiCodeEnum.AUTH_REFRESH_TOKEN_EXPIRED);
         }
         // 移除旧 Token
         String oldAccessToken = redisJwtUserDTO.getAccessToken();

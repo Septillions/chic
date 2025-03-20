@@ -1,4 +1,4 @@
-package com.github.chic.common.config;
+package com.github.chic.common.component.config;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.fasterxml.jackson.core.JsonGenerator;

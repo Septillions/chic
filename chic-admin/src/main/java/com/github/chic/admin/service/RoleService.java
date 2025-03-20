@@ -10,6 +10,9 @@ import com.github.chic.entity.Role;
 
 import java.util.List;
 
+/**
+ * 角色表 服务类
+ */
 public interface RoleService extends IService<Role> {
     List<Role> pageQuery(PageQuery page, RoleQuery query);
 
@@ -20,4 +23,6 @@ public interface RoleService extends IService<Role> {
     void deleteByParam(RoleDeleteParam param);
 
     List<Role> listByAdminId(Long adminId);
+
+    void clearCacheByAdminId(Long adminId);
 }
